@@ -30,6 +30,70 @@ body {
     margin: 0;
     font-size:1.4rem;
 }
+.screenLoading{
+    position:fixed;
+    min-heihgt:100%;
+    height:100vh;
+    width:100%;
+    width:100vw;
+    background-color:#000;
+    z-index:9999;
+}
+
+.screenLoading .spinner {
+    width: 8rem;
+    height: 8rem;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%);
+    margin: auto;
+
+}
+
+.screenLoading .spinner .circle {
+    width: 7.4rem;
+    height:7.4rem;
+    position:absolute;
+    border-radius: 50%;
+    border-top: 0.3rem solid rgba(255, 255, 255, 0.2);
+    border-right: 0.3rem solid rgba(255, 255, 255, 0.2);
+    border-bottom: 0.3rem solid rgba(255, 255, 255, 0.2);
+    border-left: 0.3rem solid #ffffff;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-animation: load8 1.1s infinite linear;
+    animation: load8 1.1s infinite linear;
+}
+@-webkit-keyframes load8 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@keyframes load8 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+.screenLoading .spinner>img{
+    margin:1rem;
+    width:6rem;
+}
+
+
+
 #fullscreen {
     z-index: -999;
     min-height: 100%;
@@ -77,8 +141,9 @@ h1 {
 }
 h3 {
     color: white;
-    padding-bottom: 2rem;
-    font-weight: thin;
+    margin-top:2rem;
+    margin-bottom: 2rem;
+    font-weight: lighter;
 }
 .content {
     padding-top: 10rem;
@@ -112,7 +177,7 @@ li:hover {
 }
 a {
     color: white;
-    padding: 1.5rem;
+    padding: 2rem;
     text-decoration: none;
 }
 .description {
@@ -127,7 +192,6 @@ li {
     border-radius: 0%;
     border: none;
     color: white;
-    margin: 0.8rem;
     display: block;
     list-style: none;
     margin: 1rem 0px;
