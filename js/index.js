@@ -3,7 +3,8 @@
  */
 
 
-
 $(function(){
-    
+    snailUtils.loadImagesComplete(function(){
+        snailUtils.endLoading();
+    })
 })

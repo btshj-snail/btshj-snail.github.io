@@ -20,5 +20,22 @@ const snailUtils = {
         if(dom_loading){
             dom_loading.style.display = "none";
         }
+    },
+    loadImagesComplete(callBack){
+        let defedAry = [];
+        $("img").each(function(){
+            let dfd = $.Deferred();
+            $(this).bind('load',function(){
+                dfd.resolve();
+            })
+            if(this.complete) setTimeout(function(){
+                dfd.resolve();
+            },100)
+            defedAry.push(dfd);
+        })
+
+        $.when.apply(null,defedAry).done(function(){
+            callBack && callBack();
+        })
     }
 }
