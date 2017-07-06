@@ -29,6 +29,12 @@ body {
     left: 0;
     margin: 0;
     font-size:1.4rem;
+    color:#fff;
+}
+
+a{
+    text-decoration: none;
+    color:#fff;
 }
 .screenLoading{
     position:fixed;
@@ -152,11 +158,11 @@ h3 {
     text-align: center;
     /*min-height:100%;*/
 }
-ul {
+ul.types {
     list-style: none;
     padding: 0;
 }
-li {
+ul.types li {
     border-radius: 100%;
     border: 0.2rem solid white;
     color: white;
@@ -167,7 +173,7 @@ li {
     height: 6.5rem;
     line-height:6.5rem;
 }
-li:hover {
+ul.types li:hover {
     color: white;
     text-decoration: none;
     -webkit-transition: 500ms;
@@ -176,7 +182,7 @@ li:hover {
     text-decoration: none;
     background-color: rgba(0, 0, 0, 0.5);
 }
-li a, li span {
+ul.types li a, ul.types li span {
     color: white;
     cursor:pointer;
     text-decoration: none;
@@ -231,3 +237,71 @@ li a, li span {
     /*padding-top: 6rem;*/
 /*}*/
 /*}*/
+
+
+
+
+.headSection{
+    width:100%;
+    width:100vw;
+
+}
+.headSection>img{
+    width:100%;
+}
+
+.navigator{
+    height:6rem;
+    width:100%;
+    width:100vw;
+    background:rgba(0,0,0,0.8);
+    position:absolute;
+    top:0px;
+    left:0px;
+    z-index:10;
+}
+.navigator .nav_left{
+    position:absolute;
+    width:30rem;
+}
+.navigator .nav_right{
+   margin-left:30rem;
+    height:100%;
+}
+.navigator .nav_left .logo {
+    height:100%;
+    width:100%;
+    text-align:right;
+    padding-top:1rem;
+}
+.navigator .nav_left .logo .logoFirstLetter{
+    color:#ff4400;
+}
+
+.navigator .nav_right .nav_list{
+    list-style: none;
+    padding:0;
+    display:table;
+    margin:0;
+    height:100%;
+    margin-left:10rem;
+}
+.navigator .nav_right .nav_list .nav_item{
+    vertical-align:middle;
+    display:table-cell;
+    width: 10rem;
+    text-align: center;
+}
+
+
+.contentSection{
+
+}
+.oneSection{
+    margin:4rem 10rem;
+    border:solid 1px transparent;
+}
+.oneSection .oneSection_head{
+    border-left:solid 0.3rem #ff4400;
+    padding-left:1rem;
+}
