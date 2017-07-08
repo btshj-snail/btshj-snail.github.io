@@ -317,7 +317,31 @@ ul.types li a, ul.types li span {
 
 
 
-
+.topButton{
+    height:80px;
+    width:70px;
+    background:#cccccc;
+    color:#fff;
+    border:solid 1px #ccc;
+    border-radius:5px;
+    cursor:pointer;
+    position:fixed;
+    bottom:30px;
+    right:50px;
+    text-align: center;
+    display:block;
+}
+.topButton i{
+    margin-bottom:10px;
+}
+.topButton p{
+    height:40px;
+    line-height:40px;
+    font-size:18px;
+    font-weight: bold;
+    border-top: solid 1px #eee;
+    margin:auto;
+}
 
 
 

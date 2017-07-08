@@ -37,5 +37,35 @@ const snailUtils = {
         $.when.apply(null,defedAry).done(function(){
             callBack && callBack();
         })
+    },
+    loadTopButton(){
+        let time = 1000, frameTime = 60;
+        let topBtnFrame = document.createElement("div");
+        topBtnFrame.className = "topButton";
+        document.body.appendChild(topBtnFrame);
+        let topBtn_i = document.createElement("i");
+        topBtn_i.className = "fa fa-angle-double-up fa-2x";
+        topBtnFrame.appendChild(topBtn_i);
+        let topBtn_p = document.createElement("p");
+        topBtn_p.innerHTML = "TOP";
+        topBtnFrame.appendChild(topBtn_p);
+
+        topBtnFrame.onclick = function () {
+            let top = document.body.scrollTop;
+            let move = top / time * frameTime;
+            moveFun(top, move);
+        }
+
+
+        function moveFun(top, move) {
+            top = top - move;
+            if (top > 0) {
+                document.body.scrollTop = top;
+                requestAnimationFrame(function () {
+                    moveFun(top, move)
+                });
+            }
+        }
+
     }
 }
