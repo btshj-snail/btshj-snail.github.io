@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>本地运行</title>
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/threeJs.css">
+    <link rel="stylesheet" href="../../css/font-awesome.css">
+    <script src="../../js/common/snailUtils.js"></script>
+
+</head>
+<body>
+    <div class="three_article_content">
+        <h2 class="pageTitle">如何本地运行</h2>
+
+        <p>
+            如果你只是使用three.js包含的几何形状，并且不加载任何的纹理，那么网页可以直接在文件系统运行。你只需要在文件系统中双击HTML文件，那么它就可以在浏览器中运行。（你将在浏览器地址栏看到“file:///yourFile.html”）
+        </p>
+         <p class="sectionTitle">
+             从外部加载内容
+         </p>
+        <p>
+            如果你要加载外部3D模型或者3D纹理文件，那么由于浏览器的同源策略，从文件系统加载文件可能会失败。
+        </p>
+        <p>
+            以下是两种解决方案：
+        </p>
+        <p>
+            1. 改变浏览器的安全策略
+        </p>
+        <div class="codeSection">
+            <pre>
+                file:///yourFile.html
+            </pre>
+        </div>
+        <p>
+            2.搭建一个本地服务，将文件运行在本地服务中。你可以像下面这样访问你的界面：
+        </p>
+        <div class="codeSection">
+            <pre>
+                http://localhost/yourFile.html
+            </pre>
+        </div>
+        <p>
+            如果你使用第一种方案，请注意，你使用该浏览器上网的时候，可能已经打开了一些漏洞。你可能想只为本地开发创建单独的浏览器配置或者快捷方式，来保证浏览器的安全性。
+        </p>
+        <p class="sectionTitle">
+            改变本地文件安全策略
+        </p>
+        <p class="sectionSmallTitle">
+            safari
+        </p>
+        <p>
+            打开开发者菜单的首选项，在Advanced -> "Show develop menu in menu bar".
+        </p>
+        <p>
+            然后从safari 的“develop”菜单，选择“Disable local file restrictions”,同样值得注意的是safari与缓存一些奇怪的行为,所以我们应该明智的打开处于同一菜单中的"Disable caches"选项
+        </p>
+
+        <p class="sectionSmallTitle">chrome</p>
+        <p>关闭所有打开的chrome浏览器，请注意是所有。</p>
+        <p>
+            在window下，你可以在windows任务管理器中，查看是否有打开的chrome进程。另外，如果你在系统托盘中看到了chrome的图标，可以右键打开菜单，选择‘Exit’。这样应该能关闭所有打开的chrome浏览器。
+        </p>
+    </div>
+    <script>
+        snailUtils.loadTopButton();
+    </script>
+</body>
+</html>

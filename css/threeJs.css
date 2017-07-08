@@ -16,3 +16,9 @@ body{
     color:#4b0;
     font-size:1.8rem;
 }
+.three_article_content .sectionSmallTitle{
+    margin:2rem 0px;
+    color:#ddd;
+    font-weight:800;
+    font-size:1.4rem;
+}
