@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>如何更改物体</title>
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/threeJs.css">
+    <link rel="stylesheet" href="../../css/font-awesome.css">
+    <script src="../../js/common/snailUtils.js"></script>
+</head>
+<body>
+<div class="three_article_content">
+    <h2 class="pageTitle">如何改变物体</h2>
+    <p>如果被添加到scene中后，所有对象都是默认自动更新模型</p>
+    <div class="codeSection">
+        <pre>
+            var object = new THREE.Object3D();
+            scene.add(object);
+        </pre>
+    </div>
+    <p>
+        如果对象被添加到scene中，那么它的子对象也是默认自动更新模型
+    </p>
+    <div class="codeSection">
+        <pre>
+            var object1 = new THREE.Object3D();
+            var object2 = new THREE.Object3D();
+
+            object1.add(object2);
+
+            scene.add(object1); //object1 , object2都会自动更新模型。
+        </pre>
+    </div>
+    <p>
+        然而，如果你知道这个对象是静态的，你可以手动禁用它，并且只在需要时才更新它的模型。
+    </p>
+    <div class="codeSection">
+        <pre>
+            object.matrixAutoUpdate = false;
+            object.updateMatrix();
+        </pre>
+    </div>
+
+    <p class="sectionTitle">
+        几何形状
+    </p>
+    <p class="sectionSmallTitle">
+        BufferGeometry
+    </p>
+    <p>
+        BufferGeometry可以使用buffer（也就是数组）存储大量信息（比如，定点信息，面信息，常量，UV数据，以及各种自定义属性），在一些比复杂的场景中，这通常比标准的Geometry更快。
+    </p>
+    <p>
+        关于BufferGeometry的更新，最重要的是你不能改变BufferGeometry中缓冲区的大小（这是非常昂贵的，基本上等于创建新的geometry了），只能改变缓冲区的内容。
+    </p>
+    <p>
+        这意味着，如果你知道BufferGeometry中的某个属性将会增长，比如，定点的数量，你必须预先分配一个可以能够容纳任何新创建的定点的缓冲区。当然，这意味着，将会为BufferGeometry设置最大的容量--毕竟没
+        办法创建一个能够无尽增长的BufferGeometry对象。
+    </p>
+    <p>
+        我们将用绘制线条的示例，对渲染时的代码进行扩展。我们将分配可以容纳500个定点的缓冲区，但是使用BufferGeometry.drawRange,在刚开始绘制的时使用两个定点数据。
+    </p>
+    <div class="codeSection">
+        <pre>
+            var MAX_POINTS = 500;
+            //geometry
+            var geometry = new THREE.BufferGeometry();
+
+            //attribute
+            var positions = new Float32Array(MAX_POINTS*3);// 3 vertices per point
+            geometry.addAttribute('position',new THREE.BufferGeometry(positions,3));
+
+            // draw range
+            var drawCount = 2;
+            geometry.setDrawRange(0,drawCount);
+
+            //material
+            var material = new THREE.LineBasicMaterial({color:0xff0000,lineWidth:2});
+
+            //line
+            var line = new THREE.Line(geometry,material);
+            scene.add(line);
+
+        </pre>
+    </div>
+    <p>
+        接下来,我们使用下面的代码，将随机点添加到线：
+    </p>
+    <div class="codeSection">
+        <per>
+            var positions = line.geometry.attributes.position.array;
+
+            var x, y, z, index;
+            x = y = z = index = 0;
+
+            for ( var i = 0, l = MAX_POINTS; i < l; i ++ ) {
+
+            positions[ index ++ ] = x;
+            positions[ index ++ ] = y;
+            positions[ index ++ ] = z;
+
+            x += ( Math.random() - 0.5 ) * 30;
+            y += ( Math.random() - 0.5 ) * 30;
+            z += ( Math.random() - 0.5 ) * 30;
+
+            }
+        </per>
+    </div>
+    <p>
+        如果你想改变第一次渲染的点的个数，可以像下面这样：
+    </p>
+    <div class="codeSection">
+        <pre>
+            line.geometry.setDrawRange(0,newValue);
+        </pre>
+    </div>
+    <p>
+        如果你想在第一次渲染后，改变position的数值，你需要像下面这样设置needsUpdate的标志：
+    </p>
+    <div class="codeSection">
+        <pre>
+            line.geometry.attributes.position.needsUpdate = true;
+        </pre>
+    </div>
+</div>
+</body>
+</html>
