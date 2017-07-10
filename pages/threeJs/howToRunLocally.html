@@ -63,6 +63,83 @@
         <p>
             在window下，你可以在windows任务管理器中，查看是否有打开的chrome进程。另外，如果你在系统托盘中看到了chrome的图标，可以右键打开菜单，选择‘Exit’。这样应该能关闭所有打开的chrome浏览器。
         </p>
+        <p>
+            通过命令行启动chrome
+        </p>
+        <div class="codeSection">
+            <pre>
+                chrome --allow-file-access-from-files
+            </pre>
+        </div>
+        <p>
+            在windows中，可能最简单的是创建一个独特的快捷方式，然后为其添加命令行。（在快捷方式上右键 -> properties -> target）
+        </p>
+        <p>
+            在mac OSX 上，你可以这样：
+        </p>
+        <div class="codeSection">
+            <pre>
+               open /Applications/Google\ Chrome.app --args --allow-file-access-from-files
+            </pre>
+        </div>
+        <p class="sectionSmallTitle">
+            Firefox
+        </p>
+        <p>
+            1.在地址栏输入
+        </p>
+        <div class="codeSection">
+            <pre>
+               about:config
+            </pre>
+        </div>
+        <p>
+            2.搜索到以下内容
+        </p>
+        <div class="codeSection">
+            <pre>
+              security.fileuri.strict_origin_policy
+            </pre>
+        </div>
+        <p>
+            3.设置其为false
+        </p>
+        <p class="sectionTitle">
+            运行本地服务
+        </p>
+        <p>
+            很多应用程序中都含有内置的http服务。他们不像Appache，NGINX等生产服务一样包含所有功能，不过他们应该能够满足你测试你的three.js。
+        </p>
+        <p class="sectionSmallTitle">
+            运行Python服务
+        </p>
+        <p>
+            如果已经安装了python，他应该能够从命令行运行以下内容（在你的工程目录下）
+        </p>
+        <div class="codeSection">
+            <pre>
+                //Python 2.x
+                python -m SimpleHTTPServer
+
+                //Python 3.x
+                python -m http.server
+            </pre>
+        </div>
+        <p class="sectionSmallTitle">
+            运行Node.js服务
+        </p>
+        <p>Node.js拥有一个简单的Http服务包。安装命令如下：</p>
+        <div class="codeSection">
+            <pre>
+                npm install http-server -g
+            </pre>
+        </div>
+        <p>运行服务（在你的工程目录下）</p>
+        <div class="codeSection">
+            <pre>
+                http-server -p 8080
+            </pre>
+        </div>
     </div>
     <script>
         snailUtils.loadTopButton();

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>绘制线条</title>
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/threeJs.css">
+    <link rel="stylesheet" href="../../css/font-awesome.css">
+    <script src="../../js/common/snailUtils.js"></script>
+</head>
+<body>
+<div class="three_article_content">
+    <h2 class="pageTitle">绘制线条</h2>
+
+    <p>
+        假设你只想画一条线或者一个圆，而不是想画一个网格线框状的几何形图形。
+        第一步，我们需要设置renderer、scene以及camera（可以参考《创建一个场景》）
+    </p>
+    <p>我们将使用以下代码：</p>
+    <div class="codeSection">
+        <pre>
+            var renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth,window.innerWidth);
+            document.body.appendChild(renderer.domElement);
+
+            var camera = new THREE.PerspectiveCamera();
+            camera.position.set(0,0,100);
+            camera.lookAt(new THREE.Vector3(0,0,0));
+
+            var scene = new THREE.Scene();
+
+        </pre>
+    </div>
+    <p>
+       接下来，我们将定义一个material。我们可以使用LineBasicMaterial或者LineDashedMaterial两个类。
+    </p>
+    <div class="codeSection">
+        <pre>
+            //创建一个蓝色的LineBasicMaterial
+            var material = new THREE.LineBasicMaterial({color:0x0000ff});
+        </pre>
+    </div>
+    <p>
+        在创建material之后，我们需要一个拥有一些顶点的Geometry或者BufferGeometry（一般为了拥有更好的性能，建议使用BufferGeometry，然而我们这里为了简单所以使用Geometry）：
+    </p>
+    <div class="codeSection">
+        <pre>
+            var geometry = new THREE.Geometry();
+            geometry.vertices.push(new THREE.Vector3(-10,0,0));
+            geometry.vertices.push(new THREE.Vector3(0,10,0));
+            geometry.vertices.push(new THREE.Vector3(10,0,0));
+        </pre>
+    </div>
+    <p>
+        注意，three.js是在连续的每一对定点之间画线，但是不是之间的第一个和最后一个（线不是闭合的）；
+    </p>
+    <p>
+        现在我们拥有两条线的点以及指定的材质，我们可以在Line中将他们放置在一起。
+    </p>
+    <div class="codeSection">
+        <pre>
+            var line = new THREE.Line(geometry,material);
+        </pre>
+    </div>
+    <p>
+        剩下的就是将line添加到scene中，并且渲染他们。
+    </p>
+    <div class="codeSection">
+        <pre>
+            scene.add(line);
+            renderer.render(scene, camera);
+        </pre>
+    </div>
+    <p>
+        你现在应该能够看到由两个蓝线组成的向上的箭头
+    </p>
+    <p class="sectionTitle">
+        效果图
+    </p>
+    <img class="effectImage" src="../../imgs/effect/drawingLine.png" alt="">
+    <p class="sectionTitle">
+        结尾
+    </p>
+    <p>
+        以下是该节的完整示例代码，使用它用以更好的理解下面的代码。
+    </p>
+    <div class="codeSection">
+        <pre>
+            &lt;!DOCTYPE html&gt;
+            &lt;html lang="en"&gt;
+            &lt;head&gt;
+                &lt;meta charset="UTF-8"&gt;
+                &lt;title&gt;绘制线条&lt;/title&gt;
+                &lt;style type="text/css"&gt;
+                    body { margin: 0; padding:0;}
+                    canvas { width: 100%; height: 100% }
+
+                &lt;/style&gt;
+                &lt;script src="js/three.js"&gt;&lt;/script&gt;
+            &lt;/head&gt;
+            &lt;body&gt;
+                &lt;script&gt;
+
+                var renderer = new THREE.WebGLRenderer();
+                renderer.setSize(window.innerWidth,window.innerHeight);
+                document.body.appendChild(renderer.domElement);
+
+                var camera = new THREE.PerspectiveCamera();
+                camera.position.set(0,0,100);
+                camera.lookAt(new THREE.Vector3(0,0,0));
+
+                var scene = new THREE.Scene();
+
+
+                var material = new THREE.LineBasicMaterial({color:0x0000ff});
+
+                var geometry = new THREE.Geometry();
+                geometry.vertices.push(new THREE.Vector3(-10,0,0));
+                geometry.vertices.push(new THREE.Vector3(0,10,0));
+                geometry.vertices.push(new THREE.Vector3(10,0,0));
+
+                var line = new THREE.Line(geometry,material);
+
+                scene.add(line);
+                scene.add(camera);
+
+                renderer.render(scene,camera);
+                &lt;/script&gt;
+            &lt;/body&gt;
+            &lt;/html&gt;
+        </pre>
+    </div>
+    
+</div>
+<script>
+    snailUtils.loadTopButton();
+</script>
+</body>
+</html>

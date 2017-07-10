@@ -313,7 +313,12 @@ ul.types li a, ul.types li span {
     border-bottom:solid 1px  #eee;
     box-shadow: 1px 1px 0px 1px #eee;
 }
-
+.effectImage{
+    display: block;
+    margin:2rem auto;
+    width:80rem;
+    max-width:80rem;
+}
 
 
 
