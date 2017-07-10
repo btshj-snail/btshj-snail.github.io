@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>创建文本</title>
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/threeJs.css">
+    <link rel="stylesheet" href="../../css/font-awesome.css">
+    <script src="../../js/common/snailUtils.js"></script>
+</head>
+<body>
+<div class="three_article_content">
+    <h2 class="pageTitle">创建文本</h2>
+    <p>
+        很多时候你可能会需要在three.js程序中使用文本,你可以按照下面的几种方式来书写文本。
+    </p>
+    <p class="sectionTitle">
+        1.DOM+CSS
+    </p>
+    <p>
+        添加文本最快最方便的方式可能就是使用HTML。这种用于描述的方法大量的覆盖了three.js的示例。
+    </p>
+    <p>
+        你可以增加以下内容：
+    </p>
+    <div class="codeSection">
+        <pre>
+            &lt;div id="info"&gt; 描述 &lt;/div&gt;
+        </pre>
+    </div>
+    <p>
+        如果你的three.js程序是全屏的，你可以将css中position属性设置为absolute（fixed），并且用z-index属性将其设置在其他层之上。
+    </p>
+    <div class="codeSection">
+        <pre>
+            #info{
+                position:absolute;
+                top:10px;
+                left:10px;
+                text-align:center;
+                z-index:100;
+                display:block;
+            }
+        </pre>
+    </div>
+    <p class="sectionTitle">2.作为一个纹理，画文本信息到canvas上</p>
+    <p>
+        在three.js场景中，如果你希望能够快捷的在平面上绘画文本信息，那么你可以使用这个方法。
+    </p>
+    <p class="sectionTitle">
+        3.在你最喜欢的3D建模工具中创建3D模型，然后导入到three.js应用中
+    </p>
+    <p>
+        如果你喜欢使用3D建模工具，并且将其导入three.js中，那么你可以用这种方式。
+    </p>
+    <p class="sectionTitle">
+        4.three.js中的文本几何形状
+    </p>
+    <p>如果你喜欢纯粹的使用three.js 或者喜欢创建动态3D文本几何形状，你可以用THREE.TextGeometry的实例创建Mesh</p>
+    <div class="codeSection">
+        <pre>
+            new THREE.TextGeometry(text,parameters);
+        </pre>
+    </div>
+    <p>
+        然而，为了使其能够运行，你的TextGeometry需要一个THREE.Font实例用以设置“font”。查看《文本几何形状》界面，以了解TextGeometry可以做什么，了解每个可用参数的作用，以及three.js如何分配一个
+        JSON数组的font。
+    </p>
+</div>
+<script>
+    snailUtils.loadTopButton();
+</script>
+</body>
+</html>
