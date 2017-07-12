@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
-    <title>如何更改物体</title>
+    <title>如何更新数据</title>
     <link rel="stylesheet" href="../../css/main.css">
     <link rel="stylesheet" href="../../css/threeJs.css">
     <link rel="stylesheet" href="../../css/font-awesome.css">
@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="three_article_content">
-    <h2 class="pageTitle">如何改变物体</h2>
+    <h2 class="pageTitle">如何更新对象数据</h2>
     <p>如果被添加到scene中后，所有对象都是默认自动更新模型</p>
     <div class="codeSection">
         <pre>
@@ -43,7 +43,7 @@
     </div>
 
     <p class="sectionTitle">
-        几何形状
+        Geometries
     </p>
     <p class="sectionSmallTitle">
         BufferGeometry
@@ -88,7 +88,7 @@
         接下来,我们使用下面的代码，将随机点添加到线：
     </p>
     <div class="codeSection">
-        <per>
+        <pre>
             var positions = line.geometry.attributes.position.array;
 
             var x, y, z, index;
@@ -105,7 +105,7 @@
             z += ( Math.random() - 0.5 ) * 30;
 
             }
-        </per>
+        </pre>
     </div>
     <p>
         如果你想改变第一次渲染的点的个数，可以像下面这样：
@@ -121,6 +121,116 @@
     <div class="codeSection">
         <pre>
             line.geometry.attributes.position.needsUpdate = true;
+        </pre>
+    </div>
+
+    <p class="sectionSmallTitle">
+        Geometry
+    </p>
+    <p>
+        下面的标志控制着更改Geometry的各种属性，只设置你要更改的属性的标志，因为更新的代价是昂贵的。一旦缓冲区发生变化，这些标志又会自动的变成false。如果你想保持更新缓冲区，你需要将它们每次设置为true
+        注意，这个仅仅适用于Geometry，不适用于BufferGeometry
+    </p>
+    <div class="codeSection">
+        <pre>
+            var geometry = new THREE.Geometry();
+            geometry.verticalNeedUpdate = true ;
+            geometry.elementsNeedUpdate = true ;
+            geometry.morphTargetsNeedUpdate = true ;
+            geometry.uvsNeedUpdate = true ;
+            geometry.normalsNeedUpdate = true ;
+            geometry.colorsNeedUpdate = true ;
+            geometry.tangentsNeedUpdate = true ;
+        </pre>
+    </div>
+    <p>在r66版本之前，mesh另外需要启动动态标志（保持内部输入数组）：</p>
+    <div class="codeSection">
+        <pre>
+            geometry.dynamic = true;
+        </pre>
+    </div>
+
+    <p class="sectionTitle">
+        Materials
+    </p>
+    <p>
+        所有的值都能够随意的改变（比如，colors,textures,opacity等等），值会在每帧渲染的时候发送过去。
+    </p>
+    <p>
+        同样GLstate相关的参数也可以在任何时候进行改变(depthTest, blending, polygonOffset, 等)。
+    </p>
+    <p>
+        Flat / smooth shading 被拷贝normals中。你应该重置normals缓冲区
+    </p>
+    <p>
+        以下属性不能很容易的改变其值，一旦material被渲染过一次
+    </p>
+    <ul>
+        <li>uniforms的数量和类型</li>
+        <li>lights的数量和类型</li>
+        <li>
+            <p>是否存在</p>
+            <ul>
+                <li>texture //纹理</li>
+                <li>fog //雾</li>
+                <li>vertex color //定点 颜色</li>
+                <li>skinning</li>
+                <li>morphing</li>
+                <li>shadow map</li>
+                <li>alpha test</li>
+            </ul>
+        </li>
+    </ul>
+    <p>
+        改变上面这些属性要求从新建立一个新的shader。并且你要像下面这样设置：
+    </p>
+    <div class="codeSection">
+        <pre>
+            material.needsUpdate = true
+        </pre>
+    </div>
+    <p>
+        记住在帧速率下，这可能会变得非常慢并且引起卡顿。特别是在windows下,在DirectX下shader编译比OpenGL要慢。
+    </p>
+    <p>
+        为了平滑的体验，你可以在某种程度上模拟这些值的变化，比如0强度灯光，白色的纹理，零密度雾
+    </p>
+    <p>
+        你可以自由的改变material用于geometry块。但是在块内，你不能拆分对象
+    </p>
+    <p>
+        如果你在运行期需要不同配置的materials：
+    </p>
+    <p>
+        如果materials / chunks数量比较小，你可以事先就将对象拆分了。
+    </p>
+    <p>
+        如果数量比较大，就可以考虑其他的解决方案了。比如在属性中设置texture拆分到不同的面位上。
+    </p>
+    <p class="sectionTitle">
+        Textures
+    </p>
+    <p>
+        如果Image, canvas, video and data textures要改变，设置以下的标志
+    </p>
+    <div class="codeSection">
+        <pre>
+            texture.needsUpdate = true;
+        </pre>
+    </div>
+    <p>
+        渲染目标会自动更新
+    </p>
+    <p class="sectionTitle">
+        Cameras
+    </p>
+    <p>
+        camera的位置和目标是自动更新的。如果你改变fov,aspect,near,far,随后你需要重新计算投影矩阵。
+    </p>
+    <div class="codeSection">
+        <pre>
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix;
         </pre>
     </div>
 </div>
