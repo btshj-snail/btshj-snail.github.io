@@ -328,6 +328,12 @@ ul.types li a, ul.types li span {
     transition:0.5s;
 }
 
+.oneSection .sectionContent .color_section_item_color{
+    background:#4b0
+}
+.oneSection .sectionContent .color_section_item_color_red{
+    background:#ff4400
+}
 .oneSection .sectionContent .color_section_item:hover{
    box-shadow:0px 0px 0px 2px #FFF;
     transform:scale(1.2);

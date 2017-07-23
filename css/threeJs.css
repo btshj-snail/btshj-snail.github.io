@@ -20,6 +20,23 @@ body{
 }
 .three_right_page{
     margin-left:20rem;
+    height:100%;
+    height:100vh;
+    position:relative;
+}
+
+.three_index_text{
+    width:100%;
+    font-size:4rem;
+    font-weight: bold;
+    position:absolute;
+    top:50%;
+    /*transform: translateY(-50%);*/
+    text-align:center;
+}
+.three_index_text .three_index_inner_text{
+   opacity:0;
+    position:relative;
 }
 .three_article_content{
     margin:2rem;
@@ -40,4 +57,25 @@ body{
     color:#ddd;
     font-weight:800;
     font-size:1.4rem;
+}
+
+.three_menu{
+    list-style: none;
+    padding:0;
+}
+.three_menu_item{
+    margin:1rem 0;
+    padding-left:2rem;
+    color:#ff4400;
+}
+.three_menu_item_bigTitle{
+    font-weight:bold;
+    font-size:1.8rem;
+    padding-left:1rem;
+    margin:2.5rem 0;
+}
+.three_menu_item_smallTitle{
+    font-size:2rem;
+    padding-left:1.2rem;
+    margin:2rem 0;
 }
