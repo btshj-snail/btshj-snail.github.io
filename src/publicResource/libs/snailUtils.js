@@ -68,4 +68,6 @@ const snailUtils = {
         }
 
     }
-}
+};
+
+export default snailUtils;

@@ -103,7 +103,7 @@ const loader = function (env) {
                         // 编码为dataUrl的最大尺寸
                         limit: 10000,
                         // 输出路径，相对于publicPath
-                        outputPath: '/imgs/',
+                        outputPath: 'imgs/',
                         name: '[name]_[hash:8].[ext]'
                     }
                 }
@@ -116,7 +116,7 @@ const loader = function (env) {
                     options: {
                         limit: 10000,
                         mimetype: 'application/font-woff',
-                        outputPath: '/font/',
+                        outputPath: 'font/',
                         name: '[name]_[hash:8].[ext]'
                     }
                 }
@@ -128,7 +128,7 @@ const loader = function (env) {
                     options: {
                         limit: 10000,
                         mimetype: 'application/octet-stream',
-                        outputPath: '/font/',
+                        outputPath: 'font/',
                         name: '[name]_[hash:8].[ext]'
                     }
                 }
@@ -140,7 +140,7 @@ const loader = function (env) {
                     options: {
                         limit: 10000,
                         // mimetype: 'application/vnd.ms-fontobject',
-                        outputPath: '/font/',
+                        outputPath: 'font/',
                         name: '[name]_[hash:8].[ext]'
                     }
                 }
@@ -152,7 +152,7 @@ const loader = function (env) {
                     options: {
                         limit: 10000,
                         mimetype: 'application/svg+xml',
-                        outputPath: '/font/',
+                        outputPath: 'font/',
                         name: '[name]_[hash:8].[ext]'
                     }
                 }

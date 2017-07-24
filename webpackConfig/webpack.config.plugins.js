@@ -25,6 +25,10 @@ const plugins = function (env) {
             name: ['js/vendor'],
             minChunks: 3,
         }),
+        // new CopyWebpackPlugin([
+        //     {from:config_obj.COPY_PATH_FONT},
+        //     {from:config_obj.COPY_PATH_IMG}
+        //     ]),
         new webpack.optimize.UglifyJsPlugin({
             sourceMap: true,
             beautify: false,
@@ -51,8 +55,7 @@ const plugins = function (env) {
 
         p_ary.push(
             new HtmlWebpackPlugin({
-
-                template:'html-withimg-loader!'+path.resolve(config_obj.HTML_TEMPLATE_PATH,"./"+item.template+".html"),
+                template:"html-withimg-loader!"+path.resolve(config_obj.HTML_TEMPLATE_PATH,"./"+item.template+".html"),
                 filename: config_obj.HTML_OUTPUT_DIRECTION+item.template + ".html",
                 hash: true,
                 inject: true,

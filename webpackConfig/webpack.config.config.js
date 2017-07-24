@@ -21,6 +21,8 @@ const config = function (env) {
     return {
         PROJECT_PATH: p_path,
         SOURCE_PATH: './src/view/',
+        // COPY_PATH_IMG:path.resolve(p_path, "./src/publicResource/imgs"),
+        // COPY_PATH_FONT:path.resolve(p_path, "./src/publicResource/font"),
         HTML_TEMPLATE_PATH:htmlTemplatePath,
         HTML_OUTPUT_DIRECTION:"page/",
         OUTPUT_PATH: outPath,

@@ -2,7 +2,11 @@
  * Created by snail on 2017/7/24.
  */
 
+require("../../publicResource/less/main.css");
+require("../../publicResource/less/font-awesome.css");
+require("../../publicResource/less/threeJs.css");
 
+import snailUtils from '../../publicResource/libs/snailUtils';
 
 jQuery.extend( jQuery.easing,
     {
