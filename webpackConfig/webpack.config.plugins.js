@@ -25,10 +25,12 @@ const plugins = function (env) {
             name: ['js/vendor'],
             minChunks: 3,
         }),
-        // new CopyWebpackPlugin([
-        //     {from:config_obj.COPY_PATH_FONT},
-        //     {from:config_obj.COPY_PATH_IMG}
-        //     ]),
+        new CopyWebpackPlugin([
+            {
+                from:config_obj.COPY_PATH_HTML_FRAGMENT_FROM,
+                to:config_obj.COPY_PATH_HTML_FRAGMENT_TO
+            }
+            ]),
         new webpack.optimize.UglifyJsPlugin({
             sourceMap: true,
             beautify: false,

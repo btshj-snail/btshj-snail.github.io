@@ -2,7 +2,7 @@
  * Created by snail on 2017/7/5.
  */
 
-require("../publicResource/less/main.css")
+require("../publicResource/less/main.less")
 
 import snailUtils from '../publicResource/libs/snailUtils';
 

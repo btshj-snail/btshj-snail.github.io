@@ -21,8 +21,9 @@ const config = function (env) {
     return {
         PROJECT_PATH: p_path,
         SOURCE_PATH: './src/view/',
-        // COPY_PATH_IMG:path.resolve(p_path, "./src/publicResource/imgs"),
-        // COPY_PATH_FONT:path.resolve(p_path, "./src/publicResource/font"),
+        CONFIG_PATH:path.resolve(p_path,"./webpackConfig"),
+        COPY_PATH_HTML_FRAGMENT_FROM:path.resolve(p_path, "./src/htmlFragment/"),
+        COPY_PATH_HTML_FRAGMENT_TO:path.resolve(outPath,"./htmlFragment"),
         HTML_TEMPLATE_PATH:htmlTemplatePath,
         HTML_OUTPUT_DIRECTION:"page/",
         OUTPUT_PATH: outPath,
@@ -31,7 +32,6 @@ const config = function (env) {
             {storage:'js/articleList',entry:"articleList.js",template:'articleList'},
             {storage:'js/superWeb',entry:"superWeb.js",template:'superWeb'},
             {storage:'js/threeJs/index',entry:"threeJs/index.js",template:'threeJs/index'},
-
         ]
     }
 }

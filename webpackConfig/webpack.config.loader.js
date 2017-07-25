@@ -5,14 +5,21 @@
 
 const webpack = require('webpack'),
     autoprefixer = require('autoprefixer'),
-    ExtractTextPlugin = require('extract-text-webpack-plugin');
+    ExtractTextPlugin = require('extract-text-webpack-plugin'),
+    config = require('./webpack.config.config');
 
+const config_obj = config();
 function getLessUse(env) {
     return env != 'dev'
         ?
         ExtractTextPlugin.extract([
             {loader: 'css-loader'},
-            {loader: 'postcss-loader',options:{plugins:[autoprefixer({browsers:['ie>=8','>1% in CN']})]}},//中国使用了超过1%的浏览器
+            // {loader: 'postcss-loader',options:{plugins:[autoprefixer({browsers:['ie>=8','>1% in CN']})]}},//中国使用了超过1%的浏览器
+            {loader:'postcss-loader',options:{
+                config: {
+                    path: config_obj.CONFIG_PATH+'/postcss.config.js'
+                }
+            }},
             {loader: 'less-loader'}
         ])
         :
@@ -23,7 +30,12 @@ function getLessUse(env) {
                     modules: false
                 }
             },
-            {loader: 'postcss-loader',options:{plugins:[autoprefixer({browsers:['ie>=8','>1% in CN']})]}},
+            // {loader: 'postcss-loader',options:{plugins:[autoprefixer({browsers:['ie>=8','>1% in CN']})]}},
+            {loader:'postcss-loader',options:{
+                config: {
+                    path: config_obj.CONFIG_PATH+'/postcss.config.js'
+                }
+            }},
             {
                 loader: 'less-loader',
                 options: {
@@ -37,22 +49,24 @@ function getCssUse(env) {
         ?
         ExtractTextPlugin.extract([
             'style-loader',
-            {
-                loader: 'css-loader',
-                options: {
+            {loader: 'css-loader'},
+            // {loader: 'postcss-loader',options:{plugins:[autoprefixer({browsers:['ie>=8','>1% in CN']})]}},//中国使用了超过1%的浏览器
+            {loader:'postcss-loader',options:{
+                config: {
+                    path: config_obj.CONFIG_PATH+'/postcss.config.js'
                 }
-            },
-            {loader: 'postcss-loader',options:{plugins:[autoprefixer({browsers:['ie>=8','>1% in CN']})]}},//中国使用了超过1%的浏览器
+            }}
         ])
         :
         [
             'style-loader',
-            {
-                loader: 'css-loader',
-                options: {
+            {loader: 'css-loader'},
+            // {loader: 'postcss-loader',options:{plugins:[autoprefixer({browsers:['ie>=8','>1% in CN']})]}},//中国使用了超过1%的浏览器
+            {loader:'postcss-loader',options:{
+                config: {
+                    path: config_obj.CONFIG_PATH+'/postcss.config.js'
                 }
-            },
-            {loader: 'postcss-loader',options:{plugins:[autoprefixer({browsers:['ie>=8','>1% in CN']})]}},//中国使用了超过1%的浏览器
+            }}
             ]
 }
 
@@ -159,7 +173,11 @@ const loader = function (env) {
             },
             {
                 test: /\.(htm|html)$/i,
-                loader: 'html-withimg-loader'
+                use: [
+
+                    {loader:'html-withimg-loader'},
+                    {loader:'html-loader'},
+                    ]
             }
             // {
             //     test: /\.html$/,

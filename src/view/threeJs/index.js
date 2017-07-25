@@ -2,9 +2,9 @@
  * Created by snail on 2017/7/24.
  */
 
-require("../../publicResource/less/main.css");
-require("../../publicResource/less/font-awesome.css");
-require("../../publicResource/less/threeJs.css");
+require("../../publicResource/less/main.less");
+// require("../../publicResource/less/font-awesome.less");
+require("../../publicResource/less/threeJs.less");
 
 import snailUtils from '../../publicResource/libs/snailUtils';
 

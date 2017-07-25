@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>创建场景</title>
+    <!--<link rel="stylesheet" href="../../css/main.css">-->
+    <!--<link rel="stylesheet" href="../../css/threeJs.css">-->
+    <!--<link rel="stylesheet" href="../../css/font-awesome.css">-->
+    <!--<script src="../../js/component/jquery-3.2.1.min.js"></script>-->
+    <!--<script src="../../js/common/snailUtils.js"></script>-->
+
+</head>
+<body>
+    <div class="three_article_content">
+        <h2 class="pageTitle">创建一个场景</h2>
+
+        <p>这一节的目标是概要的介绍three.js.我们将从设置一个scene以及一个旋转的cube开始。我们在页面的底部放置了一个可以运行的示例，以方便您随时查看.</p>
+
+        <p class="sectionTitle">
+            开始前的准备
+        </p>
+        <p>
+            在我们开始使用three.js前，我们必须要有一个html界面用以显示我们three.js渲染结果。我们建立了一个名叫threeJs的工程，在该工程下建立了一个名叫js的文件夹，将three.js文件拷贝到这个文件夹中。
+            然后新建一个html界面，输入以下代码：
+        </p>
+        <div class="codeSection">
+            <pre class="">
+                &lt;!DOCTYPE html&gt;
+                &lt;html&gt;
+                &lt;head&gt;
+                    &lt;meta charset=utf-8&gt;
+                    &lt;title&gt;My first three.js app&lt;/title&gt;
+                    &lt;style&gt;
+                        body { margin: 0;padding:0 }
+                        canvas { width: 100%; height: 100% }
+                    &lt;/style&gt;
+                &lt;/head&gt;
+                &lt;body&gt;
+                &lt;script src="js/three.js"&gt;&lt;/script&gt;
+                &lt;script&gt;
+                    // Our Javascript will go here.
+                &lt;/script&gt;
+                &lt;/body&gt;
+                &lt;/html&gt;
+            </pre>
+        </div>
+        <p>
+            以后我们的js代码将书写在空的script标签中。
+        </p>
+
+        <p class="sectionTitle">
+            创建一个场景
+        </p>
+        <p>
+            为了能够显示three.js，我们需要三个对象：一个scene,一个camera，一个可以渲染scene和camera的renderer。
+        </p>
+        <div class="codeSection">
+            <pre>
+                var scene = new THREE.Scene();
+		        var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
+
+		        var renderer = new WebGLRenderer();
+		        renderer.setSize(window.innerWidth,window.innerHeight);
+		        document.body.appendChild(renderer.domElement);
+            </pre>
+        </div>
+        <p>
+            让我们花点时间来解释这是怎么回事。现在我们已经设置好了scene,camera以及renderer。在three.js中有内置的几种不同类型的camera。现在我们使用的是PerspectiveCamera(透视投影相机)。
+        </p>
+        <p>
+            new THREE.Perspective（fov,aspect,near,far）中有4个参数。第一个参数是即视景体竖直方向上的张角（是角度制而非弧度制），aspect 是照相机水平方向和竖直方向长度的比值，通常设为Canvas的横纵比例。near和far分别是照相机到视景体最近、最远的距离，均为正值，且far应大于near。
+        </p>
+        <p>
+            接下来是renderer。这是一个魔法产生的地方。除了我们使用的WebGlRenderer外，three.js 还提供了其他几种渲染器，用来解决那些由于各种原因不支持WebGL的老浏览器。
+        </p>
+        <p>
+            除了创建renderer实例，还要设置我们希望应用程序呈现的大小。比较好的一个办法是使用我们应用程序区域的大小（在实例中，我们用的是浏览器的宽高）。
+            为了提高应用程序的性能，你也可以设置一个小一点的值。比如，我们渲染浏览器显示区域的一半，window.innerWidth/2 ,window.innerHeight/2
+        </p>
+        <p>
+            如果你想保持整个浏览器显示区域的大小，但是又想使用低的分辨率。那么你可以调用setSize，并将第三个参数设置为false。比如，setSize(window.innerWidth/2,window.innerHeight/2,false),这样three.js
+            会按照canvas标签的宽、高来的一半来作为分辨率。
+        </p>
+        <p>
+            最后，但不是最重要的，我们将渲染元素添加到我们的HTML文档中。canvas标签可以用来显示我们渲染的场景。
+        </p>
+        <p>
+            “一切都好，但是我们承诺的cube在什么地方呢？” ok,让我们来添加cube。
+        </p>
+        <div class="codeSection">
+            <pre>
+                var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+                var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+                var cube = new THREE.Mesh( geometry, material );
+                scene.add( cube );
+
+                camera.position.z = 5;
+            </pre>
+        </div>
+        <p>
+            我们使用BoxGeometry创建立方体。这个对象包含了立方体所有的点（vertices）和面（face）。在后面的章节再来进行更多的探索。
+        </p>
+        <p>
+            除了形状，我们需要物体的材质和颜色。three.js包含了几种材质，但是现在我们使用的MeshGeometry。所有的材质，将作为对象的一个属性来被使用。
+            为了让事情变得简单，我们只设置材质为绿色（0x00ff00）
+        </p>
+        <p>
+            接下来，我们需要一个Mesh。mesh是一个对象，需要geometry和material，然后我们可以将mesh添加到我们的scene中。
+        </p>
+        <p>
+            在默认的情况下，当我们调用scene.add(),我们会将其添加到坐标为（0,0,0）的地方。这会导致camera和cube相互重叠。为了避免这种情况,我们只是将camera移出一点。
+        </p>
+
+
+
+        <p class="sectionTitle">
+            渲染场景
+        </p>
+        <p>
+            如果你将上面的代码复制到HTMl指定位置中，你无法看到任何东西。这是因为我们还没有做渲染。为此，我们调用render或者循环动画。
+        </p>
+
+        <div class="codeSection">
+            <pre>
+                function animate(){
+                    requestAnimationFrame(animate);
+                    renderer.render(scene,camera);
+                }
+                animate();
+            </pre>
+        </div>
+
+        <p>
+            该方法会使浏览器循环每秒渲染60次。如果你只是一个刚刚在浏览器中写游戏的开发人员，你可能会问“为什么不用setInterval来循环”。事实是我们可以使用setInterval,但是requestAnimation相较于setInterval有很多优点。
+            其中最重要的可能是，当用户切换到浏览器的其他选项卡时，requestAnimation会暂停渲染。这样就不会浪费宝贵的处理能力和电池寿命
+        </p>
+
+        <p class="sectionTitle">使cube动起来</p>
+        <p>
+            如果您将上面的所有代码都写到我们之前创建的HTML中，那么你应该能够看到一个绿色的立方体。接下来，我们让事情变得稍微有趣点，让绿色的立方体旋转起来。
+        </p>
+        <p>
+            将下面的代码放置到animate方法中 renderer.render()语句上。
+        </p>
+        <div class="codeSection">
+            <pre>
+                cube.rotation.x +=0.1;
+                cube.rotation.y +=0.1;
+            </pre>
+
+        </div>
+        <p>
+            这将每帧（60次/秒）运行一次，让立方体旋转起来。通常，当程序运行起来后，你想要移动或者改变物体都是通过循环动画来实现的。
+            当然，你可以在animate中调用其他方法，避免你的animate方法中出现数百行的代码。
+        </p>
+
+        <p class="sectionTitle">
+            结尾
+        </p>
+        <p>
+            恭喜你，你完成了你的第一个three.js应用程序。
+        </p>
+        <p>
+            以下是完整的示例代码，使用它用以更好的理解下面的代码。
+        </p>
+        <div class="codeSection">
+            <pre>
+                &lt;!DOCTYPE html&gt;
+                &lt;html&gt;
+                    &lt;head&gt;
+                        &lt;meta charset=utf-8&gt;
+                        &lt;title&gt;My first three.js app&lt;/title&gt;
+                        &lt;style&gt;
+                            body { margin: 0; padding:0;}
+                            canvas { width: 100%; height: 100% }
+                        &lt;/style&gt;
+                    &lt;/head&gt;
+                    &lt;body&gt;
+                        &lt;script src="js/three.js"&gt;&lt;/script&gt;
+                        &lt;script&gt;
+
+                        var scene = new THREE.Scene();
+                        var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
+
+                        var renderer = new THREE.WebGLRenderer();
+                        renderer.setSize(window.innerWidth,window.innerHeight);
+                        document.body.appendChild(renderer.domElement);
+
+                        var geometry = new THREE.BoxGeometry(1,1,1);
+                        var material = new THREE.MeshBasicMaterial({color:0x00ff00});
+                        var cube = new THREE.Mesh(geometry,material);
+                        scene.add(cube);
+
+                        camera.position.z=5;
+                        scene.add(camera);
+
+
+                        function animate(){
+                            requestAnimationFrame(animate);
+                            cube.position.x +=0.1;
+                            cube.position.y +=0.1;
+                            renderer.render(scene,camera);
+                        }
+
+                        animate();
+                        &lt;/script&gt;
+                    &lt;/body&gt;
+                &lt;/html&gt;
+            </pre>
+        </div>
+    </div>
+
+</body>
+</html>
