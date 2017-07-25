@@ -1,10 +1,10 @@
 /**
  * Created by snail on 2017/7/24.
  */
-
+require("../../publicResource/less/threeJs.less");
 require("../../publicResource/less/main.less");
 // require("../../publicResource/less/font-awesome.less");
-require("../../publicResource/less/threeJs.less");
+
 
 import snailUtils from '../../publicResource/libs/snailUtils';
 

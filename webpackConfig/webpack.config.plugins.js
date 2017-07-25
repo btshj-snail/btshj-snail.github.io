@@ -71,7 +71,9 @@ const plugins = function (env) {
     } else {
         //css 单独打包
         p_ary.push(
-            new ExtractTextWebpackPlugin('style/main.[hash].css')
+            new ExtractTextWebpackPlugin('style/[name].[hash].css',{
+                allChunks: true
+            })
         );
         //清除编译文件存放空间
         p_ary.push(
