@@ -6,129 +6,56 @@
     <title>Snail Home</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
     <meta name="description" content="snail web record">
-    <link rel="stylesheet" href="./css/main.css">
-    <script src="./js/component/browser.min.js"></script>
-    <script src="./js/component/jquery-3.2.1.min.js"></script>
-    <script src="./js/common/snailUtils.js"></script>
-    <script src="./js/index.js"></script>
+
 
 </head>
 <body>
-<!--<div class="screenLoading" id="screenLoading">-->
-    <!--<div class="spinner">-->
-        <!--<div class="circle"></div>-->
-        <!--<img src="./imgs/snail.png" alt=""/>-->
-    <!--</div>-->
-
-<!--</div>-->
-
-
-<!--<div class="inclineTarget">snail blog</div>-->
-<!--<div class="content">-->
-
-    <!--<img src="./imgs/background1.jpg" id="fullscreen">-->
-
-
-
-    <!--<img src="./imgs/snail.png" id="avatar">-->
-
-
-    <!--<h1>Snail Home</h1>-->
-    <!--<h3>The super WEB,WEB without end</h3>-->
-
-
-    <!--<ul class="types">-->
-
-        <!--<li pageUrl = "./pages/superWeb.html">-->
-            <!--<a class="fa fa-2x fa-github" href="javaScript:void(0)"></a>-->
-            <!--<span class="description">GitHub</span>-->
-        <!--</li>-->
-
-
-
-        <!--<li pageUrl = "./pages/articleList.html" ><a class="fa fa-2x fa-codepen" href="javaScript:void(0)"></a><span class="description">Article</span></li>-->
-
-
-
-        <!--<li pageUrl = "./pages/threeJs/createScene.html"><a class="fa fa-2x fa-facebook" href="javaScript:void(0)"></a><span class="description">Effect</span></li>-->
-
-
-
-        <!--&lt;!&ndash;<li><a class="fa fa-2x fa-vk" href="javaScript:void(0)"></a><span class="description"></span></li>&ndash;&gt;-->
-
-
-
-        <!--&lt;!&ndash;<li><a class="fa fa-2x fa-twitter" href="javaScript:void(0)"></a><span class="description"></span></li>&ndash;&gt;-->
-
-
-
-        <!--&lt;!&ndash;<li><a class="fa fa-2x fa-google-plus" href="javaScript:void(0)"></a><span class="description"></span></li>&ndash;&gt;-->
-
-
-
-        <!--&lt;!&ndash;<li><a class="fa fa-2x fa-linkedin" href="javaScript:void(0)"><span class="description">LinkedIn</span></a></li>&ndash;&gt;-->
-
-
-
-        <!--&lt;!&ndash;<li><a class="fa fa-2x fa-vine" href="javaScript:void(0)"><span class="description">Vine</span></a></li>&ndash;&gt;-->
-
-
-
-        <!--&lt;!&ndash;<li><a class="fa fa-2x fa-instagram" href="javaScript:void(0)"><span class="description">Instagram</span></a></li>&ndash;&gt;-->
-
-
-
-        <!--&lt;!&ndash;<li><a class="fa fa-2x fa-flickr" href="javaScript:void(0)"><span class="description">Flickr</span></a></li>&ndash;&gt;-->
-
-
-
-        <!--&lt;!&ndash;<li><a class="fa fa-2x fa-steam" href="javaScript:void(0)"><span class="description">Steam</span></a></li>&ndash;&gt;-->
-
-
-
-        <!--&lt;!&ndash;<li><a class="fa fa-2x fa-soundcloud" href="javaScript:void(0)"><span class="description">Soundcloud</span></a></li>&ndash;&gt;-->
-
-
-
-        <!--&lt;!&ndash;<li><a class="fa fa-2x fa-lastfm" href="javaScript:void(0)"><span class="description">Last.fm</span></a></li>&ndash;&gt;-->
-
-
-
-        <!--&lt;!&ndash;<li><a class="fa fa-2x fa-stack-overflow" href="javaScript:void(0)"><span class="description">Stack OF</span></a></li>&ndash;&gt;-->
-
-
-
-        <!--&lt;!&ndash;<li><a class="fa fa-2x fa-reddit" href="javaScript:void(0)"><span class="description">Reddit</span></a></li>&ndash;&gt;-->
-
-
-
-        <!--&lt;!&ndash;<li><a class="fa fa-2x fa-medium" href="javaScript:void(0)"><span class="description">Medium</span></a></li>&ndash;&gt;-->
-
-
-
-        <!--&lt;!&ndash;<li><a class="fa fa-2x fa-tumblr" href="javaScript:void(0)"><span class="description">Tumblr</span></a></li>&ndash;&gt;-->
-
-
-
-        <!--&lt;!&ndash;<li><a class="fa fa-2x fa-weibo" href="javaScript:void(0)"><span class="description">微博</span></a></li>&ndash;&gt;-->
-
-
-
-        <!--&lt;!&ndash;<li><a class="fa fa-2x fa-tags" href="javaScript:void(0)"><span class="description">Blog</span></a></li>&ndash;&gt;-->
-
-
-
-        <!--&lt;!&ndash;<li><a class="fa fa-2x fa-envelope" href="javaScript:void(0)"><span class="description">Email</span></a></li>&ndash;&gt;-->
-
-
-        <!--&lt;!&ndash;<li><a class="fa fa-2x fa-key" href="javaScript:void(0)"><span class="description">PGP Key</span></a></li>&ndash;&gt;-->
-
-    <!--</ul>-->
-
-
-<!--</div>-->
 <script>
-    window.location.href = "./static/page/index.html"
+
+    function BrowserType()
+    {
+        var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+        var isOpera = userAgent.indexOf("Opera") > -1; //判断是否Opera浏览器
+        var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera; //判断是否IE浏览器
+        var isEdge = userAgent.indexOf("Windows NT 6.1;") > -1 && userAgent.indexOf("Trident/7.0;") > -1 && !isIE; //判断是否IE的Edge浏览器
+        var isFF = userAgent.indexOf("Firefox") > -1; //判断是否Firefox浏览器
+        var isSafari = userAgent.indexOf("Safari") > -1 && userAgent.indexOf("Chrome") == -1; //判断是否Safari浏览器
+        var isChrome = userAgent.indexOf("Chrome") > -1 && userAgent.indexOf("Safari") > -1; //判断Chrome浏览器
+
+        if (isIE)
+        {
+            var reIE = new RegExp("MSIE (\\d+\\.\\d+);");
+            reIE.test(userAgent);
+            var fIEVersion = parseFloat(RegExp["$1"]);
+            if(fIEVersion == 7)
+            { return "IE7";}
+            else if(fIEVersion == 8)
+            { return "IE8";}
+            else if(fIEVersion == 9)
+            { return "IE9";}
+            else if(fIEVersion == 10)
+            { return "IE10";}
+            else if(fIEVersion == 11)
+            { return "IE11";}
+            else
+            { return "0"}//IE版本过低
+        }//isIE end
+
+        if (isFF) {  return "FF";}
+        if (isOpera) {  return "Opera";}
+        if (isSafari) {  return "Safari";}
+        if (isChrome) { return "Chrome";}
+        if (isEdge) { return "Edge";}
+    }//myBrowser() end
+
+    var a = BrowserType();
+    alert(a)
+    if(a=="IE7" || a=="IE8" || a== "IE9"){
+        alert("哥们，作为程序猿你还在用"+a+".也太low了吧！快用chrome")
+    }else{
+        window.location.href = "./static/page/index.html"
+    }
+
 </script>
 </body>
 </html>
