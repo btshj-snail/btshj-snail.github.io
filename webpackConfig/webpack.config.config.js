@@ -32,6 +32,7 @@ const config = function (env) {
             {storage:'js/articleList',entry:"articleList.js",template:'articleList'},
             {storage:'js/superWeb',entry:"superWeb.js",template:'superWeb'},
             {storage:'js/threeJs/index',entry:"threeJs/index.js",template:'threeJs/index'},
+            {storage:'js/compileFrame/index',entry:"compileFrame/index.js",template:'compileFrame/index'},
         ]
     }
 }
