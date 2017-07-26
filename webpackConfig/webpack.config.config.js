@@ -33,6 +33,21 @@ const config = function (env) {
             {storage:'js/superWeb',entry:"superWeb.js",template:'superWeb'},
             {storage:'js/threeJs/index',entry:"threeJs/index.js",template:'threeJs/index'},
             {storage:'js/compileFrame/index',entry:"compileFrame/index.js",template:'compileFrame/index'},
+            {storage:'js/cssOther/cssOtherIndex',entry:"cssOther/cssOtherIndex.js",template:'cssOther/cssOtherIndex'},
+            {storage:'js/cssOther/verticalAlign',entry:"cssOther/verticalAlign.js",template:'cssOther/verticalAlign'},
+            {storage:'js/cssOther/background',entry:"cssOther/background.js",template:'cssOther/background'},
+            {storage:'js/cssOther/border',entry:"cssOther/border.js",template:'cssOther/border'},
+            {storage:'js/cssOther/clip',entry:"cssOther/clip.js",template:'cssOther/clip'},
+            {storage:'js/cssOther/display',entry:"cssOther/display.js",template:'cssOther/display'},
+            {storage:'js/cssOther/float',entry:"cssOther/float.js",template:'cssOther/float'},
+            {storage:'js/cssOther/line-height',entry:"cssOther/line-height.js",template:'cssOther/line-height'},
+            {storage:'js/cssOther/overflow',entry:"cssOther/overflow.js",template:'cssOther/overflow'},
+            {storage:'js/cssOther/position',entry:"cssOther/position.js",template:'cssOther/position'},
+            {storage:'js/cssOther/text-decoration',entry:"cssOther/text-decoration.js",template:'cssOther/text-decoration'},
+            {storage:'js/cssOther/text-transform',entry:"cssOther/text-transform.js",template:'cssOther/text-transform'},
+            {storage:'js/cssOther/white-space',entry:"cssOther/white-space.js",template:'cssOther/white-space'},
+            {storage:'js/cssOther/widthHeight',entry:"cssOther/widthHeight",template:'cssOther/widthHeight'},
+            {storage:'js/cssOther/wordSpacing',entry:"cssOther/wordSpacing",template:'cssOther/wordSpacing'},
         ]
     }
 }

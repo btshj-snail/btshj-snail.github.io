@@ -4,6 +4,9 @@
 
 
 const snailUtils = {
+    getRandom(min,max){
+        return Math.floor(Math.random()*(max-min+1)+min);
+    },
     startLoading(){
         let dom_loading = document.querySelector("#screenLoading");
         if(dom_loading){

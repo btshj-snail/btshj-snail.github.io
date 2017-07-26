@@ -1,0 +1,64 @@
+<!DOCTYPE html> <html lang=en> <head> <meta charset=UTF-8> <title>snail_vertical-align</title> <script src=../../threeComponent/browser.min.js></script> <script src=../../threeComponent/jquery-3.2.1.min.js></script> <link href="/static/style/js/vendor.974fef8d29044e40faf4.css?974fef8d29044e40faf4" rel="stylesheet"></head> <body> <div class="headSection headSection_otherCss"> <div class=headSection_otherCss_Img_div> <div class=animate_text_init id=headSectionAnimate><span>垂直居中</span></div> <img src=/static/imgs/cssOther_bg_2bc7aa5c.jpg alt=""> </div> </div> <div class=contentSection> <div class=content> <p>在css中，vertical-align只能运用在<span class=importWord>行内元素或者替换元素中</span>，并且该属性不能够被继承。vertical-align只接受8个关键字、一个百分数值或一个长度。其中关键字包括：baseline(默认)、sub、supper、bottom、text-bottom、middle、top、text-top</p> <div class=content_effect> <ol> <li> <p> vertical-align 不影响块级元素中的内容对齐。不过，可以用它来影响表格单元格中的垂直对齐。 </p> <div class=effect> <div class=effect_title>效果:</div> <div class=effect_content> <style>.table_vl .table-cell{border:solid 1px #ccc;height:80px;vertical-align:top}</style> <table class=table_vl> <thead> <tr> <th>姓名</th> <th>年龄</th> </tr> </thead> <tbody> <tr> <td class=table-cell>Jack</td> <td class=table-cell>30</td> </tr> <tr> <td class=table-cell>Tom</td> <td class=table-cell>30</td> </tr> </tbody> </table> </div> </div> <div class=eg_code> <div class=eg_code_title>代码:</div> <div class=eg_code_content> <pre>
+			.table_vl .table-cell
+				{
+					border:solid 1px #ccc;
+					height:80px;
+					vertical-align: top;
+				}
+				&lt;table class="table_vl"&gt;
+						&lt;thead&gt;
+							&lt;tr&gt;
+								&lt;th&gt;姓名&lt;/th&gt;
+								&lt;th&gt;年龄&lt;/th&gt;
+							&lt;/tr&gt;
+						&lt;/thead&gt;
+						&lt;tbody&gt;
+							&lt;tr&gt;
+								&lt;td class="table-cell"&gt;Jack&lt;/td&gt;
+								&lt;td class="table-cell"&gt;30&lt;/td&gt;
+							&lt;/tr&gt;
+							&lt;tr&gt;
+								&lt;td class="table-cell"&gt;Tom&lt;/td&gt;
+								&lt;td class="table-cell"&gt;30&lt;/td&gt;
+							&lt;/tr&gt;
+						&lt;/tbody&gt;
+					&lt;/table&gt;
+	</pre> </div> </div> </li> <li> 看看top、text-top、bottom、text-bottom区别.从下面的效果图可以看出。top是指元素的顶部(<span class=importWord>行高而不是内容高度</span>)移动到行高的位置，而text-top是指元素的顶部移动到父元素文本高度的位置。同理，bottom和text-bottom也是一样。 <div class=effect> <div class=effect_title>效果:</div> <div class=effect_content> <style type=text/css>.bigLineHeight{background:#f40;color:#fff;line-height:300px;font-size:20px;border:solid 1px #ccc}.bigLineHeightSpan{background:#000}.vertical-top{vertical-align:top}.vertical-text-top{vertical-align:text-top}.vertical-bottom{vertical-align:bottom}.vertical-text-bottom{vertical-align:text-bottom}.vertical-middle{vertical-align:middle}</style> <p class=bigLineHeight> <span class=bigLineHeightSpan> top <img src=/static/imgs/ic_4f0bf590.png class=vertical-top /> text-top <img src=/static/imgs/ic_4f0bf590.png class=vertical-text-top /> bottom <img src=/static/imgs/ic_4f0bf590.png class=vertical-bottom /> text-bottom <img src=/static/imgs/ic_4f0bf590.png class=vertical-text-bottom /> middle <img src=/static/imgs/ic_4f0bf590.png class=vertical-middle /> </span> </p> </div> </div> <div class=eg_code> <div class=eg_code_title>代码:</div> <div class=eg_code_content> <pre>
+		.bigLineHeight {
+			background:#ff4400;
+			color:#fff;
+			line-height:300px;
+			font-size: 20px;
+			border: solid 1px #ccc;
+		}
+		.bigLineHeightSpan{
+			background:#000;
+		}
+		.vertical-top {
+			vertical-align: top;
+		}
+		.vertical-text-top {
+			vertical-align: text-top;
+		}
+		.vertical-bottom {
+			vertical-align: bottom;
+		}
+		.vertical-text-bottom {
+			vertical-align: text-bottom;
+		}
+		.vertical-middle{
+			vertical-align: middle;
+		}
+
+
+		&lt;p class="bigLineHeight"&gt;
+			&lt;span class="bigLineHeightSpan"&gt;
+				top &lt;img src="./assets/imgs/ic.png" class="vertical-top"/&gt;
+				text-top &lt;img src="./assets/imgs/ic.png" class="vertical-text-top"/&gt;
+				bottom &lt;img src="./assets/imgs/ic.png" class="vertical-bottom"/&gt;
+				text-bottom &lt;img src="./assets/imgs/ic.png" class="vertical-text-bottom"/&gt;
+				middle &lt;img src="./assets/imgs/ic.png" class="vertical-middle"/&gt;
+			&lt;/span&gt;
+
+		&lt;/p>
+	</pre> </div> </div> </li> </ol> </div> </div> </div> <script type="text/javascript" src="/static/js/vendor.974fef8d29044e40faf4.js?974fef8d29044e40faf4"></script><script type="text/javascript" src="/static/js/cssOther/verticalAlign.974fef8d29044e40faf4.js?974fef8d29044e40faf4"></script></body> </html>

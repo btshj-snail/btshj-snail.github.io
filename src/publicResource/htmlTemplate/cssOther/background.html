@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Css index</title>
+    <script src="../../threeComponent/browser.min.js"></script>
+    <script src="../../threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+
+<div class="screenLoading" id="screenLoading">
+    <div class="spinner">
+        <div class="circle"></div>
+        <img src="../../imgs/snail.png" alt=""/>
+    </div>
+</div>
+
+<div class="headSection headSection_otherCss">
+    <div class="headSection_otherCss_Img_div">
+        <div class="animate_text_init" id="headSectionAnimate"><span ><label style="color:#ff4400">B</label>ackground</span></div>
+        <img src="../../imgs/cssOther_bg.jpg" alt="">
+    </div>
+</div>
+<div class="contentSection">
+    <div class="content">
+
+        <div class=content_effect>
+            <ol>
+                <li>
+                    <p>
+                        背景图像涉及background-image ,background-repeat , background-position 等属性
+                    </p>
+
+                    <table class="attr_table">
+                        <tr>
+                            <td class="attr_table_title" colspan="2">background-image</td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">值</td>
+                            <td class="attr_table_value">none | uri | inherit
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">初始值</td>
+                            <td class="attr_table_value">none</td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">应用于</td>
+                            <td class="attr_table_value">所有元素</td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">继承性</td>
+                            <td class="attr_table_value">无</td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">计算值</td>
+                            <td class="attr_table_value">绝对URI</td>
+                        </tr>
+                    </table>
+
+                    <div class="effect">
+                        <div class=effect_title>效果:</div>
+                        <div class="effect_content">
+                            <style>
+                                .background_background_image{
+                                    background-image:url("../../imgs/w1.png");
+                                    background-color:#002bff;
+                                    height:90px;
+                                    color:#ff4400;
+                                    font-size: 60px;
+                                    text-align: center;
+                                    line-height:90px;
+                                    word-spacing: 50px;
+                                }
+
+
+                            </style>
+                            <div>
+                                <div class="background_background_image">
+                                    We are family
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </li>
+
+                <li>
+                    <p>背景图片的重复，是可以控制方向的</p>
+
+
+
+                    <table class="attr_table">
+                        <tr>
+                            <td class="attr_table_title" colspan="2">background-repeat</td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">值</td>
+                            <td class="attr_table_value">repeat | repeat-x | repeat-y | no-repeat | inherit
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">初始值</td>
+                            <td class="attr_table_value">repeat</td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">应用于</td>
+                            <td class="attr_table_value">所有元素</td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">继承性</td>
+                            <td class="attr_table_value">无</td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">计算值</td>
+                            <td class="attr_table_value">根据指定</td>
+                        </tr>
+                    </table>
+
+
+                    <div class="effect">
+                        <div class=effect_title>效果:</div>
+                        <div class="effect_content">
+                            <style>
+                                .background_image{
+                                    background-image:url("../../imgs/w1.png");
+                                    background-color:#002bff;
+                                    height:90px;
+                                    color:#ff4400;
+                                    font-size: 20px;
+                                    text-align: center;
+                                    line-height:90px;
+                                    word-spacing: 50px;
+                                    margin:30px 0px;
+                                }
+                                .background_repeat-no{
+                                    background-repeat:no-repeat;
+                                }
+                                .background_repeat-repeat{
+                                    background-repeat:repeat;
+                                }
+                                .background_repeat-repeat-x{
+                                    background-repeat:repeat-x;
+                                }
+                                .background_repeat-repeat-y{
+                                    background-repeat:repeat-y;
+                                }
+
+
+                            </style>
+                            <div>
+                                <div class="background_image background_repeat-no">
+                                    不重复
+                                </div>
+                                <div class="background_image background_repeat-repeat">
+                                    x轴、y轴重复
+                                </div>
+                                <div class="background_image background_repeat-repeat-x">
+                                    x轴重复
+                                </div>
+                                <div class="background_image background_repeat-repeat-y">
+                                    y轴重复
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <p>
+                        背景图片的位置。每个包含图像的背景都从一个图像开始，再根据background-repeat的值重复（或者不重复）。这个起点称之为原图像。css2 和css2.1指出，background-position，将相对于元素的内边距边界放置原图像。换句话说，放置图像的上下文是内边框边界，尽管背景去会延伸到外边框边界。并非所有的浏览器都能正确的放置图像，有些浏览器会相对于外边框的边界而不是内边框的边界来放置原图像。不过要是没有边框，所有浏览器都是一样的；
+                        background-position的关键字可以按照任意顺序出现，只是要保证不能超过两个关键字。
+                    </p>
+
+
+
+                    <table class="attr_table">
+                        <tr>
+                            <td class="attr_table_title" colspan="2">background-position</td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">值</td>
+                            <td class="attr_table_value">[percentage | length | left | center | right][percentage | length | top | center | bottom ]  || [left | center | right ] || [top | center | bottom]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">初始值</td>
+                            <td class="attr_table_value">0% 0%</td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">应用于</td>
+                            <td class="attr_table_value">块级元素或者替换元素</td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">继承性</td>
+                            <td class="attr_table_value">无</td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">百分比</td>
+                            <td class="attr_table_value">相对于元素和原图上的相应点</td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">计算值</td>
+                            <td class="attr_table_value">如果指定了length，则为绝对长度偏移。否则是百分数</td>
+                        </tr>
+                    </table>
+
+
+                    <div class="effect">
+                        <div class=effect_title>效果:</div>
+                        <div class="effect_content">
+                            <style>
+                                .background_position{
+                                    background-image:url("../../imgs/w1.png");
+                                    background-color:#002bff;
+                                    background-repeat:no-repeat;
+                                    height:90px;
+                                    color:#ff4400;
+                                    font-size: 20px;
+                                    text-align: center;
+                                    line-height:90px;
+                                    word-spacing: 50px;
+                                    margin:30px 0px;
+                                }
+                                .background_position_left_bottom{
+                                    background-position:left bottom;
+                                }
+                                .background_position_bottom{
+                                    background-position:bottom;
+                                }
+                                .background_repeat-repeat-x{
+                                    background-repeat:repeat-x;
+                                }
+                                .background_repeat-repeat-y{
+                                    background-repeat:repeat-y;
+                                }
+
+
+                            </style>
+                            <div>
+                                <div class="background_position background_position_left_bottom">
+                                    左下角
+                                </div>
+                                <div class="background_position background_position_bottom">
+                                    如果只出现一个关键字，那么另外一个关键字默认为center
+                                </div>
+                                <div class="background_image background_repeat-repeat-x">
+                                    x轴重复
+                                </div>
+                                <div class="background_image background_repeat-repeat-y">
+                                    y轴重复
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <p>
+                        背景图片的位置。每个包含图像的背景都从一个图像开始，再根据background-repeat的值重复（或者不重复）。这个起点称之为原图像。css2 和css2.1指出，background-position，将相对于元素的内边距边界放置原图像。换句话说，放置图像的上下文是内边框边界，尽管背景去会延伸到外边框边界。并非所有的浏览器都能正确的放置图像，有些浏览器会相对于外边框的边界而不是内边框的边界来放置原图像。不过要是没有边框，所有浏览器都是一样的；
+                        background-position的关键字可以按照任意顺序出现，只是要保证不能超过两个关键字。
+                    </p>
+
+
+
+                    <table class="attr_table">
+                        <tr>
+                            <td class="attr_table_title" colspan="2">background-position</td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">值</td>
+                            <td class="attr_table_value">[percentage | length | left | center | right][percentage | length | top | center | bottom ]  || [left | center | right ] || [top | center | bottom]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">初始值</td>
+                            <td class="attr_table_value">0% 0%</td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">应用于</td>
+                            <td class="attr_table_value">块级元素或者替换元素</td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">继承性</td>
+                            <td class="attr_table_value">无</td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">百分比</td>
+                            <td class="attr_table_value">相对于元素和原图上的相应点</td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">计算值</td>
+                            <td class="attr_table_value">如果指定了length，则为绝对长度偏移。否则是百分数</td>
+                        </tr>
+                    </table>
+
+
+                    <div class="effect">
+                        <div class=effect_title>效果:</div>
+                        <div class="effect_content">
+                            <style>
+                                .background_position{
+                                    background-image:url("../../imgs/w1.png");
+                                    background-color:#002bff;
+                                    background-repeat:no-repeat;
+                                    height:90px;
+                                    color:#ff4400;
+                                    font-size: 20px;
+                                    text-align: center;
+                                    line-height:90px;
+                                    word-spacing: 50px;
+                                    margin:30px 0px;
+                                }
+                                .background_position_left_bottom{
+                                    background-position:left bottom;
+                                }
+                                .background_position_bottom{
+                                    background-position:bottom;
+                                }
+                                .background_repeat-repeat-x{
+                                    background-repeat:repeat-x;
+                                }
+                                .background_repeat-repeat-y{
+                                    background-repeat:repeat-y;
+                                }
+
+
+                            </style>
+                            <div>
+                                <div class="background_position background_position_left_bottom">
+                                    左下角
+                                </div>
+                                <div class="background_position background_position_bottom">
+                                    如果只出现一个关键字，那么另外一个关键字默认为center
+                                </div>
+                                <div class="background_image background_repeat-repeat-x">
+                                    x轴重复
+                                </div>
+                                <div class="background_image background_repeat-repeat-y">
+                                    y轴重复
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <p>
+                        背景图片位置如果使用百分比，水平位置总是先出现，如果只提供了一个百分比，所提供的这个值将作为水平值，垂直值将假设为50%.
+                        <span class="importWord">
+                                这个百分比是同时作用于元素和图片的。
+                            </span>
+                        比如50% 50% 则是元素的50% 图片的50%  这样就相当于图片的中心位置与元素的中心位置对齐了。
+                    </p>
+
+                    <div class="effect">
+                        <div class=effect_title>效果:</div>
+                        <div class="effect_content">
+                            <style>
+                                .background_position_1{
+                                    background-image:url("../../imgs/w1.png");
+                                    background-color:#002bff;
+                                    background-repeat:no-repeat;
+                                    height:90px;
+                                    color:#ff4400;
+                                    font-size: 20px;
+                                    text-align: center;
+                                    line-height:90px;
+                                    word-spacing: 50px;
+                                    margin:30px 0px;
+                                }
+                                .background_position_percentage_center{
+                                    background-position:50% 50%;
+                                }
+
+
+
+                            </style>
+                            <div>
+                                <div class="background_position_1 background_position_percentage_center">
+                                    .
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <p>
+                        如果background-position 和background-repeat 同时使用，那么图片开始的位置一定是background-position的位置。
+                    </p>
+
+                    <div class="effect">
+                        <div class=effect_title>效果:</div>
+                        <div class="effect_content">
+                            <style>
+                                .background_position_repeat{
+                                    background-image:url("../../imgs/w1.png");
+                                    background-color:#002bff;
+                                    height:90px;
+                                    color:#ff4400;
+                                    font-size: 20px;
+                                    text-align: center;
+                                    line-height:90px;
+                                    word-spacing: 50px;
+                                    margin:30px 0px;
+                                }
+                                .background_position_center_repeat{
+                                    background-position:center;
+                                    background-repeat:repeat;
+                                }
+
+                                .background_position_left_top_repeat{
+                                    background-position:left top;
+                                    background-repeat:repeat;
+                                }
+
+
+                            </style>
+                            <div>
+                                <div class="background_position_repeat background_position_center_repeat">
+                                    图片起始点是在中间，因此是以中间为起点，开始平铺图片
+                                </div>
+                                <div class="background_position_repeat background_position_left_top_repeat">
+                                    图片起始点是在左上角，因此是以左上角为起点，开始平铺图片
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <p>
+                        background-attachment，可以申明原图像相对于可视区域是固定的还是滚动的。
+                    </p>
+
+                    <table class="attr_table">
+                        <tr>
+                            <td class="attr_table_title" colspan="2">background-attachment</td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">值</td>
+                            <td class="attr_table_value">scroll | fixed | inherit
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">初始值</td>
+                            <td class="attr_table_value">scroll</td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">应用于</td>
+                            <td class="attr_table_value">块级元素或者替换元素</td>
+                        </tr>
+                        <tr>
+                            <td class="attr_table_attr">继承性</td>
+                            <td class="attr_table_value">无</td>
+                        </tr>
+
+                        <tr>
+                            <td class="attr_table_attr">计算值</td>
+                            <td class="attr_table_value">根据指定值计算</td>
+                        </tr>
+                    </table>
+
+                    <div class="effect">
+                        <div class=effect_title>效果:</div>
+                        <div class="effect_content">
+                            <style>
+                                .background_attachment_frame{
+                                    height:200px;
+                                    width:400px;
+                                    margin:0px auto;
+                                    background-image:url("../../imgs/w1.png");
+                                    background-repeat:no-repeat;
+                                    background-position:bottom ;
+                                    border:solid 1px;
+                                    overflow:auto;
+                                    background-color:#002bff;
+                                }
+                                .background_attachment{
+                                    background-image:url("../../imgs/timg.jpg");
+                                    height:1850px;
+                                    background-repeat: no-repeat;
+                                    background-attachment:fixed;
+                                    background-position:center;
+                                }
+
+
+
+                            </style>
+                            <div class="background_attachment_frame">
+                                <div class="background_attachment"></div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+</body>
+</html>

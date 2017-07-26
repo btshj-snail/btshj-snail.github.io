@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Css index</title>
+    <script src="../../threeComponent/browser.min.js"></script>
+    <script src="../../threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+
+<div class="screenLoading" id="screenLoading">
+    <div class="spinner">
+        <div class="circle"></div>
+        <img src="../../imgs/snail.png" alt=""/>
+    </div>
+</div>
+
+<div class="headSection headSection_otherCss">
+    <div class="headSection_otherCss_Img_div">
+        <div class="animate_text_init" id="headSectionAnimate"><span >空白符</span></div>
+        <img src="../../imgs/cssOther_bg.jpg" alt="">
+    </div>
+</div>
+<div class="contentSection">
+
+    <div class="content">
+        <p>处理文本中的各种空白符，包括空格、回车、tab制表符</p>
+
+        <div>
+            <table class="attr_table">
+                <tr>
+                    <td class="attr_table_title" colspan="2">white-space</td>
+                </tr>
+                <tr>
+                    <td class="attr_table_attr">值</td>
+                    <td class="attr_table_value">normal | nowrap | pre | pre-wrap | pre-line
+                    </td>
+                </tr>
+                <tr>
+                    <td class="attr_table_attr">初始值</td>
+                    <td class="attr_table_value">normal</td>
+                </tr>
+                <tr>
+                    <td class="attr_table_attr">应用于</td>
+                    <td class="attr_table_value">所有元素(css2.1) 块级元素（CSS1和CSS2）</td>
+                </tr>
+                <tr>
+                    <td class="attr_table_attr">继承性</td>
+                    <td class="attr_table_value">无</td>
+                </tr>
+                <tr>
+                    <td class="attr_table_attr">计算值</td>
+                    <td class="attr_table_value">根据指定确定</td>
+                </tr>
+            </table>
+
+            <div class=content_effect>
+                <ol>
+                    <li>
+                        <div class="effect">
+                            <div class=effect_title>效果:</div>
+                            <div class="effect_content">
+                                <style>
+                                    .white_space_normal {
+                                        white-space: normal;
+                                        margin-top: 20px;
+                                    }
+
+                                    .white_space_nowrap {
+                                        white-space:nowrap;
+                                        margin-top: 20px;
+                                    }
+                                    .white_space_pre{
+                                        white-space:pre;
+                                        margin-top:20px;
+                                    }
+
+                                    .white_space_pre_wrap {
+                                        white-space:pre-wrap;
+                                        margin-top: 20px;
+                                    }
+
+                                    .white_space_pre_line {
+                                        white-space:pre-line;
+                                        margin-top: 20px;
+                                    }
+                                </style>
+                                <p class="white_space_normal">normal ，空白符合并，忽略换行符 ，自动换行 this                   is underline this is underline this is underline this is underline this is
+                                    underline this is underline this is underline this is underline this is underline this is underline this is underline
+                                    this is underline this is underline this is underline this is underline this is underline this is underline this is underline
+                                    this is underline this is underline this is underline this is underline</p>
+                                <p class="white_space_nowrap">nowrap 空白符合并，忽略换行符，不自动换行 this                 is underline this is underline this
+                                    is underline this is underline this is underline this is underline this is underline this is underline this is underline this
+                                    is underline this is underline this is underline this is underline this is underline this is underline this is underline this
+                                    is underline this is underline this is underline this is underline this is underline this is underline</p>
+
+                                <p class="white_space_pre">pre 空白符不合并，不忽略换行符，不自动换行 this is              underline this is underline this
+                                    is underline this is underline this is underline this is underline this is underline this is underline this is underline this
+                                    is underline this is underline this is underline this is underline this is underline this is underline this is underline this
+                                    is underline this is underline this is underline this is underline this is underline this is underline</p>
+
+
+                                <p class="white_space_pre_wrap">
+                                    pre-warp css2.1引入 空白符不合并，不忽略换行符，自动换行   this is underline this is underline this
+                                    is underline this is underline this is underline this is underline this is                     underline this is underline this is underline this
+                                    is underline this is underline this is underline this is underline this is underline this is underline this is underline this
+                                    is underline this is underline this is underline this is underline this is underline this is underline
+                                </p>
+                                <p class="white_space_pre_line">pre-line  css2.1引入 合并空白符  保留换行符 自动换行   this is underline this is underline this this is underline this is underline thisthis is underline this is underline this
+                                    is underline this is underline this is underline this is underline this is                     underline this is underline this is underline this
+                                    is underline this is underline this is underline this is underline this is underline this is underline this is underline this
+                                    is underline this is underline this is underline this is underline this is underline this is underline  </p>
+                            </div>
+                        </div>
+
+
+
+                    </li>
+
+                </ol>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

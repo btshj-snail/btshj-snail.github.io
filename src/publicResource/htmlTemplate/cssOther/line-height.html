@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Css index</title>
+    <script src="../../threeComponent/browser.min.js"></script>
+    <script src="../../threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+
+<div class="screenLoading" id="screenLoading">
+    <div class="spinner">
+        <div class="circle"></div>
+        <img src="../../imgs/snail.png" alt=""/>
+    </div>
+</div>
+
+<div class="headSection headSection_otherCss">
+    <div class="headSection_otherCss_Img_div">
+        <div class="animate_text_init" id="headSectionAnimate"><span ><label style="color:#ff4400">L</label>ine-height</span></div>
+        <img src="../../imgs/cssOther_bg.jpg" alt="">
+    </div>
+</div>
+<div class="contentSection">
+
+    <div class="content">
+        <div class=content_effect>
+            <ol>
+                <li>
+                    <p>
+                        百分比、ex、em等相对单位，都是相对当前元素的font-size来的。比如font-size为10px，那么line-height：1.5em ，其实相当于是line-height:15px
+                    </p>
+                    <div class="effect">
+                        <div class=effect_title>效果:</div>
+                        <div class="effect_content">
+                            <p class="cl1">this line-height is 1.5em</p>
+                            <p class="cl2">this font is 10,line-height is 150%</p>
+                            <p class="cl3">this line-height is 0.33in</p>
+                        </div>
+                    </div>
+
+                </li>
+                <li>
+                    当一个块级元素从另一个元素继承line-height时。line-height值要从父元素计算，而不是在子元素上计算。如果line-height值为数字的时候，这时叫做缩放因子，此时传递到子元素的是缩放因子而不是计算好的值。因此此时line-height是根据本身元素的font-size进行计算的。
+
+                    <div class="effect">
+                        <div class=effect_title>效果:</div>
+                        <div class="effect_content">
+                            <style type="text/css">
+                                .parent{
+                                    line-height:1.5;
+                                    font-size:10px;
+                                }
+                                .sub{
+                                    font-size:20px;
+                                }
+                            </style>
+                            <div class="parent">
+                                在父元素上设置了line-height的缩放因子，并且font-size为10px
+                                <div class="sub">
+                                    在子元素上设置了font-size为20px，根据缩放因子的计算，此时在子元素上的line-height应该为30px。我们可以写多点让他换行从而看出行间距为30px。我们可以写多点让他换行从而看出行间距为30px。我们可以写多点让他换行从而看出行间距为30px。我们可以写多点让他换行从而看出行间距为30px。我们可以写多点让他换行从而看出行间距为30px。我们可以写多点让他换行从而看出行间距为30px。我们可以写多点让他换行从而看出行间距为30px。我们可以写多点让他换行从而看出行间距为30px。我们可以写多点让他换行从而看出行间距为30px。我们可以写多点让他换行从而看出行间距为30px。我们可以写多点让他换行从而看出行间距为30px。我们可以写多点让他换行从而看出行间距为30px。我们可以写多点让他换行从而看出行间距为30px。我们可以写多点让他换行从而看出行间距为30px。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="eg_code">
+                        <div class=eg_code_title>代码:</div>
+                        <div class="eg_code_content">
+	<pre>
+		.parent{
+			line-height:1.5;
+			font-size:10px;
+		}
+		.sub{
+			font-size:20px;
+		}
+		&lt;div class="parent"&gt;
+			we are family
+			&lt;div class="sub"&gt;good study&lt;/div&gt;
+		&lt;/div&gt;
+	</pre>
+                        </div>
+                    </div>
+
+                </li>
+            </ol>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

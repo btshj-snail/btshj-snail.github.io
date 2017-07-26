@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Css index</title>
+    <script src="../../threeComponent/browser.min.js"></script>
+    <script src="../../threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+
+<div class="screenLoading" id="screenLoading">
+    <div class="spinner">
+        <div class="circle"></div>
+        <img src="../../imgs/snail.png" alt=""/>
+    </div>
+</div>
+
+<div class="headSection headSection_otherCss">
+    <div class="headSection_otherCss_Img_div">
+        <div class="animate_text_init" id="headSectionAnimate"><span ><label style="color:#ff4400">F</label>loat</span></div>
+        <img src="../../imgs/cssOther_bg.jpg" alt="">
+    </div>
+</div>
+<div class="contentSection">
+
+    <div class="content">
+        <p>对于浮动元素有几点要注意，首先会以某种模式将浮动元素从文档的正常流中删除，不过他们还是会影响布局。比如浮动元素设置了margin，那么他也会影响周围的其他元素。如果确实要浮动一个非
+            替换元素，那么一定要设置元素的width，否则浏览器会将其width设置为0</p>
+
+
+
+        <table class="attr_table">
+            <tr>
+                <td class="attr_table_title" colspan="2">float</td>
+            </tr>
+            <tr>
+                <td class="attr_table_attr">值</td>
+                <td class="attr_table_value">left |　right | none
+                </td>
+            </tr>
+            <tr>
+                <td class="attr_table_attr">初始值</td>
+                <td class="attr_table_value">none</td>
+            </tr>
+            <tr>
+                <td class="attr_table_attr">应用于</td>
+                <td class="attr_table_value">所有元素</td>
+            </tr>
+            <tr>
+                <td class="attr_table_attr">继承性</td>
+                <td class="attr_table_value">无</td>
+            </tr>
+            <tr>
+                <td class="attr_table_attr">计算值</td>
+                <td class="attr_table_value">根据指定确定</td>
+            </tr>
+        </table>
+
+
+        <div class=content_effect>
+            <ol>
+                <li>
+                    <p>
+                        浮动元素会生成一个块级框，所以将元素添加display:block 没有意义。
+                    </p>
+                </li>
+
+                <li>
+                    <p>
+                        浮动元素的左（右）外边距不能超过其包含块的左（右）内边界
+                    </p>
+                    <div class="effect">
+                        <div class=effect_title>效果:</div>
+                        <div class="effect_content">
+                            <style>
+                                .outFrame{
+                                    border:solid 1px #ccc;
+                                    background-color:#ffea00;
+                                }
+                                .outFrame .innerFrame{
+                                    margin:30px;
+                                    padding:50px;
+                                    border:solid 1px #eee;
+                                    background-color:#ff4400;
+                                }
+                                .outFrame .innerFrame .floatElement{
+                                    background-color:#fff;
+                                    border:solid 1px #cccccc;
+                                    float:left;
+                                }
+                            </style>
+                            <div class="outFrame">
+                                <div class="innerFrame">
+                                    <span>这个框，有30px的外边距，50px的内边距</span>
+                                    <span class="floatElement">该元素浮动</span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                </li>
+
+                <li>
+                    <p>
+                        浮动元素的左（右）外边界必须是源文档中之前出现的左浮动元素（右浮动元素）的右（左）边界，除非后出现的浮动元素的顶端在先出现的浮动元素的底端下面。
+                        这个规则的好处在于使用浮动时，不必担心浮动元素的相互覆盖。
+                    </p>
+                    <div class="effect">
+                        <div class=effect_title>效果:</div>
+                        <div class="effect_content">
+                            <style>
+                                .outFrame{
+                                    border:solid 1px #ccc;
+                                    background-color:#ffea00;
+                                }
+                                .outFrame .innerFrame{
+                                    margin:30px;
+                                    padding:50px;
+                                    border:solid 1px #eee;
+                                    background-color:#ff4400;
+                                }
+                                .outFrame .innerFrame .floatElement{
+                                    background-color:#fff;
+                                    border:solid 1px #cccccc;
+                                    float:left;
+                                }
+                            </style>
+                            <div class="outFrame">
+                                <div class="innerFrame">
+                                    <span>这个框，有30px的外边距，50px的内边距</span>
+                                    <span class="floatElement">该元素浮动</span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                </li>
+            </ol>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
