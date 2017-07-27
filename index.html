@@ -50,7 +50,7 @@
 
     var a = BrowserType();
     if(a=="IE7" || a=="IE8" || a== "IE9"){
-        alert("哥们，作为程序猿你还在用"+a+".也太low了吧！快用chrome")
+        window.location.href = "./static/page/browserHint.html"
     }else{
         window.location.href = "./static/page/index.html"
     }

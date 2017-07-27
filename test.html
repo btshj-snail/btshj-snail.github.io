@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./static/threeComponent/jquery-3.2.1.min.js"></script>
+    <style>
+        .div{
+            height:300px;
+            width:1600px;
+            border:solid 1px red;
+            position:relative;
+        }
+        .gg{
+            position:absolute;
+            /*animation:fadeInUp 1s 0.1s 1*/
+        }
+        .ff{
+            animation-name:fadeInUp;
+            animation-duration:0.5s;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                color:#ff00ff;
+                opacity: 0;
+                left:0px;
+
+            }
+            100% {
+                color:#000;
+                opacity: 1;
+                left:1000px;
+
+            }
+        }
+    </style>
+
+</head>
+<body>
+<div class="div">
+     <span class="gg">
+        wom
+    </span>
+</div>
+
+    <script>
+        $(".gg").css({"animation-delay":"0.5s"}).addClass("ff")
+    </script>
+</body>
+</html>

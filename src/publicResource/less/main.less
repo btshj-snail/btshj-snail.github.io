@@ -372,22 +372,56 @@ ul.types li a, ul.types li span {
     line-height:1.8rem;
 }
 
+@-webkit-keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 100%, 0);
+        transform: translate3d(0, 100%, 0);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 100%, 0);
+        transform: translate3d(0, 100%, 0)
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0)
+    }
+}
+
+.fadeInUp{
+    animation-fill-mode:both;
+    animation-name:fadeInUp;
+    animation-duration:1s;
+}
+
 .co_cell{
     cursor:pointer;
-    position:relative;
     height:14.2rem;
     width:14.2rem;
     display: inline-block;
     margin:2rem;
-    transition:600ms;
+    opacity:0;
 }
+
+
+
 .co_cell .co_cell_bottom_line{
     background-color:#fff;
     box-shadow: 0 0 1px 0px #fff;
     height:1px;
     width:0;
     margin:0px auto;
-    transition:600ms;
+    transition:300ms ease-out;
 }
 .co_cell:hover .co_cell_bottom_line{
     width:100%;
@@ -517,3 +551,4 @@ ul.types li a, ul.types li span {
     font-style: italic;
     color: #ff4400;
 }
+

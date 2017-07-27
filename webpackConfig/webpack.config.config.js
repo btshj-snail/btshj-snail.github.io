@@ -29,6 +29,7 @@ const config = function (env) {
         OUTPUT_PATH: outPath,
         FILE_CONFIG:[
             {storage:'js/index',entry:"index.js",template:'index'},
+            {storage:'js/browserHint',entry:"browserHint.js",template:'browserHint'},
             {storage:'js/articleList',entry:"articleList.js",template:'articleList'},
             {storage:'js/superWeb',entry:"superWeb.js",template:'superWeb'},
             {storage:'js/threeJs/index',entry:"threeJs/index.js",template:'threeJs/index'},

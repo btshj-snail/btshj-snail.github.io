@@ -7,6 +7,7 @@ import snailUtils from '../../publicResource/libs/snailUtils';
 
 
 const pageAnimate  = {
+
     doHeadSectionAnimate(){
         let $o = $("#headSectionAnimate");
         let $span = $o.find("span").hide();
@@ -18,6 +19,23 @@ const pageAnimate  = {
                 $o.addClass("animate_text_finally");
             }, 1600)
         }, 1600)
+    },
+    doCellComeInAnimate(){
+        let scrollTop = Math.max(document.body.scrollTop, document.documentElement.scrollTop);
+        let screenHeight = Math.max(document.body.clientHeight, document.documentElement.clientHeight);
+
+        $(".co_cell[comeIn!='done']").each(function(index){
+            let $o = $(this);
+            if($o.offset().top<=scrollTop+screenHeight){
+                $o.attr("comeIn","done").css({"animation-delay":(0.1*index)+"s"}).addClass("fadeInUp");
+            }
+        })
+
+    },
+    listenCellComeIn(){
+        $(window).scroll(function(){
+            pageAnimate.doCellComeInAnimate();
+        })
     }
 }
 
@@ -34,6 +52,8 @@ $(function () {
     snailUtils.loadImagesComplete(function () {
         snailUtils.endLoading();
         pageAnimate.doHeadSectionAnimate();
+        pageAnimate.doCellComeInAnimate();
+        pageAnimate.listenCellComeIn();
     });
 
 })
