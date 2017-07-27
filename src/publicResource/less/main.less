@@ -233,6 +233,19 @@ ul.types li a, ul.types li span {
     transform:scale(1) rotate(0deg);
 }
 
+.no_animate_text{
+    font-size: 8rem;
+    color:#fff;
+    position:absolute;
+    top:45%;
+    left:45%;
+    transform:translateX(-45%);
+    z-index:10;
+    height:auto;
+    width:auto;
+    text-shadow:3px 3px 4px #fff;
+}
+
 
 .navigator{
     height:6rem;
@@ -426,31 +439,7 @@ ul.types li a, ul.types li span {
 .co_cell:hover .co_cell_bottom_line{
     width:100%;
 }
-.co_cell:hover .co_cell_circle{
-    height:14.2rem;
-    width:14.2rem;
-    border-radius:50%;
-    position:absolute;
-    border: 0.1rem dashed #ffffff;
-    transform: translateZ(0);
-    animation: load9 1.1s 1 linear;
-}
-@keyframes load9 {
-    0% {
-        -webkit-transform: rotate(0deg) scale(1);
-        transform: rotate(0deg) scale(1);
-    }
 
-    50% {
-        -webkit-transform: rotate(180deg) scale(1.2);
-        transform: rotate(180deg) scale(1.2);
-    }
-
-   100% {
-        -webkit-transform: rotate(360deg) scale(1);
-        transform: rotate(360deg) scale(1);
-    }
-}
 .co_cell_inner{
     height:10rem;
     width:10rem;
