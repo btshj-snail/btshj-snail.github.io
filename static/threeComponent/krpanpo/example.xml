@@ -1,0 +1,51 @@
+<krpano>
+
+	<!-- use the videoplayer plugin as panoramic image -->
+
+	<!--videourl="rtmp://10.10.10.130:1935/live/360video"-->
+	<image>
+		<sphere url="plugin:video" />
+	</image>
+
+	<plugin name="video"
+			url.flash="videoplayer.swf"
+			url.html5="videoplayer_basic_source.js"
+			videourl="./wow.mp4"
+			devices="panovideosupport"
+			/>
+			
+	
+	<!-- show an error when panoramic videos are not supported -->
+	<action name="no_pano_video_error" autorun="onstart" devices="no-panovideosupport">
+		error("Sorry, but your browser doesn't support panoramic videos!");
+	</action>
+	
+	
+	<!-- include a contextmenu with different projection settings -->
+	<include url="contextmenu.xml" />
+	
+	
+	<!-- basic WebVR support -->
+	<!--onavailable="set(layer[enter_vr_button].visible, true);"-->
+	<!--onentervr="set(layer[enter_vr_button].visible, false);"-->
+	<!--onexitvr="set(layer[enter_vr_button].visible, true);"-->
+	<plugin name="webvr"
+	        url="webvr.js"
+	        mobilevr_fake_support="true"
+
+	        />
+
+	<!-- a button for entering VR mode -->
+	<layer name="enter_vr_button"
+		url="textfield.swf"
+		html="Enter VR Mode"
+		padding="4 8"
+		align="bottom" y="20"
+		onclick="plugin[webvr].entervr();"
+		visible="false"
+		/>
+
+	<!-- use the ESC key (keycode=27) to exit the VR mode -->
+	<events onkeydown="if(plugin[webvr].isenabled == true AND keycode == 27, plugin[webvr].exitvr());" />
+
+</krpano>

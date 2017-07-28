@@ -47,8 +47,9 @@ const config = function (env) {
             {storage:'js/cssOther/text-decoration',entry:"cssOther/text-decoration.js",template:'cssOther/text-decoration'},
             {storage:'js/cssOther/text-transform',entry:"cssOther/text-transform.js",template:'cssOther/text-transform'},
             {storage:'js/cssOther/white-space',entry:"cssOther/white-space.js",template:'cssOther/white-space'},
-            {storage:'js/cssOther/widthHeight',entry:"cssOther/widthHeight",template:'cssOther/widthHeight'},
-            {storage:'js/cssOther/wordSpacing',entry:"cssOther/wordSpacing",template:'cssOther/wordSpacing'},
+            {storage:'js/cssOther/widthHeight',entry:"cssOther/widthHeight.js",template:'cssOther/widthHeight'},
+            {storage:'js/cssOther/wordSpacing',entry:"cssOther/wordSpacing.js",template:'cssOther/wordSpacing'},
+            {storage:'js/cssEffect/twoImgSlider',entry:"cssEffect/twoImgSlider.js",template:'cssEffect/twoImgSlider'},
         ]
     }
 }
