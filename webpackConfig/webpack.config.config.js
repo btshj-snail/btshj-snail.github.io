@@ -33,6 +33,7 @@ const config = function (env) {
             {storage:'js/articleList',entry:"articleList.js",template:'articleList'},
             {storage:'js/superWeb',entry:"superWeb.js",template:'superWeb'},
             {storage:'js/threeJs/index',entry:"threeJs/index.js",template:'threeJs/index'},
+            {storage:'js/es6/index',entry:"es6/index.js",template:'es6/index'},
             {storage:'js/compileFrame/index',entry:"compileFrame/index.js",template:'compileFrame/index'},
             {storage:'js/cssOther/cssOtherIndex',entry:"cssOther/cssOtherIndex.js",template:'cssOther/cssOtherIndex'},
             {storage:'js/cssOther/verticalAlign',entry:"cssOther/verticalAlign.js",template:'cssOther/verticalAlign'},
