@@ -1,0 +1,53 @@
+<!DOCTYPE html> <html lang=en> <head> <meta charset=UTF-8> <meta name=viewport content="width=device-width,initial-scale=1,user-scalable=no"> <title>Title</title> <script src=../../threeComponent/browser.min.js></script> <script src=../../threeComponent/jquery-3.2.1.min.js></script> <link href="/static/style/js/vendor.05836eaba4ec9bc3a47b.css?05836eaba4ec9bc3a47b" rel="stylesheet"><link href="/static/style/js/cssEffect/twoImgSlider.05836eaba4ec9bc3a47b.css?05836eaba4ec9bc3a47b" rel="stylesheet"></head> <body> <div class=effect_page_content> <h2 class=effect_title> 两张图片重叠滑动效果 </h2> <p class=effect_p_title> 效果 </p> <div class=effect_show> <div class=twoImgSlider_clearness> <div class=twoImgSlider_dim></div> </div> </div> <p class=effect_p_title> 代码 </p> <p class=effect_small_title> html </p> <div class=codeSection> <pre>
+        &lt;div class="twoImgSlider_clearness"&gt;
+            &lt;div class="twoImgSlider_dim"&gt;&lt;/div&gt;
+        &lt;/div&gt;
+    </pre> </div> <p class=effect_small_title> js </p> <div class=codeSection> <pre>
+       function init(){
+            let $clearness = $(".effect_show .twoImgSlider_clearness");
+            let $dim = $(".effect_show .twoImgSlider_dim");
+            let width = $clearness.width();
+            $dim.width(width).css({"background-size":width+"px 100%"});
+        }
+
+        $(function(){
+            init();
+            $(".effect_show").mousemove(function(e){
+                let {pageX} = e;
+                let $clearness = $(this).find(".twoImgSlider_clearness");
+                let $dim = $(this).find(".twoImgSlider_dim");
+                let {top,left} = $clearness.offset();
+
+                if(pageX-left){
+                    let width = $clearness.width()-(pageX-left);
+                    $dim.width(width);
+                }
+            })
+            $(window).resize(function(){
+                init();
+            })
+        })
+    </pre> </div> <p class=effect_small_title> css </p> <div class=codeSection> <pre>
+        .twoImgSlider_clearness{
+          width:100%;
+          height:800px;
+          background-image:url(../imgs/clearness.jpg);
+          background-size:100% 100%;
+          background-repeat:no-repeat;
+          position:relative;
+
+        }
+
+        .twoImgSlider_dim{
+          position:absolute;
+          top:0px;
+          right:0px;
+          height:800px;
+          width:100%;
+          background-image: url(../imgs/dim.jpg);
+          background-repeat:no-repeat;
+          background-size:100% 100%;
+          background-position:top 0px right 0px;
+          border-left:solid 1px #eee;
+        }
+    </pre> </div> <p class=effect_p_title> 关键点解析 </p> </div> <script type="text/javascript" src="/static/js/vendor.05836eaba4ec9bc3a47b.js?05836eaba4ec9bc3a47b"></script><script type="text/javascript" src="/static/js/cssEffect/twoImgSlider.05836eaba4ec9bc3a47b.js?05836eaba4ec9bc3a47b"></script></body> </html>
