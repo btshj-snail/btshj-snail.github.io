@@ -67,5 +67,5 @@
     
     console.log(o) // {[object object]:'tom'}
     
-    ```
+```
     
