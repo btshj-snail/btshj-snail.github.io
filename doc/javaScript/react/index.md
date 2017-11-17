@@ -15,3 +15,5 @@
 ## 7. [form表单](form.md)
 
 ## 8. [状态提升](liftingStateUp.md)
+
+## 9. [组合 vs 继承](compositionVsInheritance.md)
