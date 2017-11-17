@@ -241,7 +241,7 @@ class Reservation extends React.Component {
 
 ```
 
-注意我们如何使用ES6当中的[计算属性名语法](../es6/属性名表达式.md)来更新与给定输入名称相对应的状态键：
+注意我们如何使用ES6当中的[计算属性名语法](../es6/attrNameExpression.md)来更新与给定输入名称相对应的状态键：
 
 ```javascript
 

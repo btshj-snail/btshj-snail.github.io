@@ -8,8 +8,8 @@
 
 1. JavaScript
 
-    1.1 [React](./doc/react/index.md);
+    1.1 [React](doc/javaScript/react/index.md);
 
 2. 常用工具
 
-    2.1 [git](./doc/git/gitOperate.md);
+    2.1 [git](doc/tools/git/gitOperate.md);
