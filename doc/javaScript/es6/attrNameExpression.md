@@ -24,8 +24,8 @@
     let key = 'foo';
     
     let obj = {
-        \[key\]:true,
-        \['a'+'b'\]:123
+        [key]:true,
+        ['a'+'b']:123
     }
 
 ```
@@ -35,7 +35,7 @@
 ```javascript
 
     let obj = {
-        \['say'+'Something'\](){
+        ['say'+'Something'](){
             return 'Hello snail'
         }
         
