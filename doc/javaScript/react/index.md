@@ -23,3 +23,5 @@
 ## 高级指引
 
 ### 10. [react理念](thinkingInReact.md)
+
+### 11. [深入JSX](jsxInDepth.md)
