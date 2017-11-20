@@ -1,19 +1,25 @@
 # React
 
-## 1. [jsx简介](jsx-interduce.md)
+## 快速开始
 
-## 2. [元素渲染](elementRender.md)
+### 1. [jsx简介](jsx-interduce.md)
 
-## 3. [组件&Props](componentAndProps.md)
+### 2. [元素渲染](elementRender.md)
 
-## 4. [State&生命周期](stateAndLiveCycle.md)
+### 3. [组件&Props](componentAndProps.md)
 
-## 5. [事件处理](event.md)
+### 4. [State&生命周期](stateAndLiveCycle.md)
 
-## 6. [条件渲染](conditionRender.md)
+### 5. [事件处理](event.md)
 
-## 7. [form表单](form.md)
+### 6. [条件渲染](conditionRender.md)
 
-## 8. [状态提升](liftingStateUp.md)
+### 7. [form表单](form.md)
 
-## 9. [组合 vs 继承](compositionVsInheritance.md)
+### 8. [状态提升](liftingStateUp.md)
+
+### 9. [组合 vs 继承](compositionVsInheritance.md)
+
+## 高级指引
+
+### 10. [react理念](thinkingInReact.md)
