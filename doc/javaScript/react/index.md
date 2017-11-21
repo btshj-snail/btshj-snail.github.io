@@ -30,4 +30,6 @@
 
 ### 12. [Refs & Dom](refAndDom.md)
 
-### 13. [不受控组件]()
+### 13. [不受控组件](./uncontrolledComponents.md)
+
+### 14. [性能优化](./optimizingPerformance.md)
