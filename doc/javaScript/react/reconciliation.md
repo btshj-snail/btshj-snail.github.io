@@ -28,7 +28,7 @@ React需要算出如何高效更新UI以匹配最新的树。
 ## 元素的不同类型
 
 每当根元素有不同类型，React将卸载旧树并重新构建新树。
-从<a>到<img>或从<Article>到<Comment>，或从<Button> 到 <div>，任何的调整都会导致全部重建。
+从&lt;a&gt;到&lt;img&gt;或从&lt;Article&gt;到&lt;Comment&gt;，或从&lt;Button&gt; 到 &lt;div&gt;，任何的调整都会导致全部重建。
 
 当树被卸载，旧的DOM节点将被销毁。组件实例将会接收到componentWillUnmount()方法。
 当构建一棵新树，新的DOM节点被插入到DOM中。组件实例将接收到componentWillMount()以及之后的componentDidMount()。
@@ -90,7 +90,7 @@ React更新底层组件实例的属性以满足新元素，
       <li>third</li>
     </ul>
  
-React将会匹配两棵树的<li>first</li>，并匹配两棵树的<li>second</li> 节点，并插入<li>third</li>节点树。
+React将会匹配两棵树的&lt;li&gt;first&lt;/li&gt;，并匹配两棵树的&lt;li&gt;second&lt;/li&gt; 节点，并插入&lt;li&gt;third&lt;/li&gt;节点树。
 
 若原生实现，在开始插入元素会使得性能更棘手。例如，两棵树的转换效果则比较糟糕：
 
@@ -105,7 +105,7 @@ React将会匹配两棵树的<li>first</li>，并匹配两棵树的<li>second</l
       <li>Villanova</li>
     </ul>
     
-React会调整每个子节点，而非意识到可以完整保留<li>Duke</li> 和 <li>Villanova</li>子树。低效成了一个问题。
+React会调整每个子节点，而非意识到可以完整保留&lt;li&gt;Duke&lt;/li&gt; 和 &lt;li&gt;Villanova&lt;/li&gt;子树。低效成了一个问题。
 
 ## Keys
 
