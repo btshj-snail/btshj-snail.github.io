@@ -35,3 +35,5 @@
 ### 14. [性能优化](./optimizingPerformance.md)
 
 ### 15. [不使用ES6](./unuseEs6.md)
+
+### 16. [协调（Reconciliation）](./reconciliation.md)
