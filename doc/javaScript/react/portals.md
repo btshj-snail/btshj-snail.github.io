@@ -1,6 +1,6 @@
 # portals 
 
-Portals[^Portals] 提供了一种很好的将子节点渲染到父组件以外的 DOM 节点的方式。
+Portals[^1] 提供了一种很好的将子节点渲染到父组件以外的 DOM 节点的方式。
 
 ```javascript
 
@@ -150,4 +150,4 @@ ReactDOM.render(<Parent />, appRoot);
 
 
 
-[Portals]:  \['pɔ:təlz\] 入口( portal的名词复数 );桥门;\[解剖学\]肝门;出孔
+[1]:  \['pɔ:təlz\] 入口( portal的名词复数 );桥门;\[解剖学\]肝门;出孔
