@@ -39,3 +39,9 @@
 ### 16. [协调（Reconciliation）](./reconciliation.md)
 
 ### 17. [Context](./context.md)
+
+### 18. [Portals](./portals.md)
+
+### 19. [webComponent](./webComponent.md)
+
+### 20. [高阶组件](./hoc.md)
