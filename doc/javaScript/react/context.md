@@ -113,3 +113,112 @@ MessageList.childContextTypes = {
 就能通过定义contextTypes来获取参数。
 
 如果contextTypes没有定义，那么context将会是个空对象。
+
+## 父子组件耦合
+
+Context还能让你构建一个父子组件通讯的API。例如React Router V4就是这么实现的。
+
+```javascript
+
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+
+const BasicExample = () => (
+  <Router>
+    <div>
+      <ul>
+        <li><Link to="/">Home</Link></li>
+        <li><Link to="/about">About</Link></li>
+        <li><Link to="/topics">Topics</Link></li>
+      </ul>
+
+      <hr />
+
+      <Route exact path="/" component={Home} />
+      <Route path="/about" component={About} />
+      <Route path="/topics" component={Topics} />
+    </div>
+  </Router>
+);
+
+```
+
+通过Router组件向下传递参数，每个Link和Route组件就能回传到包含的Router组件中。
+
+在使用与此类似的API构建你的组件之前，请考虑下是否有更好的选择。例如，如果你乐意的话，可以将整个React组件当做参数来传递。
+
+## 在生命周期函数中引用Context
+
+如果在一个组件中定义了contextTypes，那么下面这些生命周期函数中将会接收到额外的参数，即context对象:
+
++ constructor(props, context)
++ componentWillReceiveProps(nextProps, nextContext)
++ shouldComponentUpdate(nextProps, nextState, nextContext)
++ componentWillUpdate(nextProps, nextState, nextContext)
++ componentDidUpdate(prevProps, prevState, prevContext)
+
+
+## 在无状态函数组件中引用Context
+
+如果contextTypes作为函数参数被定义的话，无状态函数组件也是可以引用context。以下代码展示了用无状态函数组件写法的Button组件。
+
+```javascript
+
+const PropTypes = require('prop-types');
+
+const Button = ({children}, context) =>
+  <button style={{background: context.color}}>
+    {children}
+  </button>;
+
+Button.contextTypes = {color: PropTypes.string};
+
+```
+
+## 更新Context
+
+千万别这么做。
+
+React有更新context的API，但是基本已经被废除了，你不应该使用。
+
+当state或者props更新时getChildContext方法会被调用。为了在context中更新数据，使用 this.setState来更新本地state。
+这将会生成一个新的context，所有的子组件会接收到更新。
+
+```javascript
+
+const PropTypes = require('prop-types');
+
+class MediaQuery extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {type:'desktop'};
+  }
+
+  getChildContext() {
+    return {type: this.state.type};
+  }
+
+  componentDidMount() {
+    const checkMediaQuery = () => {
+      const type = window.matchMedia("(min-width: 1025px)").matches ? 'desktop' : 'mobile';
+      if (type !== this.state.type) {
+        this.setState({type});
+      }
+    };
+
+    window.addEventListener('resize', checkMediaQuery);
+    checkMediaQuery();
+  }
+
+  render() {
+    return this.props.children;
+  }
+}
+
+MediaQuery.childContextTypes = {
+  type: PropTypes.string
+};
+
+```
+
+那么问题来了，由于组件更新产生的新的context，如果有一个中间的父组件 的shouldComponentUpdate返回了false,那么接下来的子组件中的context是不会被更新的。
+这么使用context的话，组件就失控了，所以没有一种可靠的方式来更新context。这篇博客很好地解释了为什么这是一个问题，以及如何规避它。
