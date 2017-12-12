@@ -28,7 +28,7 @@ module.exports = function (env) {
         output: output_obj,
         module: loader_obj,
         plugins: plugins_obj,
-        devtool: 'source-map',
+        devtool: env=='dev'?'source-map':'cheap-module-source-map',
         devServer: devServer_obj
     }
 }

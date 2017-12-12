@@ -32,7 +32,7 @@ const plugins = function (env) {
             }
             ]),
         new webpack.optimize.UglifyJsPlugin({
-            sourceMap: true,
+            sourceMap: false,
             beautify: false,
             comments: false,
             compress: {
@@ -40,6 +40,9 @@ const plugins = function (env) {
                 drop_console: false,
                 collapse_vars: true,
                 reduce_vars: true
+            },
+            output:{
+                comments:false
             }
         }),
         new webpack.DefinePlugin({
