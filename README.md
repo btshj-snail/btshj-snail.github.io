@@ -8,9 +8,11 @@
 
 1. JavaScript
 
-    1.1 [ES6](doc/javaScript/es6/es6Index.md);
+    1.1 [经典代码](doc/javaScript/classicCase/classicCase.md);
 
-    1.2 [React](doc/javaScript/react/index.md);
+    1.2 [ES6](doc/javaScript/es6/es6Index.md);
+
+    1.3 [React](doc/javaScript/react/index.md);
 
 2. 常用工具
 
