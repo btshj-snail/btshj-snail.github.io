@@ -35,7 +35,9 @@ React兼容所有常用的浏览器，包括IE9及以上的版本。
 
 > 注意:
 >  ReactDOM.render() 控制你传进来的容器节点里的的内容。第一次被调用时，内部所有已经存在的DOM元素都会被替换掉。之后的调用会使用React的DOM比较算法进行高效的更新。   
+
 >  ReactDOM.render()不会修改容器节点（只修改容器的子项）。你可以在不覆盖已有子节点的情况下添加一个组件到已有的DOM节点中去。  
+
 >  ReactDOM.render() 目前会返回一个引用， 指向 ReactComponent的根实例。但是这个返回值是历史遗留，应该避免使用。因为未来版本的React可能会在某些情况下进行异步渲染。如果你真的需要一个指向 ReactComponent 的根实例的引用，推荐的方法是添加一个 callback ref到根元素上。 
 
 ## unmountComponentAtNode()
