@@ -54,4 +54,4 @@
 
 ### 24. [DOM Elements](./domElements.md)
 
-
+### 25. [syntheticEvent](./syntheticEvent.md)
