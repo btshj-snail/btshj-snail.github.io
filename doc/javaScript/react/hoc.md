@@ -190,6 +190,10 @@ function withSubscription(WrappedComponent, selectData) {
 
 ### 不要改变原始组件，使用组合
 
+> 阅读感悟：高阶组件不要在内部修改原始组件的原型属性，避免被其他组件覆盖，并且这样的高阶组件对无状态函数式组件也是没有效果的
+> 这种更改原始组件属性的高阶组件被称之为更改型高阶组件。更改型高阶组件泄露了组件的抽象性，也就是说用高阶组件的时候必须要清楚内部组件的相关实现。
+> 所以使用容器高阶组件代替更改型高阶组件
+
 不要在高阶组件内部修改（或以其它方式修改）原组件的原型属性。
 
 ```javascript
@@ -212,7 +216,7 @@ const EnhancedComponent = logProps(InputComponent);
 更关键的一点是，如果你用另一个高级组件来转变 EnhancedComponent ，同样的也去改变 componentWillReceiveProps 函数时，
 第一个高阶组件（即EnhancedComponent）转换的功能就会被覆盖。这样的高阶组件（修改原型的高级组件）对没有生命周期函数的无状态函数式组件也是无效的。
 
-更改型高阶组件（mutating HOCs）泄露了组件的抽象性 —— 使用者必须知道他们的具体实现，才能避免与其它高级组件的冲突。
+***更改型高阶组件（mutating HOCs）泄露了组件的抽象性 —— 使用者必须知道他们的具体实现，才能避免与其它高级组件的冲突。***
 
 不应该修改原组件，高阶组件应该使用组合技术，将input组件包含到容器组件中：
 
@@ -252,7 +256,7 @@ function logProps(WrappedComponent) {
 
 ```javascript
 
-render() {
+render(){
   // 过滤掉与高阶函数功能相关的props属性，
   // 不再传递
   const { extraProp, ...passThroughProps } = this.props;
@@ -276,5 +280,204 @@ render() {
 
 ## 约定：最大化使用组合
 
+并不是所有的高阶组件看起来都是一样的。有时，它们仅仅接收一个参数，即包裹组件：
+
+    const NavbarWithRouter = withRouter(Navbar);
+
+一般而言，高阶组件会接收额外的参数。在下面这个来自Relay的示例中，可配置对象用于指定组件的数据依赖关系：
+
+    const CommentWithRelay = Relay.createContainer(Comment, config);
+    
+大部分常见高阶组件的函数签名如下所示：
+
+    // React Redux's `connect`
+    const ConnectedComment = connect(commentSelector, commentActions)(Comment);
+    
+这是什么？！ 如果你把它剥开，你就很容易看明白到底是怎么回事了。
+
+```javascript
+
+// connect是一个返回函数的函数（译者注：就是个高阶函数）
+const enhance = connect(commentListSelector, commentListActions);
+// 返回的函数就是一个高阶组件，该高阶组件返回一个与Redux store
+// 关联起来的新组件
+const ConnectedComment = enhance(CommentList);
+
+```
+
+换句话说，connect 是一个返回高阶组件的高阶函数！
+
+这种形式有点让人迷惑，有点多余，但是它有一个有用的属性。
+那就是，类似 connect 函数返回的单参数的高阶组件有着这样的签名格式， Component => Component.输入和输出类型相同的函数是很容易组合在一起。
+
+```javascript
+
+// 不要这样做……
+const EnhancedComponent = connect(commentSelector)(withRouter(WrappedComponent))
+
+// ……你可以使用一个功能组合工具
+// compose(f, g, h) 和 (...args) => f(g(h(...args)))是一样的
+const enhance = compose(
+  // 这些都是单参数的高阶组件
+  connect(commentSelector),
+  withRouter
+)
+const EnhancedComponent = enhance(WrappedComponent)
 
 
+```
+
+（connect函数产生的高阶组件和其它增强型高阶组件具有同样的被用作装饰器的能力。）
+包括lodash（比如说lodash.flowRight）, Redux 和 Ramda在内的许多第三方库都提供了类似compose功能的函数。
+
+## 约定：包装显示名字以便于调试
+
+高价组件创建的容器组件在React Developer Tools中的表现和其它的普通组件是一样的。
+为了便于调试，可以选择一个好的名字，确保能够识别出它是由高阶组件创建的新组件还是普通的组件。
+
+最常用的技术就是将包裹组件的名字包装在显示名字中。
+所以，如果你的高阶组件名字是 withSubscription，且包裹组件的显示名字是 CommentList，那么就是用 withSubscription(CommentList)这样的显示名字：
+
+
+```javascript
+
+function withSubscription(WrappedComponent) {
+  class WithSubscription extends React.Component {/* ... */}
+  WithSubscription.displayName = `WithSubscription(${getDisplayName(WrappedComponent)})`;
+  return WithSubscription;
+}
+
+function getDisplayName(WrappedComponent) {
+  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
+}
+
+
+```
+
+## 注意事项
+
+如果你是React新手，你要知道高阶组件自身也有一些不是太明显的使用注意事项。
+
+### 不要在render函数中使用高阶组件
+
+React使用的差异算法（称为协调）使用组件标识确定是否更新现有的子对象树或丢掉现有的子树并重新挂载。
+如果render函数返回的组件和之前render函数返回的组件是相同的，React就递归的比较新子对象树和旧子对象树的差异，并更新旧子对象树。
+如果他们不相等，就会完全卸载掉旧的之对象树。
+
+一般而言，你不需要考虑这些细节东西。但是它对高阶函数的使用有影响，那就是你不能在组件的render函数中调用高阶函数：
+
+```javascript
+
+render() {
+  // 每一次render函数调用都会创建一个新的EnhancedComponent实例
+  // EnhancedComponent1 !== EnhancedComponent2
+  const EnhancedComponent = enhance(MyComponent);
+  // 每一次都会使子对象树完全被卸载或移除
+  return <EnhancedComponent />;
+}
+
+```
+
+这里产生的问题不仅仅是性能问题 —— 还有，重新加载一个组件会引起原有组件的所有状态和子组件丢失。
+
+相反，在组件定义外使用高阶组件，可以使新组件只出现一次定义。在渲染的整个过程中，保证都是同一个组件。无论在任何情况下，这都是最好的使用方式。
+
+在很少的情况下，你可能需要动态的调用高阶组件。那么你就可以在组件的构造函数或生命周期函数中调用。
+
+### 必须将静态方法做拷贝
+
+有时，给组件定义静态方法是十分有用的。例如，Relay的容器就开放了一个静态方法 getFragment便于组合GraphQL的代码片段。
+
+当使用高阶组件包装组件，原始组件被容器组件包裹，也就意味着新组件会丢失原始组件的所有静态方法。
+
+```javascript
+
+// 定义静态方法
+WrappedComponent.staticMethod = function() {/*...*/}
+// 使用高阶组件
+const EnhancedComponent = enhance(WrappedComponent);
+
+// 增强型组件没有静态方法
+typeof EnhancedComponent.staticMethod === 'undefined' // true
+
+```
+
+解决这个问题的方法就是，将原始组件的所有静态方法全部拷贝给新组件：
+
+```javascript
+
+function enhance(WrappedComponent) {
+  class Enhance extends React.Component {/*...*/}
+  // 必须得知道要拷贝的方法 :(
+  Enhance.staticMethod = WrappedComponent.staticMethod;
+  return Enhance;
+}
+
+```
+
+这样做，就需要你清楚的知道都有哪些静态方法需要拷贝。你可以使用hoist-non-react-statics来帮你自动处理，它会自动拷贝所有非React的静态方法：
+
+```javascript
+
+import hoistNonReactStatic from 'hoist-non-react-statics';
+function enhance(WrappedComponent) {
+  class Enhance extends React.Component {/*...*/}
+  hoistNonReactStatic(Enhance, WrappedComponent);
+  return Enhance;
+}
+
+```
+
+另外一个可能的解决方案就是分别导出组件自身的静态方法。
+
+```javascript
+
+// 替代……
+MyComponent.someFunction = someFunction;
+export default MyComponent;
+
+// ……分别导出……
+export { someFunction };
+
+// ……在要使用的组件中导入
+import MyComponent, { someFunction } from './MyComponent.js';
+
+
+```
+
+
+### Refs属性不能传递
+
+一般来说，高阶组件可以传递所有的props属性给包裹的组件，但是不能传递refs引用。
+因为并不是像key一样，refs是一个伪属性，React对它进行了特殊处理。
+如果你向一个由高级组件创建的组件的元素添加ref应用，那么ref指向的是最外层容器组件实例的，而不是包裹组件。
+
+如果你碰到了这样的问题，最理想的处理方案就是搞清楚如何避免使用 ref。有时候，没有看过React示例的新用户在某种场景下使用prop属性要好过使用ref。
+
+话说，有时候不可避免的要使用ref应用——React在任何时候都不建议使用。
+例如聚焦输入表单的例子中，你可能想要对组件命令式的控制，在这种情况下，传递一个ref回调函数属性，也就是给ref应用一个不同的名字，这就是一个不错的解决方案：
+
+```javascript
+
+function Field({ inputRef, ...rest }) {
+  return <input ref={inputRef} {...rest} />;
+}
+
+// 在高阶组件中增强Field组件
+const EnhancedField = enhance(Field);
+
+// 组件的render函数中……
+<EnhancedField
+  inputRef={(inputEl) => {
+    // 该回调函数被作为常规的props属性传递
+    this.inputEl = inputEl
+  }}
+/>
+
+// 现在你就可以愉快的调用控制函数了
+this.inputEl.focus();
+
+```
+
+无论怎样，这都不是最完美的解决方案。
+我们更愿意把refs应用问题留给库来解决，也不愿让使用者手动去处理他们。我们正在探索解决这个问题的方法，能够让你安心的使用高阶组件而不必关注这个问题。
