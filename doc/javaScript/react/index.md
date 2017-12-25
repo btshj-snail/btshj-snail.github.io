@@ -48,4 +48,6 @@
 
 ### 21. [第三方库的结合](./threeLib.md)
 
-### 22. [生命周期](./lifeCircle.md)
+### 22. [React Component](./reactComponent.md)
+
+### 23. [React Dom](./reactDom.md)
