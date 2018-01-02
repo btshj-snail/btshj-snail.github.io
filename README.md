@@ -13,6 +13,8 @@
     1.2 [ES6](doc/javaScript/es6/es6Index.md);
 
     1.3 [React](doc/javaScript/react/index.md);
+    
+    1.4 [Canvas](doc/javaScript/canvas/index.md);
 
 2. 常用工具
 
