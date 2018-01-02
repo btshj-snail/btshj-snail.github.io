@@ -17,7 +17,6 @@ color 可以是表示 CSS 颜色值的字符串，渐变对象或者图案对象
     ctx.fillStyle = "#FFA500";
     ctx.fillStyle = "rgb(255,165,0)";
     ctx.fillStyle = "rgba(255,165,0,1)";
-    
 
 ## fillStyle 示例
 
@@ -71,11 +70,12 @@ globalAlpha 属性在需要绘制大量拥有相同透明度的图形时候相�
 
     ctx.strokeStyle = "rgba(255,0,0,0.5)";
     ctx.fillStyle = "rgba(255,0,0,0.5)";
-    
+
 ## globalAlpha 示例
 
 在这个例子里，将用四色格作为背景，设置 globalAlpha 为 0.2 后，在上面画一系列半径递增的半透明圆。
 最终结果是一个径向渐变效果。圆叠加得越更多，原先所画的圆的透明度会越低。通过增加循环次数，画更多的圆，背景图的中心部分会完全消失。
+
 ```javascript
 function draw() {
   var ctx = document.getElementById('canvas').getContext('2d');
@@ -101,6 +101,7 @@ function draw() {
   }
 }
 ```
+
 ## rgba() 示例
 
 第二个例子和上面那个类似，不过不是画圆，而是画矩形。这里还可以看出，rgba() 可以分别设置轮廓和填充样式，因而具有更好的可操作性和使用灵活性。
@@ -182,5 +183,92 @@ function draw() {
 想要获得精确的线条，必须对线条是如何描绘出来的有所理解。见下图，用网格来代表 canvas 的坐标格，每一格对应屏幕上一个像素点。
 在第一个图中，填充了 (2,1) 至 (5,5) 的矩形，整个区域的边界刚好落在像素边缘上，这样就可以得到的矩形有着清晰的边缘。
 
+![](./img/canvas-grid.png)
 
+如果你想要绘制一条从 (3,1) 到 (3,5)，宽度是 1.0 的线条，你会得到像第二幅图一样的结果。实际填充区域（深蓝色部分）仅仅延伸至路径两旁各一半像素。而这半个像素又会以近似的方式进行渲染，这意味着那些像素只是部分着色，结果就是以实际笔触颜色一半色调的颜色来填充整个区域（浅蓝和深蓝的部分）。这就是上例中为何宽度为 1.0 的线并不准确的原因。
+
+要解决这个问题，你必须对路径施以更加精确的控制。已知粗 1.0 的线条会在路径两边各延伸半像素，那么像第三幅图那样绘制从 (3.5,1) 到 (3.5,5) 的线条，其边缘正好落在像素边界，填充出来就是准确的宽为 1.0 的线条。
+
+> 注意：在这个竖线的例子中，其Y坐标刚好落在网格线上，否则端点上同样会出现半渲染的像素点（但还要注意，这种行为的表现取决于当前的lineCap风格，它默认为butt；您可能希望通过将lineCap样式设置为square正方形，来得到与奇数宽度线的半像素坐标相一致的笔画，这样，端点轮廓的外边框将被自动扩展以完全覆盖整个像素格）。
+
+> 还请注意，只有路径的起点和终点受此影响：如果一个路径是通过closePath()来封闭的，它是没有起点和终点的；相反的情况下，路径上的所有端点都与上一个点相连，下一段路径使用当前的lineJoin设置（默认为miter），如果相连路径是水平和/或垂直的话，会导致相连路径的外轮廓根据相交点自动延伸，因此渲染出的路径轮廓会覆盖整个像素格。接下来的两个小节将展示这些额外的行样式。
+
+对于那些宽度为偶数的线条，每一边的像素数都是整数，那么你想要其路径是落在像素点之间 (如那从 (3,1) 到 (3,5)) 而不是在像素点的中间。同样，注意到那个例子的垂直线条，其 Y 坐标刚好落在网格线上，如果不是的话，端点上同样会出现半渲染的像素点。
+
+虽然开始处理可缩放的 2D 图形时会有点小痛苦，但是及早注意到像素网格与路径位置之间的关系，可以确保图形在经过缩放或者其它任何变形后都可以保持看上去蛮好：线宽为 1.0 的垂线在放大 2 倍后，会变成清晰的线宽为 2.0，并且出现在它应该出现的位置上。
+
+## lineCap 属性的例子
+
+属性 lineCap 的值决定了线段端点显示的样子。它可以为下面的三种的其中之一：butt，round 和 square。默认是 butt。
+
+在这个例子里面，我绘制了三条直线，分别赋予不同的 lineCap 值。还有两条辅助线，为了可以看得更清楚它们之间的区别，三条线的起点终点都落在辅助线上。
+
+最左边的线用了默认的 butt 。可以注意到它是与辅助线齐平的。中间的是 round 的效果，端点处加上了半径为一半线宽的半圆。右边的是 square 的效果，端点处加上了等宽且高度为一半线宽的方块。
+
+![](./img/Canvas_linecap.png)
+
+```javaScript
+
+function draw() {
+  var ctx = document.getElementById('canvas').getContext('2d');
+  var lineCap = ['butt','round','square'];
+
+  // 创建路径
+  ctx.strokeStyle = '#09f';
+  ctx.beginPath();
+  ctx.moveTo(10,10);
+  ctx.lineTo(140,10);
+  ctx.moveTo(10,140);
+  ctx.lineTo(140,140);
+  ctx.stroke();
+
+  // 画线条
+  ctx.strokeStyle = 'black';
+  for (var i=0;i<lineCap.length;i++){
+    ctx.lineWidth = 15;
+    ctx.lineCap = lineCap[i];
+    ctx.beginPath();
+    ctx.moveTo(25+i*50,10);
+    ctx.lineTo(25+i*50,140);
+    ctx.stroke();
+  }
+}
+
+```
+
+## lineJoin 属性的例子
+
+lineJoin 的属性值决定了图形中两线段连接处所显示的样子。它可以是这三种之一：round, bevel 和 miter。默认是 miter。
+
+这里我同样用三条折线来做例子，分别设置不同的 lineJoin 值。最上面一条是 round 的效果，边角处被磨圆了，圆的半径等于线宽。中间和最下面一条分别是 bevel 和 miter 的效果。当值是 miter 的时候，线段会在连接处外侧延伸直至交于一点，延伸效果受到下面将要介绍的 miterLimit 属性的制约。
+
+![](./img/Canvas_linejoin.png)
+
+```javaScript
+
+function draw() {
+  var ctx = document.getElementById('canvas').getContext('2d');
+  var lineJoin = ['round','bevel','miter'];
+  ctx.lineWidth = 10;
+  for (var i=0;i<lineJoin.length;i++){
+    ctx.lineJoin = lineJoin[i];
+    ctx.beginPath();
+    ctx.moveTo(-5,5+i*40);
+    ctx.lineTo(35,45+i*40);
+    ctx.lineTo(75,5+i*40);
+    ctx.lineTo(115,45+i*40);
+    ctx.lineTo(155,5+i*40);
+    ctx.stroke();
+  }
+}
+
+```
+
+## miterLimit 属性的演示例子
+
+就如上一个例子所见的应用 miter 的效果，线段的外侧边缘会延伸交汇于一点上。线段直接夹角比较大的，交点不会太远，但当夹角减少时，交点距离会呈指数级增大。
+
+miterLimit 属性就是用来设定外延交点与连接点的最大距离，如果交点距离大于此值，连接效果会变成了 bevel。
+
+![](./img/Canvas_miterlimit.png)
 

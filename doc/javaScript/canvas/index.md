@@ -5,4 +5,4 @@
 
 ## 2. [绘制形状](./drawShape.md)
 
-## 2. [色彩](./color.md)
+## 3. [色彩](./color.md)
