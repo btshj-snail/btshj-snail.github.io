@@ -16,6 +16,8 @@
     
     1.4 [Canvas](doc/javaScript/canvas/index.md);
 
+    1.5 [krpano](doc/javaScript/krpano/index.md);
+
 2. 常用工具
 
     2.1 [git](doc/tools/git/gitOperate.md);
