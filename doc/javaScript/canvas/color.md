@@ -272,3 +272,197 @@ miterLimit 属性就是用来设定外延交点与连接点的最大距离，如
 
 ![](./img/Canvas_miterlimit.png)
 
+## 使用虚线
+
+用 setLineDash 方法和 lineDashOffset 属性来制定虚线样式. setLineDash 方法接受一个数组，来指定线段与间隙的交替；lineDashOffset 属性设置起始偏移量.
+
+在这个例子中，我们要创建一个行军蚁的效果。它往往是在计算机图形程序选区工具动效。它可以帮助用户通过动画的边界来区分图像背景选区边框。在本教程的后面部分，你可以学习如何做到这一点和其他基本的动画。
+
+```javaScript
+
+var ctx = document.getElementById('canvas').getContext('2d');
+var offset = 0;
+
+function draw() {
+  ctx.clearRect(0,0, canvas.width, canvas.height);
+  ctx.setLineDash([4, 2]);
+  ctx.lineDashOffset = -offset;
+  ctx.strokeRect(10,10, 100, 100);
+}
+
+function march() {
+  offset++;
+  if (offset > 16) {
+    offset = 0;
+  }
+  draw();
+  setTimeout(march, 20);
+}
+
+march();
+
+```
+## 渐变 Gradients
+
+就好像一般的绘图软件一样，我们可以用线性或者径向的渐变来填充或描边。我们用下面的方法新建一个 canvasGradient 对象，并且赋给图形的 fillStyle 或 strokeStyle 属性。
+
+**createLinearGradient(x1, y1, x2, y2)**
+
+createLinearGradient 方法接受 4 个参数，表示渐变的起点 (x1,y1) 与终点 (x2,y2)。
+
+**createRadialGradient(x1, y1, r1, x2, y2, r2)**
+
+createRadialGradient 方法接受 6 个参数，前三个定义一个以 (x1,y1) 为原点，半径为 r1 的圆，后三个参数则定义另一个以 (x2,y2) 为原点，半径为 r2 的圆。
+
+```javaScript
+  var lineargradient = ctx.createLinearGradient(0,0,150,150);
+  var radialgradient = ctx.createRadialGradient(75,75,0,75,75,100);
+```
+
+创建出 canvasGradient 对象后，我们就可以用 addColorStop 方法给它上色了。
+
+**gradient.addColorStop(position, color)**
+
+addColorStop 方法接受 2 个参数，position 参数必须是一个 0.0 与 1.0 之间的数值，表示渐变中颜色所在的相对位置。例如，0.5 表示颜色会出现在正中间。color 参数必须是一个有效的 CSS 颜色值（如 #FFF， rgba(0,0,0,1)，等等）。
+
+你可以根据需要添加任意多个色标（color stops）。下面是最简单的线性黑白渐变的例子。
+
+```javaScript
+
+var lineargradient = ctx.createLinearGradient(0,0,150,150);
+lineargradient.addColorStop(0,'white');
+lineargradient.addColorStop(1,'black');
+
+```
+
+## createLinearGradient 的例子
+
+本例中，我弄了两种不同的渐变。第一种是背景色渐变，你会发现，我给同一位置设置了两种颜色，你也可以用这来实现突变的效果，就像这里从白色到绿色的突变。一般情况下，色标的定义是无所谓顺序的，但是色标位置重复时，顺序就变得非常重要了。所以，保持色标定义顺序和它理想的顺序一致，结果应该没什么大问题。
+
+第二种渐变，我并不是从 0.0 位置开始定义色标，因为那并不是那么严格的。在 0.5 处设一黑色色标，渐变会默认认为从起点到色标之间都是黑色。
+
+你会发现，strokeStyle 和 fillStyle 属性都可以接受 canvasGradient 对象。
+
+```javaScript
+
+function draw() {
+  var ctx = document.getElementById('canvas').getContext('2d');
+
+  // Create gradients
+  var lingrad = ctx.createLinearGradient(0,0,0,150);
+  lingrad.addColorStop(0, '#00ABEB');
+  lingrad.addColorStop(0.5, '#fff');
+  lingrad.addColorStop(0.5, '#26C000');
+  lingrad.addColorStop(1, '#fff');
+
+  var lingrad2 = ctx.createLinearGradient(0,50,0,95);
+  lingrad2.addColorStop(0.5, '#000');
+  lingrad2.addColorStop(1, 'rgba(0,0,0,0)');
+
+  // assign gradients to fill and stroke styles
+  ctx.fillStyle = lingrad;
+  ctx.strokeStyle = lingrad2;
+  
+  // draw shapes
+  ctx.fillRect(10,10,130,130);
+  ctx.strokeRect(50,50,50,50);
+
+}
+
+```
+
+## 图案样式 Patterns
+
+上一节的一个例子里面，我用了循环来实现图案的效果。其实，有一个更加简单的方法：createPattern。
+
+**createPattern(image, type)**
+
+该方法接受两个参数。Image 可以是一个 Image 对象的引用，或者另一个 canvas 对象。Type 必须是下面的字符串值之一：repeat，repeat-x，repeat-y 和 no-repeat。
+
+> 注意: 用 canvas 对象作为 Image 参数在 Firefox 1.5 (Gecko 1.8) 中是无效的。
+
+图案的应用跟渐变很类似的，创建出一个 pattern 之后，赋给 fillStyle 或 strokeStyle 属性即可。
+
+```javaScript
+
+var img = new Image();
+img.src = 'someimage.png';
+var ptrn = ctx.createPattern(img,'repeat');
+
+```
+
+> 注意：与 drawImage 有点不同，你需要确认 image 对象已经装载完毕，否则图案可能效果不对的。
+
+# createPattern 的例子
+
+在最后的例子中，我创建一个图案然后赋给了 fillStyle 属性。唯一要注意的是，使用 Image 对象的 onload handler 来确保设置图案之前图像已经装载完毕。
+
+```javaScript
+
+function draw() {
+  var ctx = document.getElementById('canvas').getContext('2d');
+
+  // 创建新 image 对象，用作图案
+  var img = new Image();
+  img.src = 'images/wallpaper.png';
+  img.onload = function(){
+
+    // 创建图案
+    var ptrn = ctx.createPattern(img,'repeat');
+    ctx.fillStyle = ptrn;
+    ctx.fillRect(0,0,150,150);
+
+  }
+}
+
+```
+
+## 阴影 Shadows
+
+**shadowOffsetX = float**
+shadowOffsetX 和 shadowOffsetY 用来设定阴影在 X 和 Y 轴的延伸距离，它们是不受变换矩阵所影响的。负值表示阴影会往上或左延伸，正值则表示会往下或右延伸，它们默认都为 0。
+
+**shadowOffsetY = float**
+shadowOffsetX 和 shadowOffsetY 用来设定阴影在 X 和 Y 轴的延伸距离，它们是不受变换矩阵所影响的。负值表示阴影会往上或左延伸，正值则表示会往下或右延伸，它们默认都为 0。
+**shadowBlur = float**
+shadowBlur 用于设定阴影的模糊程度，其数值并不跟像素数量挂钩，也不受变换矩阵的影响，默认为 0。
+**shadowColor = color**
+shadowColor 是标准的 CSS 颜色值，用于设定阴影颜色效果，默认是全透明的黑色。
+
+## 文字阴影的例子
+
+这个例子绘制了带阴影效果的文字。
+
+```javaScript
+function draw() {
+  var ctx = document.getElementById('canvas').getContext('2d');
+
+  ctx.shadowOffsetX = 2;
+  ctx.shadowOffsetY = 2;
+  ctx.shadowBlur = 2;
+  ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+ 
+  ctx.font = "20px Times New Roman";
+  ctx.fillStyle = "Black";
+  ctx.fillText("Sample String", 5, 30);
+}
+```
+
+## Canvas 填充规则
+
+当我们用到 fill（或者 clip和isPointinPath ）你可以选择一个填充规则，该填充规则根据某处在路径的外面或者里面来决定该处是否被填充，这对于自己与自己路径相交或者路径被嵌套的时候是有用的。
+
+两个可能的值：
+
+ - "nonzero": non-zero winding rule, 默认值.
+ - "evenodd":  even-odd winding rule.
+
+ ```javaScript
+ function draw() {
+  var ctx = document.getElementById('canvas').getContext('2d'); 
+  ctx.beginPath(); 
+  ctx.arc(50, 50, 30, 0, Math.PI*2, true);
+  ctx.arc(50, 50, 15, 0, Math.PI*2, true);
+  ctx.fill("evenodd");
+}
+```
