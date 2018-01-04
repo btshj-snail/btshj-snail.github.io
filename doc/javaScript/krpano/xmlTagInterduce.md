@@ -501,4 +501,186 @@ hotspot是全景的一块区域，在鼠标悬停或者点击时发生反应。�
     从一个或多个&lt;style&gt;加载属性。这样可以减少xml的代码，要使用多个style，请用|字符分割样式名称。注意：在样式中定义的属性不能覆盖在图层、插件、热点定义的属性。
     </td>
 </tr>
+<tr>
+    <td>
+    ath<br>
+    atv
+    </td>
+    <td>
+    hotspot[name].ath<br>
+    hotspot[name].atv
+    </td>
+    <td>Number</td>
+    <td>0.0</td>
+</tr>
+<tr>
+    <td colspan=4>
+    热点的球面坐标。在这里，热点图像将边缘设置点上对齐。
+    </td>
+</tr>
+<tr>
+    <td>edge</td>
+    <td>hotspot[name].edge</td>
+    <td>String</td>
+    <td>“center”</td>
+</tr>
+<tr>
+    <td colspan=4>
+    热点元素的边缘/锚点。可能值：lefttop，left，leftbottom，top，center，bottom，righttop，right，rightbottom
+    </td>
+</tr>
+<tr>
+    <td>zoom</td>
+    <td>hotspot[name].zoom</td>
+    <td>Boolean</td>
+    <td>false</td>
+</tr>
+<tr>
+    <td colspan=4>
+    当缩放时，热点图像的大小是否与pano一起变化。
+    </td>
+</tr>
+<tr>
+    <td>distorted</td>
+    <td>hotspot[name].distorted</td>
+    <td>Boolean</td>
+    <td>false</td>
+</tr>
+<tr>
+    <td colspan=4>
+    在3D空间中，热点图像是否随当前pano/view一起扭曲。当扭曲设置为true后，使用rx，ry，rz来旋转三维空间的热点。注意：1，当启用时，将使用1000像素的大小作为像素的大小的参考。这1000像素覆盖了三维空间中90度的视场。2：扭曲热点不能也不应该有子元素，他们可能会不能正确显示。3：将Flash插件显示为失真的热点应该是可能的，但不能直接与他们交互。在这种情况下，插件不会直接显示，只有一种‘截图’的图像。
+    </td>
+</tr>
+<tr>
+    <td>rx/ry/rz</td>
+    <td>hotspot[name].rx/hotspot[name].ry/hotspot[name].rz</td>
+    <td>Number</td>
+    <td>0.0/0.0/0.0</td>
+</tr>
+<tr>
+    <td colspan=4>
+    3维旋转的角度除以X/Y/Z轴。（轴顺序：Y-X-Z）。只能在distorted=true时使用。
+    </td>
+</tr>
+<tr>
+    <td>width/height</td>
+    <td>hotspot[name].width/hotspot[name].height</td>
+    <td>String/String</td>
+    <td></td>
+</tr>
+<tr>
+    <td colspan=4>
+    热点元素的目标大小-图像将按比例缩放这可以是绝对像素值，也可以是相对（屏幕宽度或屏幕高度）的百分比值。当未设置时，将使用加载图像的大小。此外，还可以使用特殊的值“prop”通过宽高来缩放图像（例如，将宽度或高度设置为一个值，另一个设置为prop。width=“500” height=“prop”）。注意：当使用扭曲热点时，大小与内部基准大小有关，其中1000像素覆盖了90度的视场。
+    </td>
+</tr>
+<tr>
+    <td>scale</td>
+    <td>hotspot[name].scale</td>
+    <td>Number</td>
+    <td>1.0</td>
+</tr>
+<tr>
+    <td colspan=4>
+    热点元素的缩放
+    </td>
+</tr>
+<tr>
+    <td>rotate</td>
+    <td>hotspot[name].scale</td>
+    <td>Number</td>
+    <td>1.0</td>
+</tr>
+<tr>
+    <td colspan=4>
+    热点的旋转角度。注意，distorted不能设置为true
+    </td>
+</tr>
+<tr>
+    <td>alpha</td>
+    <td>hotspot[name].alpha</td>
+    <td>Number</td>
+    <td>1.0</td>
+</tr>
+<tr>
+    <td colspan=4>
+    热点的透明度。0.0-1.0之间。即使设置为0.0，元素依然存在并且可以点击，如果像隐藏它，可见属性必须设置为false。
+    </td>
+</tr>
+<tr>
+    <td>fillcolor/fillalpha</td>
+    <td>hotspot[name].fillcolor/hotspot[name].fillalpha</td>
+    <td>int/number</td>
+    <td>0xAAAAAA/0.5</td>
+</tr>
+<tr>
+    <td colspan=4>
+    向多边形热点区域填充颜色和透明度
+    </td>
+</tr>
+<tr>
+    <td>borderwidth/bordercolor/borderalpha</td>
+    <td>hotspot[name].borderwidth/hotspot[name].bordercolor/hotspot[name].borderalpha</td>
+    <td>Number/int/Number</td>
+    <td>3.0/0xAAAAAA/1.0</td>
+</tr>
+<tr>
+    <td colspan=4>
+    多边形热点的边框宽度，颜色，透明度
+    </td>
+</tr>
+<tr>
+    <td>onhover</td>
+    <td>hotspot[name].onhover</td>
+    <td>action event</td>
+    <td></td>
+</tr>
+<tr>
+    <td colspan=4>
+    当鼠标移动到热点之上时触发该事件
+    </td>
+</tr>
+<tr>
+    <td>onout</td>
+    <td>hotspot[name].onout</td>
+    <td>action event</td>
+    <td></td>
+</tr>
+<tr>
+    <td colspan=4>
+    当鼠标移出热点时触发该事件
+    </td>
+</tr>
+<tr>
+    <td>ondown</td>
+    <td>hotspot[name].ondown</td>
+    <td>action event</td>
+    <td></td>
+</tr>
+<tr>
+    <td colspan=4>
+    当鼠标点击热点，并且在按下的时候，触发该事件
+    </td>
+</tr>
+<tr>
+    <td>onup</td>
+    <td>hotspot[name].onup</td>
+    <td>action event</td>
+    <td></td>
+</tr>
+<tr>
+    <td colspan=4>
+    当鼠标点击热点，并且在抬起的时候，触发该事件
+    </td>
+</tr>
+<tr>
+    <td>onload</td>
+    <td>hotspot[name].onload</td>
+    <td>action event</td>
+    <td></td>
+</tr>
+<tr>
+    <td colspan=4>
+    当加载热点图片完成时触发该事件。
+    </td>
+</tr>
 </table>
