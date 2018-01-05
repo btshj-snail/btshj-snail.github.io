@@ -10,3 +10,5 @@
 ## 4. [文字](./text.md)
 
 ## 5. [加载图片](./image.md)
+
+## 6. [变形](./transformation.md)
