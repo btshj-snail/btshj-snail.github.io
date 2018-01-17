@@ -17,6 +17,8 @@
     1.4 [Canvas](doc/javaScript/canvas/index.md);
 
     1.5 [krpano](doc/javaScript/krpano/index.md);
+    
+    1.6 [其他](doc/javaScript/otherJs/index.md);
 
 2. 常用工具
 
