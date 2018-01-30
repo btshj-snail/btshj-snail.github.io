@@ -36,4 +36,16 @@
 git reset 命令既可以回退版本，也可以把暂存区的修改回退到工作区。当我们用 HEAD时 ，表示最新的版本。
 
     git reset HEAD readme.txt
+
+6. 修改远程仓库地址
+
+git remote set-url origin [url]
+
+    git remote set-url origin http://wwww.ee.git
+
+7. 删除和增加远程仓库地址
+
+git remote rm origin 
+
+git remote add origin  [url]
     
