@@ -12,3 +12,9 @@
 ## 5. [加载图片](./image.md)
 
 ## 6. [变形](./transformation.md)
+
+## 7.[合成与剪裁](./composite.md)
+
+## 8.[基本动画](./basicAnimation.md)
+
+## 9.[高级动画](./seniorAnimation.md)
