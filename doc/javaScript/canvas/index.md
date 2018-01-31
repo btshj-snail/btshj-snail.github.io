@@ -18,3 +18,7 @@
 ## 8.[基本动画](./basicAnimation.md)
 
 ## 9.[高级动画](./seniorAnimation.md)
+
+## 10.[像素操作](./operatePixel.md)
+
+## 11.[性能优化](./performanceAdvance.md)

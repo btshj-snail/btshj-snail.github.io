@@ -143,3 +143,67 @@ function draw(img) {
 }
 
 ```
+
+## 缩放和反锯齿
+
+在drawImage() 方法， 第二个画布和imageSmoothingEnabled 属性的帮助下，我们可以放大显示我们的图片及看到详情内容。
+
+我们得到鼠标的位置并裁剪出距左和上5像素，距右和下5像素的图片。然后我们将这幅图复制到另一个画布然后将图片调整到我们想要的大小。在缩放画布里，我们将10×10像素的对原画布的裁剪调整为 200×200 。
+
+    zoomctx.drawImage(canvas, Math.abs(x - 5), Math.abs(y - 5), 10, 10, 0, 0, 200, 200);
+
+因为反锯齿默认是启用的，我们可能想要关闭它以看到清楚的像素。你可以通过切换勾选框来看到imageSmoothingEnabled属性的效果（不同浏览器需要不同前缀）。
+
+```javaScript
+
+var img = new Image();
+img.src = 'https://mdn.mozillademos.org/files/5397/rhino.jpg';
+img.onload = function() {
+  draw(this);
+};
+
+function draw(img) {
+  var canvas = document.getElementById('canvas');
+  var ctx = canvas.getContext('2d');
+  ctx.drawImage(img, 0, 0);
+  img.style.display = 'none';
+  var zoomctx = document.getElementById('zoom').getContext('2d');
+ 
+  var smoothbtn = document.getElementById('smoothbtn');
+  var toggleSmoothing = function(event) {
+    zoomctx.imageSmoothingEnabled = this.checked;
+    zoomctx.mozImageSmoothingEnabled = this.checked;
+    zoomctx.webkitImageSmoothingEnabled = this.checked;
+    zoomctx.msImageSmoothingEnabled = this.checked;
+  };
+  smoothbtn.addEventListener('change', toggleSmoothing);
+
+  var zoom = function(event) {
+    var x = event.layerX;
+    var y = event.layerY;
+    zoomctx.drawImage(canvas, Math.abs(x - 5), Math.abs(y - 5), 10, 10, 0, 0, 200, 200);
+  };
+
+  canvas.addEventListener('mousemove', zoom);
+
+```
+
+## 保存图片
+
+HTMLCanvasElement  提供一个toDataURL()方法，此方法在保存图片的时候非常有用。它返回一个包含被类型参数规定的图像表现格式的数据链接。返回的图片分辨率是96dpi。
+
+    canvas.toDataURL('image/png')
+
+默认设定。创建一个PNG图片。
+
+    canvas.toDataURL('image/jpeg', quality)
+
+创建一个JPG图片。你可以有选择地提供从0到1的品质量，1表示最好品质，0基本不被辨析但有比较小的文件大小。
+
+当你从画布中生成了一个数据链接，例如，你可以将它用于任何\<image\>元素，或者将它放在一个有download属性的超链接里用于保存到本地。
+
+你也可以从画布中创建一个Blob对像。
+
+    canvas.toBlob(callback, type, encoderOptions)
+    
+这个创建了一个在画布中的代表图片的Blob对像。
