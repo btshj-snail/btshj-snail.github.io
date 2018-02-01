@@ -28,7 +28,7 @@ The new shape is drawn only where both the new shape and the destination canvas 
 
 ![](./img/new.png)
 
-![](./img/souce-in.png)
+![](./img/source-in.png)
 
 ### source-out
 
@@ -38,7 +38,7 @@ The new shape is drawn where it doesn't overlap the existing canvas content.(在
 
 ![](./img/new.png)
 
-![](./img/souce-out.png)
+![](./img/source-out.png)
 
 ### source-atop
 
