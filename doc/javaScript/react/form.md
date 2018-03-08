@@ -132,7 +132,7 @@ class EssayForm extends React.Component {
 
 ## select标签
 
-在HTML当中，<select>会创建一个下拉列表。例如这个HTML就创建了一个下拉列表的原型。
+在HTML当中，\<select\>会创建一个下拉列表。例如这个HTML就创建了一个下拉列表的原型。
 
 ```javascript
 
