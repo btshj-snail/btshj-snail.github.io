@@ -128,3 +128,201 @@ vDOMEq 代表渲染的 React 元素是否相等。最后，圆圈内的颜色代
 如果你想要你的组件仅当 props.color 或 state.count 发生改变时需要更新，
 
 你可以通过 shouldComponentUpdate 函数来检查：
+
+```javaScript
+
+class CounterButton extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {count: 1};
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.color !== nextProps.color) {
+      return true;
+    }
+    if (this.state.count !== nextState.count) {
+      return true;
+    }
+    return false;
+  }
+
+  render() {
+    return (
+      <button
+        color={this.props.color}
+        onClick={() => this.setState(state => ({count: state.count + 1}))}>
+        Count: {this.state.count}
+      </button>
+    );
+  }
+}
+
+
+```
+上面的代码，只有当props.color 或者 state.count 发生改变了，shouldComponentUpdate方法才能返回正确。如果props.color或者state.count不发生变化，组件是不会进行变化的。如果您的组件更复杂，您可以使用类似的模式，在所有的props和state字段之间进行“浅比较”，以确定组件是否应该更新。
+这个模式很常见，React提供了一个帮助器来使用这个逻辑--只是继承了React.PureComponent。因此，这段代码是实现相同目标的一种更简单的方法。
+
+```javaScript
+
+class CounterButton extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {count: 1};
+  }
+
+  render() {
+    return (
+      <button
+        color={this.props.color}
+        onClick={() => this.setState(state => ({count: state.count + 1}))}>
+        Count: {this.state.count}
+      </button>
+    );
+  }
+}
+
+
+```
+
+绝大部分情况，你可以适用React.PureComponent来代替你自己的shouldComponentUpdate。但是React.PureComponent只做了一个浅比较，所以如果props或state可能发生了突变，React.PureComponent可能不会去改变。
+
+在复杂的数据结构中，这个可能会是一个问题。例如，假设您想要一个ListOfWords组件来呈现一个以逗号分隔的单词列表，其中有一个父WordAdder组件，它允许您单击一个按钮向列表中添加一个单词。下面的代码可能不会正常运行：
+
+```javaScript
+
+class ListOfWords extends React.PureComponent {
+  render() {
+    return <div>{this.props.words.join(',')}</div>;
+  }
+}
+
+class WordAdder extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      words: ['marklar']
+    };
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    // This section is bad style and causes a bug
+    const words = this.state.words;
+    words.push('marklar');
+    this.setState({words: words});
+  }
+
+  render() {
+    return (
+      <div>
+        <button onClick={this.handleClick} />
+        <ListOfWords words={this.state.words} />
+      </div>
+    );
+  }
+}
+
+```
+
+导致这个问题，是因为PureComponent对this.props.words的新值和老值做了浅比较。WordAdder的handleClick方法中，改变了单词数组的内容。即使实际上数组中的内容发生了变化，但是新值和老值的this.props.words是相等的，因此ListOfWords将不会改变，即使它有应该呈现的新单词。
+
+## 不改变数据的能力
+
+避免这个问题的最简单的方法是避免使用作为props或state的突变值。例如，上面的handleClick方法可以用concat重写为:
+
+```javaScript
+
+handleClick() {
+  this.setState(prevState => ({
+    words: prevState.words.concat(['marklar'])
+  }));
+}
+
+```
+ES6支持对数组的扩展语法，使其更容易。如果您使用的是Create React应用程序，默认情况下该语法是可用的。
+
+```javaScript
+
+handleClick() {
+  this.setState(prevState => ({
+    words: [...prevState.words, 'marklar'],
+  }));
+};
+
+```
+
+您也可以用类似的方式重写使对象发生变异以避免突变的代码。
+
+例如，假设我们有一个名为colormap的对象，我们想要编写一个改变colormap.right = "blue"。我们可以写:
+
+```javaScript
+
+function updateColorMap(colormap) {
+  colormap.right = 'blue';
+}
+
+```
+
+要想在不改变原始对象的情况下编写它，我们可以使用Object.assign()方法:
+
+```javaScript
+
+function updateColorMap(colormap) {
+  return Object.assign({}, colormap, {right: 'blue'});
+}
+
+```
+
+updateColorMap现在返回一个新对象，而不是改变旧对象。Object.assign 是ES6的方法，因此需要一个polyfill。
+
+有一个JavaScript提议，可以添加对象扩展属性，以使更新对象更容易，而不需要修改:
+
+```javaScript
+
+function updateColorMap(colormap) {
+  return {...colormap, right: 'blue'};
+}
+
+```
+
+如果你使用的是Create React App，默认情况下，Object.assign和对象扩展语法是可用的。
+
+## 使用不可变的数据结构
+
+Immutable.js是解决这个问题的另一种方法。它提供了通过结构共享工作的不可变的、持久的集合:
+
+- 不可变:一旦创建，集合不能在另一个时间点被改变。
+
+- 持久化:新的集合可以从以前的集合中创建，也可以通过设置来创建。原始集合在创建新集合后仍然有效。
+
+- 结构共享:新的集合是使用尽可能多的原始集合来创建的，减少复制到最低限度以提高性能。
+
+Immutable使跟踪change变得方便。change总是会导致一个新对象，所以我们只需要检查对对象的引用是否已经更改。例如，在这个常规JavaScript代码中:
+
+```javaScript
+
+const x = { foo: 'bar' };
+const y = x;
+y.foo = 'baz';
+x === y; // true
+
+```
+
+虽然y中的属性被修改了，但是它是对于x具有相同的对象引用，所以这个比较返回true。您可以用immutable.js编写类似的代码。
+
+```javaScript
+
+const SomeRecord = Immutable.Record({ foo: null });
+const x = new SomeRecord({ foo: 'bar' });
+const y = x.set('foo', 'baz');
+const z = x.set('foo', 'bar');
+x === y; // false
+x === z; // true
+
+```
+
+在这种情况下，由于在改变x时返回一个新的引用，我们可以使用引用等式检查(x == y)来验证存储在y中的新值与存储在x中的原始值不同。
+
+有两个库可以帮助我们使用Immutable数据，他们是 seamless-immutable和immutability-helper.
+
