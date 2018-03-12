@@ -16,7 +16,7 @@
 
 ## 类名属性
 
-在React中，使用className属性指定一个CSS类。这个特性适用于所有的常规DOM节点和SVG元素，比如<div>，<a>和其它的元素。
+在React中，使用className属性指定一个CSS类。这个特性适用于所有的常规DOM节点和SVG元素，比如\<div\>，\<a\>和其它的元素。
 
 如果你在React中使用Web组件（这是一种不常见的使用方式），请使用class属性。
 

@@ -17,7 +17,7 @@
     1.4 [Canvas](doc/javaScript/canvas/index.md);
 
     1.5 [krpano](doc/javaScript/krpano/index.md);
-    
+
     1.6 [其他](doc/javaScript/otherJs/index.md);
 
 2. 常用工具
@@ -27,3 +27,11 @@
 3. 系统
 
     3.1 [linux](doc/linux/linuxCommand.md)
+
+4. web架构
+
+    4.1 [设计模式](doc/webFrmaework/designPattern/index.md)
+
+5. 好文
+
+    5.1 [大型网站架构系列：20本技术书籍推荐](doc/gooddArticle/webFrameworkRecommend.md)
