@@ -18,9 +18,11 @@
 
     1.5 [krpano](doc/javaScript/krpano/index.md);
 
-    1.6 [js设计模式](doc/javaScript/designMode/index.md)
+    1.6 [js设计模式](doc/javaScript/designMode/index.md);
 
-    1.7 [其他](doc/javaScript/otherJs/index.md);
+    1.7 [js数据结构与算法](doc/javaScript/dataArithmetic/index.md);
+
+    1.8 [其他](doc/javaScript/otherJs/index.md);
 
 2. 常用工具
 
