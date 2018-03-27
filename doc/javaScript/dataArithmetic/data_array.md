@@ -77,6 +77,8 @@ ary.forEach(function(item,index,ary){
 
 ```
 
+*** 注意forEach中不能使用continue，break等关键字。若要跳出本次循环，可以使用return。若要结束所有循环，只有使用for循环语句 ***
+
 ### 使用map和filter方法迭代
 
 这两个方法都会返回一个新的数组。
