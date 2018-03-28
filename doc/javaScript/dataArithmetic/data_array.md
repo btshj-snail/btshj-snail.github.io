@@ -32,7 +32,7 @@ let b = [1,2,3,4,5,6]
 
 every方法是对数组中每一元素运行指定的函数，如果该函数的每一项都返回true，则返回true
 
-***注意：该方法是短路运行的。也就意味着，只要在某个元素判定到为false后，就不会再继续向后执行了.***
+*** 注意：该方法是短路运行的。也就意味着，只要在某个元素判定到为false后，就不会再继续向后执行了. ***
 
 ```javaScript
 
@@ -324,3 +324,20 @@ ary.copyWithin(0,4,6); //[5,6,6,4,5,6];
 
 ```
 
+## 类型数组
+
+与C和Java等其他语言不同，javaScript数组不是强类型的，因此它可以存储任意类型的数据。
+
+而类型数组则用于存储单一类型的数据。它的语法是 let myArray = new TypeArray(length),其中TypeArray需要替换为下表所列之一。
+
+|类型数组|数据类型|
+|:--|:--|
+|Int8Array|8位二进制补码整数|
+|Unit8Array|8位无符号整数|
+|Unit8ClampedArray|8位无符号整数|
+|Int16Array|16位二进制补码整数|
+|Unit16Array|16位二进制无符号整数|
+|Int32Array|32位二进制补码整数|
+|Unit32Array|32位二进制无符号整数|
+|Float32Array|32位IEEE浮点数|
+|Float64Array|64位IEEE浮点数|
