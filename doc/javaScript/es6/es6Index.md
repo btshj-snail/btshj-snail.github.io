@@ -14,3 +14,5 @@ ES6是javaScript语言的一次跨越，添加了许多新的语法特性。增�
 ## 1. [属性名表达式](attrNameExpression.md)
 
 ## 2. [Set](set.md)
+
+## 3. [WeakSet](weakSet.md)

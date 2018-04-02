@@ -8,4 +8,8 @@
 
  4. [链表](./data_linkedList.md)
 
+ 5. [集合](./data_list.md)
+
+ 6. [字典](./data_dictionary.md)
+
  
