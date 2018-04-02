@@ -318,6 +318,6 @@ set = new Set(Array.from(set, val => val * 2));
 
 ## WeakSet 
 
-![《weakSet》](./weakSet.md)
+[《weakSet》](./weakSet.md)
 
 [摘自]: http://es6.ruanyifeng.com/#docs/set-map#Set "ECMAScript 6 入门"
