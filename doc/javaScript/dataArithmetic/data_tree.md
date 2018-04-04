@@ -658,19 +658,31 @@ let BinarySearchTree = (function () {
                 }
             }
 
+            /**
+            *
+            *方法中return node对象，主要是为了维护各个node之间的关系。保持树形结构
+            *
+            **/
             function removeNode(node,key){
+                //如果key小于节点的key ，则表明想要删除的节点在当前节点的左边。继续调用删除方法，查找下一个
                 if(node.key>key){
                     node.left = arguments.callee(node.left,key);
                     return node;
-                }else if(node.key<key){
+                }
+                //如果key大于节点的key ，则表明想要删除的节点在当前节点的右边。继续调用删除方法，查找下一个
+                else if(node.key<key){
                     node.right = arguments.callee(node.right,key);
                     return node;
-                }else{
+                
+                }
+                //key值等于当前节点的key，表明该节点是我们想要删除的节点。此时准备删除。分为以下三种情况
+                else{
+                    //1.如果当前节点没有子节点，则直接删除。返回null给上一节点即可
                     if(node.left===null && node.right===null){
                         node = null;
                         return node;
                     }
-
+                    //2. 如果当前节点只有一个子节点(只有左节点或者只有右节点)，那么直接将当前节点置换成子节点即可。
                     if(node.left===null){
                         node = node.right;
                         return node;
@@ -678,7 +690,9 @@ let BinarySearchTree = (function () {
                         node = node.left;
                         return node;
                     }
-
+                    //3. 如果当前节点有两个子节点，那么此时找到右子节点所有后代（包含右子节点）中最小的一个节点。
+                    // 将这个最小节点的值替换掉当前节点的值（其实是做了删除）
+                    // 然后删除掉这个最小的节点。
                     var aux = minNode(node.right);
                     node.key = aux.key;
                     node.right = arguments.callee(node.right,aux.key);
