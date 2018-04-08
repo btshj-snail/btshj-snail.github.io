@@ -743,5 +743,91 @@ let BinarySearchTree = (function () {
 
 ```
 
+## 自平衡树
 
+二叉搜索树存在一个问题：取决于你添加的节点数，树的边可能会很深；也就是说，树的一条分支会有很多层，而其他的分支却只有几层。如图所示：
+
+![](./imgs/tree_5.png)
+
+这会在需要在某条边上添加、移除和搜索某个节点时引起一些性能问题。为了解决这个问题，有一种树叫作Adelson-Velskii-Landi树（AVL树）。AVL树是一种自平衡二叉搜索树，意思是任何一个节点左右两侧子树的高度之差最多为1。也就是说这种树会在添加或移除节点时尽量试着成为一棵**完全**树.
+
+### AVL树
+
+AVL树是一种自平衡树。添加或移除节点时，AVL树会尝试自平衡。任意一个节点（不论深度）的左子树和右子树高度最多相差1。添加或移除节点时，AVL树会尽可能尝试转换为完全树
+
+### 在AVL树插入节点
+
+在AVL树中插入或移除节点和BST完全相同。然而，AVL树的不同之处在于我们需要检验它的平衡因子，如果有需要，则将其逻辑应用于树的自平衡。
+
+```javaScript
+
+let insertNode = function(node,el){
+    if(node === null ){
+        node = new Node(el);
+    }else if(el<node.key){
+        node.left = arguments.callee(node.left,el);
+        if(node.left !==null){
+            //todo 检查是否平衡 {1}
+        }
+    }else if(el>node.key){
+        node.right = arguments.callee(node.right,el);
+        if(node.right !==null){
+            //todo 检查是否平衡 {2}
+        }
+    }
+    return node;
+}
+
+```
+
+### 计算平衡因子
+
+在AVL树中，需要对每个节点计算右子树高度（hr）和左子树高度（hl）的差值，该值（hr－hl）应为0、1或-1。如果结果不是这三个值之一，则需要平衡该AVL树。这就是平衡因子的概念。
+
+```javaScript
+
+let heightNode = function(node){
+    if(node===null){
+        return -1;
+    }else{
+        return Math.max(heightNode(node.left),heightNode(node.right)+1);
+    }
+}
+
+```
+
+因此，向左子树插入新节点时，需要计算其高度；如果高度大于1（即不为-1、0和1之一），就需要平衡左子树。代码如下：
+
+```javaScript
+
+//在insertNode方法的第一个todo里加入以下代码
+
+if((heightNode(node.left)-heightNode(node.right))>1){
+    // 旋转{3}
+}
+
+```
+
+向右子树插入新节点时， 应用同样的逻辑，代码如下：
+
+ ```javaScript
+
+//在insertNode方法的第二个todo里加入以下代码
+
+if((heightNode(node.right)-heightNode(node.left))>1){
+    // 旋转{4}
+}
+
+```
+
+### AVL 旋转
+
+向AVL树插入节点时，可以执行单旋转或双旋转两种平衡操作，分别对应四种场景
+
+- 右-右(RR): 向左的单旋转
+- 左-左(LL): 向右的单旋转
+- 左-右(LR): 向右的双旋转
+- 右-左(RL): 向左的双旋转
+
+该文未完。。。。。。。。。。
 
