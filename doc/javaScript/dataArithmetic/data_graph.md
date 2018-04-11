@@ -247,3 +247,123 @@ let Graph = (function () {
 
 - 从v到u的距离d[u]；
 - 前溯点pred[u]，用来推导出从v到其他每个顶点u的最短路径。
+
+
+```javaScript
+
+let Graph = (function () {
+            let vertices = [];
+            let adjList = new Dictionary();
+
+            /**
+             * 初始化遍历状态
+             * 1->未发现
+             * 2->未探索
+             * 3->已探索
+             **/
+            let initTraverseStatus = function () {
+                let traverseStatus = {};
+                vertices.forEach(item => {
+                    traverseStatus[item] = 1;
+                })
+                return traverseStatus;
+            }
+
+            let _assemblePath = function(store,obj,vertex){
+               store.push(vertex); 
+               if(obj[vertex] in obj){
+                   arguments.callee(store,obj,obj[vertex]);
+               }
+            }
+
+
+            function _Graph() {}
+
+            _Graph.prototype = {
+                addVertex: function (v) {
+                    if (vertices.findIndex(item => v === item) === -1) {
+                        vertices.push(v);
+                        adjList.set(v, []);
+                    }
+                },
+                addEdge: function (v, w) {
+                    adjList.get(v).push(w);
+                    adjList.get(w).push(v);
+                },
+                toString: function () {
+                    if (vertices.length <= 0) return "";
+                    let result = vertices.map(item => {
+                        return `${item} -> ${adjList.get(item).join(' ')}`;
+                    })
+                    return result.join('\n')
+                },
+                bfs: function (v, callback) {
+                    let traverseStatus = initTraverseStatus(),
+                        queue = new Queue();
+                        queue.enqueue(v);
+
+                        while(!queue.isEmpty()){
+                            let u = queue.dequeue(),
+                                neighbors = adjList.get(u);
+                                traverseStatus[u] = 2;
+
+                                neighbors.forEach((item)=>{
+                                    if(traverseStatus[item] === 1){
+                                        queue.enqueue(item);
+                                        traverseStatus[item] = 2 ;
+                                    }
+                                })
+
+                                traverseStatus[u] = 3;
+                                callback && callback(u);
+                        }
+                },
+                exitVertex:function(v){
+                    return vertices.findIndex(item=>v===item)!==-1;
+                },
+                getShortestPath:function(beginV,endV){
+                    if(!this.exitVertex(beginV) || !this.exitVertex(endV)) return [];
+                    if(beginV===endV) return [];
+
+                    let path = [],
+                        
+                        prev = {},
+                        traverseStatus = initTraverseStatus(),
+                        queue = new Queue();
+                        queue.enqueue(beginV);
+
+                        while(!queue.isEmpty()){
+                            let u = queue.dequeue(),
+                                neighbors = adjList.get(u);
+                                traverseStatus[u] = 2;
+
+                                neighbors.forEach((item)=>{
+                                    if(item===endV){
+                                        queue.clear();
+                                    }
+                                    if(traverseStatus[item] === 1){
+                                        prev[item] = u; 
+                                        queue.enqueue(item);
+                                        traverseStatus[item] = 2 ;
+                                    }
+                                   
+                                })
+
+                                traverseStatus[u] = 3;
+                        }
+                        _assemblePath(path,prev,endV);
+                        path = path.reverse();
+                        path.push(beginV);
+                        return {
+                            path:path,
+                            step:path.length,
+                        }
+
+                }
+            }
+
+            return _Graph;
+        })();
+
+
+```

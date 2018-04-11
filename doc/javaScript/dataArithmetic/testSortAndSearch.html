@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    
+        
+function getRandomNumber(min,max){
+    return Math.floor(Math.random()*(max-min+1)+min);
+}
+
+function getNoRepeatAryByLength(length,min,max){
+    let ary = [];
+    for(let i=0;i<length;i++){
+        let randomNum = null;
+        while(randomNum===null || ary.findIndex(item=>{item===randomNum})!==-1){
+            randomNum = getRandomNumber(min,max);
+        }
+        ary.push(randomNum);
+        
+    }
+    return ary;
+}
+
+function ArrayList(){
+    let array = [];
+    let swap = function(array,index1,index2){
+         let aux = array[index1];
+         array[index1] = array[index2];
+         array[index2] = aux;
+         //es6
+        // [array[index2],array[index1]] = [array[index1],array[index2]]
+    }
+    this.insert = function(item){
+        array.push(item);
+    }
+    this.insertAry = function(ary){
+        array.push.apply(array,ary);
+    }
+    this.toString = function(){
+        return array.join();
+    }
+    this.bubbleSort = function(){
+        for(let i=0,l=array.length;i<l;i++){
+            for(let j=0,k=array.length-1;j<k;j++){
+                if(array[j]>array[j+1]){
+                    let aux = array[j];
+                    array[j] = array[j+1];
+                    array[j+1] = aux;
+                }
+            }
+        }
+    }
+}
+let al = new ArrayList();
+al.insertAry(getNoRepeatAryByLength(10,1,100));
+al.bubbleSort();
+console.log(al.toString());
+    
+    </script>
+</body>
+</html>

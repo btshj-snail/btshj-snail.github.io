@@ -136,7 +136,7 @@
             let _assemblePath = function(store,obj,vertex){
                store.push(vertex); 
                if(obj[vertex] in obj){
-                   arguments.callee(store,obj,vertex);
+                   arguments.callee(store,obj,obj[vertex]);
                }
             }
 
@@ -190,7 +190,6 @@
                     if(beginV===endV) return [];
 
                     let path = [],
-                        
                         prev = {},
                         traverseStatus = initTraverseStatus(),
                         queue = new Queue();
@@ -202,11 +201,11 @@
                                 traverseStatus[u] = 2;
 
                                 neighbors.forEach((item)=>{
-                                    prev[item] = u; 
                                     if(item===endV){
                                         queue.clear();
                                     }
                                     if(traverseStatus[item] === 1){
+                                        prev[item] = u; 
                                         queue.enqueue(item);
                                         traverseStatus[item] = 2 ;
                                     }
@@ -215,12 +214,11 @@
 
                                 traverseStatus[u] = 3;
                         }
-                        console.log('*********')
-                        console.log(prev)
                         _assemblePath(path,prev,endV);
-
+                        path = path.reverse();
+                        path.push(beginV);
                         return {
-                            path:path.reverse(),
+                            path:path,
                             step:path.length,
                         }
 

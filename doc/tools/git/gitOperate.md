@@ -108,6 +108,15 @@ git stash
 
     git branch --set-upstream dev origin/dev
 
+15. 查看远程分支
+
+    git remote show origin 
+
+16. 去除显示已删除分支
+
+    git remote prune origin
+
+
 
 
 
