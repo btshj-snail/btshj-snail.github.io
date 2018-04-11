@@ -225,9 +225,99 @@ this.selectionSort = function(){
             }
         }
         if(indexMin!==i){
-            swap(array,array[indexMin],array[i]);
+            swap(indexMin,i);
         }
     }
 }
 
 ```
+
+### 插入排序
+
+插入排序每次排一个数组项，以此方式构建最后的排序数组。假定第一项已经排序了，接着，它和第二项进行比较，第二项是应该待在原位还是插到第一项之前呢？这样，头两项就已正确排序，接着和第三项比较（它是该插入到第一、第二还是第三的位置呢？），以此类推。
+
+插入排序的核心是插入。即将要判断的元素插入到已经排序好的元素中间去，这样所有元素判断完就排序完成了。最小的循环次数为数组的长度。数组长度小的时候，排序性能要优于冒泡和选择排序。
+
+```javaScript
+
+this.insertSort = function(){
+    let j,temp,count=0;
+    for(let i=1,l=array.length;i<l;i++){
+        j = i;
+        temp = array[i];
+        while(j>0 && array[j-1]>temp){
+            count++;
+            array[j] = array[j-1];
+            j--;
+        }
+        array[j] = temp;
+    }
+    console.log('插入排序共循环次数：' + (count===0?array.length:count));
+}
+
+```
+
+### 归并排序
+
+归并排序是第一个可以被实际使用的排序算法。你在本书中学到的前三个排序算法性能并不好，但归并排序性能不错，其复杂度为o(nlogn)
+
+归并排序是一种分治算法。其思想是将原始数组切分成较小的数组，直到每个小数组只有一个位置，接着将小数组归并成较大的数组，直到最后只有一个排序完毕的大数组。
+由于是分治法，所以归并排序也是递归的。
+
+```javaScript
+
+function ArrayList() {
+            ......
+
+            let mergeRec = function (array) {
+                let length = array.length;
+                if (length === 1) {
+                    return array;
+                }
+                let mid = Math.floor(array.length / 2),
+                    leftAry = array.slice(0, mid),
+                    rightAry = array.slice(mid);
+                return merge(mergeRec(leftAry), mergeRec(rightAry));
+            }
+
+            let merge = function (left, right) {
+                let result = [], ir = 0, il = 0;
+                while (ir < right.length && il < left.length) {
+                    mergeCount++;
+                    if (right[ir] < left[il]) {
+                        result.push(right[ir++]);
+                    } else {
+                        result.push(left[il++]);
+                    }
+                }
+
+                while (ir < right.length) {
+                    mergeCount++;
+                    result.push(right[ir++]);
+                }
+
+                while (il < left.length) {
+                    mergeCount++;
+                    result.push(left[il++]);
+                }
+                return result;
+            }
+
+            ......
+            
+            this.mergeSort = function () {
+                let startTime = new Date().getTime();
+                array = mergeRec(array);
+                console.log('归并排序共循环次数：' + mergeCount + "耗时：" + (new Date().getTime() - startTime));
+            }
+        }
+
+
+```
+
+### 快速排序
+
+快速排序也许是最常用的排序算法了。它的复杂度为O(nlogn)，且它的性能通常比其他的复杂度为O(nlogn)的排序算法要好。
+
+和归并排序一样，快速排序也使用分治的方法，将原始数组分为较小的数组（但它没有像归并排序那样将它们分割开）。快速排序比到目前为止你学过的其他排序算法要复杂一些。让我们一步步地来学习。
+
