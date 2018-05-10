@@ -116,6 +116,17 @@ git stash
 
     git remote prune origin
 
+17. 忽略对某个文件的跟踪
+
+    git update-index --assume-unchanged xxx/xxx
+
+18. 恢复对某个文件的跟踪
+
+    git update-index --no-assume-unchanged xxx/xxx
+
+20. 取消本地分支与远程分支的对应关系
+
+    git branch --unSet-upstream 本地分支名 origin/远程分支名
 
 
 
