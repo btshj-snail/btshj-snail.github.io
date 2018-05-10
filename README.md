@@ -5,7 +5,7 @@
 
 ## Go info
 
-1. [Go doc](doc/goIndex.md)
+1. [Go doc](doc/goDoc/goIndex.md)
 
 
 ## 使用markdown编写的文档
