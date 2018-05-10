@@ -3,6 +3,9 @@
 本工程是一个文档集合工程。
 包含部分静态文档界面，以及部分md文件
 
+## Go info
+
+1. [Go doc](doc/goIndex.md)
 
 
 ## 使用markdown编写的文档
