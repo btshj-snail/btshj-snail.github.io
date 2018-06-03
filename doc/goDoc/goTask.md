@@ -3,7 +3,7 @@
 go-nifty
 
 task | relative | date | time
----|:-- |:--|
+---|:-- |:--|:--
 借款 | borrow.js;borrow.jsp | 05.04-05.09 | 0.25
 付款 | payment.js;payment.jsp| 05.04-05.09 | 0.25
 报销 | reimburse.js;reimburse.jsp|05.04-05.09 | 1
@@ -11,7 +11,7 @@ task | relative | date | time
 go-eplat-vue-mobile
 
 task | relative | date | time
----|:-- |:--|
+---|:-- |:--|:--
 登录 | Login | ---- | 0.25
 主页 | 一级菜单 二级菜单 动态图标| ----- | 0.5
 一级上线 | 列表、详细 |------- | 0.75
