@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let Queue = (function () {
+            let weakMap = new WeakMap();
+
+            function _getItems(key) {
+                return weakMap.get(key);
+            }
+
+            function _setItems(key, val) {
+                weakMap.set(key, val);
+            }
+
+            return class {
+                constructor() {
+                    _setItems(this, []);
+                }
+
+                front() {
+                    return _getItems(this)[0];
+                }
+
+                clear(){
+                    _setItems(this, []);
+                }
+
+                size() {
+                    return _getItems(this).length;
+                }
+
+                isEmpty() {
+                    return _getItems(this).length === 0;
+                }
+
+                print() {
+                    console.log(_getItems(this).toString());
+                }
+
+                enqueue() {
+                    let items = _getItems(this);
+                    items.push.apply(items, arguments);
+                }
+
+                dequeue() {
+                    return _getItems(this).shift();
+                }
+
+            }
+
+        })();
+
+        let Dictionary = (function () {
+
+            let wm = new WeakMap();
+
+            function _Dictionary() {
+                wm.set(this, {});
+            }
+
+            _Dictionary.prototype = {
+                set(key, val) {
+                    let store = wm.get(this);
+                    store[key] = val;
+                },
+                delete(key) {
+                    let store = wm.get(this);
+                    if (this.has(key)) {
+                        delete store[key];
+                        return true;
+                    }
+                    return false;
+                },
+                has(key) {
+                    let store = wm.get(this);
+                    return key in store;
+                },
+                get(key) {
+                    let store = wm.get(this);
+                    return this.has(key) ? store[key] : undefined;
+                },
+                clear() {
+                    wm.set(this, {});
+                },
+                size() {
+                    return Object.keys(wm.get(this)).length;
+                },
+                keys() {
+                    //Object.keys 不会获取原型链上的属性
+                    return Object.keys(wm.get(this));
+                },
+                values() {
+                    let vals = [];
+                    // for in 会将循环出所有原型链上的属性。所以使用hasOwnPropertype加以判断。主要是担心Object.prototype.xxx的出现
+                    let store = wm.get(this);
+                    for (let o in store) {
+                        if (store.hasOwnProperty(o)) {
+                            vals.push(store[o]);
+                        }
+                    }
+                    return vals;
+                },
+            }
+
+            return _Dictionary;
+        })()
+
+
+        let Graph = (function () {
+            let vertices = [];
+            let adjList = new Dictionary();
+
+            /**
+             * 初始化遍历状态
+             * 1->未发现
+             * 2->未探索
+             * 3->已探索
+             **/
+            let initTraverseStatus = function () {
+                let traverseStatus = {};
+                vertices.forEach(item => {
+                    traverseStatus[item] = 1;
+                })
+                return traverseStatus;
+            }
+
+            let _assemblePath = function(store,obj,vertex){
+               store.push(vertex); 
+               if(obj[vertex] in obj){
+                   arguments.callee(store,obj,obj[vertex]);
+               }
+            }
+
+
+            function _Graph() {}
+
+            _Graph.prototype = {
+                addVertex: function (v) {
+                    if (vertices.findIndex(item => v === item) === -1) {
+                        vertices.push(v);
+                        adjList.set(v, []);
+                    }
+                },
+                addEdge: function (v, w) {
+                    adjList.get(v).push(w);
+                    adjList.get(w).push(v);
+                },
+                toString: function () {
+                    if (vertices.length <= 0) return "";
+                    let result = vertices.map(item => {
+                        return `${item} -> ${adjList.get(item).join(' ')}`;
+                    })
+                    return result.join('\n')
+                },
+                bfs: function (v, callback) {
+                    let traverseStatus = initTraverseStatus(),
+                        queue = new Queue();
+                        queue.enqueue(v);
+
+                        while(!queue.isEmpty()){
+                            let u = queue.dequeue(),
+                                neighbors = adjList.get(u);
+                                traverseStatus[u] = 2;
+
+                                neighbors.forEach((item)=>{
+                                    if(traverseStatus[item] === 1){
+                                        queue.enqueue(item);
+                                        traverseStatus[item] = 2 ;
+                                    }
+                                })
+
+                                traverseStatus[u] = 3;
+                                callback && callback(u);
+                        }
+                },
+                exitVertex:function(v){
+                    return vertices.findIndex(item=>v===item)!==-1;
+                },
+                getShortestPath:function(beginV,endV){
+                    if(!this.exitVertex(beginV) || !this.exitVertex(endV)) return [];
+                    if(beginV===endV) return [];
+
+                    let path = [],
+                        prev = {},
+                        traverseStatus = initTraverseStatus(),
+                        queue = new Queue();
+                        queue.enqueue(beginV);
+
+                        while(!queue.isEmpty()){
+                            let u = queue.dequeue(),
+                                neighbors = adjList.get(u);
+                                traverseStatus[u] = 2;
+
+                                neighbors.forEach((item)=>{
+                                    if(item===endV){
+                                        queue.clear();
+                                    }
+                                    if(traverseStatus[item] === 1){
+                                        prev[item] = u; 
+                                        queue.enqueue(item);
+                                        traverseStatus[item] = 2 ;
+                                    }
+                                   
+                                })
+
+                                traverseStatus[u] = 3;
+                        }
+                        _assemblePath(path,prev,endV);
+                        path = path.reverse();
+                        path.push(beginV);
+                        return {
+                            path:path,
+                            step:path.length,
+                        }
+
+                }
+            }
+
+            return _Graph;
+        })();
+
+        let graph = new Graph();
+
+        graph.addVertex("a");
+        graph.addVertex("b");
+        graph.addVertex("c");
+        graph.addVertex("d");
+        graph.addVertex("e");
+
+        graph.addEdge("a", "b");
+        graph.addEdge("a", "c");
+        graph.addEdge("b", "d");
+        graph.addEdge("d", "e");
+        graph.addEdge("c", "e");
+
+        console.log("广度遍历：")
+        graph.bfs("a",(item)=>{
+            console.log(item);
+        })
+
+        console.log(graph.toString());
+
+        console.log(graph.getShortestPath("a","e"));
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    
+    let Dictionary = (function(){
+
+        let wm = new WeakMap();
+
+        function _Dictionary(){
+            wm.set(this,{});
+        }
+
+        _Dictionary.prototype = {
+            set(key,val){
+                let store = wm.get(this);
+                store[key] = val;
+            },
+            delete(key){
+                let store = wm.get(this);
+                if(this.has(key)){
+                    delete store[key];
+                    return true;
+                }
+                return false;
+            },
+            has(key){
+                let store = wm.get(this);
+                return key in store;
+            },
+            get(key){
+                let store = wm.get(this);
+               return this.has(key) ? store[key] : undefined ;
+            },
+            clear(){
+                wm.set(this,{});
+            },
+            size(){
+                return Object.keys(wm.get(this)).length;
+            },
+            keys(){
+                //Object.keys 不会获取原型链上的属性
+                return Object.keys(wm.get(this));
+            },
+            values(){
+                let vals = [];
+                // for in 会将循环出所有原型链上的属性。所以使用hasOwnPropertype加以判断。主要是担心Object.prototype.xxx的出现
+                let store = wm.get(this);
+                for(let o in store){
+                    if(store.hasOwnProperty(o)){
+                        vals.push(store[o]);
+                    }
+                }
+                return vals;
+            },
+        }
+
+        return _Dictionary;
+    })()
+
+    let dictionary = new Dictionary();
+    dictionary.set("101","v101")
+    dictionary.set("102","v102")
+    dictionary.set("103","v103")
+    dictionary.set("104","v104")
+
+    console.log(dictionary.get("104"));
+    console.log(dictionary.size());
+    console.log(dictionary.keys())
+    console.log(dictionary.values())
+    console.log(dictionary.has("103"))
+    console.log(dictionary.delete("103"))
+    console.log(dictionary.has("103"))
+    console.log(dictionary.clear())
+    console.log(dictionary.size())
+
+    function time(){
+        let ary = [1,1,1,1,1,1,1,1,1,1,1,1,11,1,11,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,11,1,11,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,11,1,11,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,11,1,11,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,11,1,11,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,11,1,11,1,1,1,1,1,1,1,11,1,1,1,1,1,1,1,1,1,1,1,11,1,11,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,11,1,11,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,11,1,11,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,11,1,11,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,11,1,11,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,11,1,11,1,1,1,1,1,1,1,1]
+        let o = {a:1,b:1,c:1,d:1,e:1,f:1,g:1,h:1,i:1,j:1,k:1,l:1,m:1}
+        let start = new Date().getTime();
+        ary[20]
+        console.log(new Date().getTime()-start);
+
+        start = new Date().getTime();
+        o.m
+        console.log(new Date().getTime()-start);
+    }
+  
+    </script>
+</body>
+</html>
