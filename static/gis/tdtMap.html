@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="http://api.tianditu.gov.cn/api?v=4.0&tk=1edeafda1eaadd9ed434dc753feb9a46" type="text/javascript"></script>
+
+    <script>
+         var map;
+        var zoom = 12;
+        function onLoad() {
+            map = new T.Map('mapDiv');
+            map.centerAndZoom(new T.LngLat(116.40769, 39.89945), zoom);
+            map.addEventListener("click",mapClick);
+        }
+
+        function mapClick(e){
+            console.log(e.lnglat.getLng()+","+e.lnglat.getLat());
+        }
+    </script>
+</head>
+<body onLoad="onLoad()">
+        <div id="mapDiv" style="position:absolute;width:100%; height:100%"></div>
+</body>
+</html>
