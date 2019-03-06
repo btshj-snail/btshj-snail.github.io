@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let Book = (function(){
+            let enableRead = true; //私有属性
+            function _formatTitle(title){
+                return `《${title}》`;
+            } //私有方法
+            return function (title,price){
+                    this.title = _formatTitle(title);
+                    this.price = price;
+                }
+        })();
+
+            Book.READ_COUNT = 0; //静态属性
+            //静态方法
+            Book.addReadCount = function(){ 
+                return ++Book.READ_COUNT;
+            }
+            Book.prototype.getTitle = function(){
+                return this.title;
+            }
+
+
+        let book = new Book("js design mode",20);
+        console.log(book.getTitle());
+        console.log(Book.addReadCount());
+        let book1 = new Book('data constructor',30);
+        console.log(book1.getTitle());
+        console.log(Book.addReadCount());
+        console.log(book1._formatTitle());
+    </script>
+</body>
+</html>

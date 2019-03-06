@@ -9,8 +9,8 @@ const webpack = require('webpack'),
     WebpackMd5Hash = require('webpack-md5-hash'),
     ExtractTextWebpackPlugin = require('extract-text-webpack-plugin'),
     CleanWebpackPlugin = require('clean-webpack-plugin'),
-    HtmlWebpackPlugin = require('html-webpack-plugin');
-
+    HtmlWebpackPlugin = require('html-webpack-plugin'),
+    UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const entry = require('./webpack.config.entry');
 const config = require("./webpack.config.config");
 
@@ -31,20 +31,22 @@ const plugins = function (env) {
                 to:config_obj.COPY_PATH_HTML_FRAGMENT_TO
             }
             ]),
-        new webpack.optimize.UglifyJsPlugin({
-            sourceMap: false,
-            beautify: false,
-            comments: false,
-            compress: {
-                warnings: false,
-                drop_console: false,
-                collapse_vars: true,
-                reduce_vars: true
-            },
-            output:{
-                comments:false
-            }
-        }),
+        // new UglifyJsPlugin({
+            //启用缓存并且启用多进程并行运行。
+            // cache: true,
+            // parallel: true,
+            // uglifyOptions: {
+            //     warnings: false,
+            //     parse: {},
+            //     compress: {},
+            //     mangle: true, // Note `mangle.properties` is `false` by default.
+            //     output: null,
+            //     toplevel: false,
+            //     nameCache: null,
+            //     ie8: false,
+            //     keep_fnames: false,
+            //   }
+        // }),
         new webpack.DefinePlugin({
             DEV: env == 'dev'
         }),
@@ -81,7 +83,7 @@ const plugins = function (env) {
         //清除编译文件存放空间
         p_ary.push(
             new CleanWebpackPlugin(['./static'],{
-                exclude:["threeComponent","i18n"],
+                exclude:["threeComponent","i18n","mdDoc"],
                 root:config_obj.PROJECT_PATH,
                 verbose:true,
                 dry:false
