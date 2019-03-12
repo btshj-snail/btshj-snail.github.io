@@ -97,7 +97,7 @@ npm login 是 adduser 的别名,和其行为是完全一致的.
 这是npm 包的registry的基础路径。如果还指定了作用域，则此registry将仅用于具有该作用域的包。作用域默认为当前所在项目目录的作用域（如果有）。见npm-scope。
 
 
-### scope
+#### scope
 
 默认: none
 
@@ -111,7 +111,7 @@ npm adduser --registry=http://myregistry.example.com --scope=@myco
 
 这将为给定的作用域和登录设置一个registry，或者同时为该注册表创建一个用户。
 
-### always-auth
+#### always-auth
 
 默认:false
 
@@ -125,11 +125,26 @@ npm adduser --registry=http://private-registry.example.com --always-auth
 
 这将确保对该registry（包括tarballs）的所有请求都包含一个授权头。对于将元数据和包tarball存储在具有不同主机名的主机上的私有registry，可能需要使用此设置。有关“always-auth”的详细信息，请参见npm config中的“always-auth”。Always-Auth的registry特定配置优先于任何全局配置。
 
-### auth-type
+#### auth-type
 
 默认:'legacy'
 类型:'legacy', 'sso', 'saml', 'oauth'
 
 与adduser/login一起使用的身份验证策略。除了传统的NPM中的经典用户名/密码输入之外，一些其他npm registry（例如，NPME）可能支持其他认证策略。
+
+
+#### bin
+显示npm的bin的文件夹路径
+
+### 概要
+
+````cmd
+
+npm bin [-g|--global]
+
+````
+### 描述
+
+列出 npm 安装可执行文件的文件夹。
 
 
