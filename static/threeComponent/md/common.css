@@ -1,0 +1,54 @@
+.page-container {
+    padding:0 20px;
+}
+
+.page-container .left-area{
+    width:300px;
+    height:100vh;
+    float:left;
+    border-right:dashed 1px #999;
+}
+
+.page-container .right-area{
+    margin-left:300px;
+    padding-left:20px;
+}
+
+.md-content-null-right{
+    padding-right:220px;
+}
+
+.vertical-menu>ul{
+    position: fixed;
+    list-style:none;
+    
+}
+.vertical-menu>ul>li{
+    font-size:16px;
+    font-weight:500;
+    color:#333;
+    line-height:1.8;
+    cursor:pointer;
+
+}
+
+.vertical-menu>ul>li:hover{
+   color:#999; 
+}
+
+.vertical-menu>ul>li>p{
+    text-indent: 0%;
+}
+
+.vertical-menu>ul>li>ul{
+    list-style:none;
+    padding-left:2em;
+}
+
+.vertical-menu>ul>li>ul>li{
+    color:#555;
+}
+
+.vertical-menu>ul>li>ul>li:hover{
+    color:#999; 
+ }

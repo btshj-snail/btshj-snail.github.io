@@ -1,6 +1,6 @@
 # 基本动画
 
-由于我们是用 JavaScript 去操控 <canvas> 对象，这样要实现一些交互动画也是相当容易的。在本章中，我们将看看如何做一些基本的动画。
+由于我们是用 JavaScript 去操控 \<canvas> 对象，这样要实现一些交互动画也是相当容易的。在本章中，我们将看看如何做一些基本的动画。
 
 可能最大的限制就是图像一旦绘制出来，它就是一直保持那样了。如果需要移动它，我们不得不对所有东西（包括之前的）进行重绘。重绘是相当费时的，而且性能很依赖于电脑的速度。
 
@@ -8,17 +8,20 @@
 
 你可以通过以下的步骤来画出一帧:
 
-1. 清空 canvas
+1.  清空 canvas 
 
 除非接下来要画的内容会完全充满 canvas （例如背景图），否则你需要清空所有。最简单的做法就是用 clearRect 方法。
 
 2. 保存 canvas 状态
+
 如果你要改变一些会改变 canvas 状态的设置（样式，变形之类的），又要在每画一帧之时都是原始状态的话，你需要先保存一下。
 
 3. 绘制动画图形（animated shapes）
+
 这一步才是重绘动画帧。
 
-4.恢复 canvas 状态
+4. 恢复 canvas 状态
+
 如果已经保存了 canvas 的状态，可以先恢复它，然后重绘下一帧。
 
 ## 操控动画 Controlling an animation
@@ -32,15 +35,15 @@
 
 首先，可以用window.setInterval(), window.setTimeout(),和window.requestAnimationFrame()来设定定期执行一个指定函数。
 
-**setInterval(function, delay)**
+- **setInterval(function, delay)**
 
 当设定好间隔时间后，function会定期执行。
 
-**setTimeout(function, delay)**
+- **setTimeout(function, delay)**
 
 在设定好的时间之后执行函数
  
-**requestAnimationFrame(callback)**
+- **requestAnimationFrame(callback)**
 
 告诉浏览器你希望执行一个动画，并在重绘之前，请求浏览器执行一个特定的函数来更新动画。
 
@@ -276,8 +279,10 @@ function draw() {
 }
 
 ```
-下方就是是图片在其中滑动的 \<canvas\>。需要注意的是这里定义的width和height必须与JavaScript代码中的变量值CanvasXZSize和CanvasYSize保持一致。
+下方就是是图片在其中滑动的 \<canvas\\>。需要注意的是这里定义的width和height必须与JavaScript代码中的变量值CanvasXZSize和CanvasYSize保持一致。
 
+```html
   <canvas id="canvas" width="800" height="200"></canvas>
+```
 
   

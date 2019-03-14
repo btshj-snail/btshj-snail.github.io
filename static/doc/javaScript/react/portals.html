@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <link rel="stylesheet" href="/static/threeComponent/md/common.css">
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="portals">portals</h1>
+<p>Portals[^1] 提供了一种很好的将子节点渲染到父组件以外的 DOM 节点的方式。</p>
+<pre><code class="language-javascript">
+ReactDOM.createPortal(child, container)
+</code></pre>
+<p>第一个参数（child）是任何可渲染的 React 子元素，例如一个元素，字符串或碎片。
+第二个参数（container）则是一个 DOM 元素。</p>
+<h2 id="用法">用法</h2>
+<p>通常讲，当你从组件的 render 方法返回一个元素，该元素仅能装配 DOM 节点中离其最近的父元素：</p>
+<pre><code class="language-javascript">
+render() {
+  // React mounts a new div and renders the children into it
+  return (
+    &lt;div&gt;
+      {this.props.children}
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+<p>然而，有时候将其插入到 DOM 节点的不同位置也是有用的：</p>
+<pre><code class="language-javascript">
+render() {
+  // React does *not* create a new div. It renders the children into `domNode`.
+  // `domNode` is any valid DOM node, regardless of its location in the DOM.
+  return ReactDOM.createPortal(
+    this.props.children,
+    domNode,
+  );
+}
+</code></pre>
+<p>对于 portal 的一个典型用例是当父组件有 overflow: hidden 或 z-index 样式，
+但你需要子组件能够在视觉上“跳出（break out）”其容器。例如，对话框、hovercards以及提示框：</p>
+<blockquote>
+<p>注意：
+ 记住这点非常重要，当在使用 portals时，你需要确保遵循合适的可访问指南。</p>
+</blockquote>
+<h2 id="通过-portals-进行事件冒泡">通过 Portals 进行事件冒泡</h2>
+<p>尽管 portal 可以被放置在 DOM 树的任何地方，但在其他方面其行为和普通的 React 子节点行为一致。
+如上下文特性依然能够如之前一样正确地工作，无论其子节点是否是 portal，由于 portal 仍存在于 React 树中，
+而不用考虑其在 DOM 树中的位置。</p>
+<p>这包含事件冒泡。一个从 portal 内部会触发的事件会一直冒泡至包含 React 树 的祖先。假设如下 HTML 结构：</p>
+<pre><code class="language-html">
+&lt;html&gt;
+  &lt;body&gt;
+    &lt;div id=&quot;app-root&quot;&gt;&lt;/div&gt;
+    &lt;div id=&quot;modal-root&quot;&gt;&lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>在 #app-root 里的 Parent 组件能够捕获到未被捕获的从兄弟节点 #modal-root 冒泡上来的事件。</p>
+<pre><code class="language-javascript">
+// These two containers are siblings in the DOM
+const appRoot = document.getElementById(&#39;app-root&#39;);
+const modalRoot = document.getElementById(&#39;modal-root&#39;);
+
+class Modal extends React.Component {
+  constructor(props) {
+    super(props);
+    this.el = document.createElement(&#39;div&#39;);
+  }
+
+  componentDidMount() {
+    modalRoot.appendChild(this.el);
+  }
+
+  componentWillUnmount() {
+    modalRoot.removeChild(this.el);
+  }
+
+  render() {
+    return ReactDOM.createPortal(
+      this.props.children,
+      this.el,
+    );
+  }
+}
+
+class Parent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {clicks: 0};
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    // This will fire when the button in Child is clicked,
+    // updating Parent&#39;s state, even though button
+    // is not direct descendant in the DOM.
+    this.setState(prevState =&gt; ({
+      clicks: prevState.clicks + 1
+    }));
+  }
+
+  render() {
+    return (
+      &lt;div onClick={this.handleClick}&gt;
+        &lt;p&gt;Number of clicks: {this.state.clicks}&lt;/p&gt;
+        &lt;p&gt;
+          Open up the browser DevTools
+          to observe that the button
+          is not a child of the div
+          with the onClick handler.
+        &lt;/p&gt;
+        &lt;Modal&gt;
+          &lt;Child /&gt;
+        &lt;/Modal&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+
+function Child() {
+  // The click event on this button will bubble up to parent,
+  // because there is no &#39;onClick&#39; attribute defined
+  return (
+    &lt;div className=&quot;modal&quot;&gt;
+      &lt;button&gt;Click&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+ReactDOM.render(&lt;Parent /&gt;, appRoot);
+</code></pre>
+<p>在父组件里捕获一个来自 portal 的事件冒泡能够在开发时具有不完全依赖于 portal 的更为灵活的抽象。
+例如，若你在渲染一个 <Modal /> 组件，父组件能够捕获其事件而无论其是否采用 portal 实现。</p>
+<p>[1]:  [&#39;pɔ:təlz] 入口( portal的名词复数 );桥门;[解剖学]肝门;出孔</p>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

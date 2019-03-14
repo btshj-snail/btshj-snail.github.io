@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <link rel="stylesheet" href="/static/threeComponent/md/common.css">
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="1-jsx简介">1. jsx简介</h1>
+<pre><code class="language-javascript">    const element = &lt;h1&gt;Hello world!&lt;/h1&gt;</code></pre>
+<p>这种看起来可能有些奇怪的标签语法既不是字符串也不是HTML</p>
+<p>它被称为JSX,一种javaScript的语法扩展.</p>
+<h2 id="11-jsx表达式">1.1 jsx表达式</h2>
+<p>可以在任意的地方使用javaScript表达式,在JSX当中的表达式要包含在打括号里.</p>
+<p>例如 2+2,user.firstName,以及formatName(user)都可以使用</p>
+<pre><code class="language-javascript">
+function formatName(){
+    return user.firstName+&quot; &quot;+user.lastName;
+}
+
+const user = {
+    firstName:&#39;Harper&#39;,
+    lastName:&#39;Perez&#39;
+}
+
+const element = (
+    &lt;h1&gt;
+        hello,{formatName()}!
+    &lt;/h1&gt;
+);
+
+ReactDOM.render(element,document.querySelector(&#39;#root&#39;))
+</code></pre>
+<p>一般书写JSX的时候都会使用到缩进和换行,这样可以增强代码的可阅读性.与此同时,推荐在JSX代码外面加上(),防止分号自动插入的bug.</p>
+<h2 id="12-jsx属性">1.2 JSX属性</h2>
+<p>可以使用引号来定义以字符串为值的属性,也可以使用打括号定义以javaScript表达式为值的属性</p>
+<pre><code class="language-javascript">
+const element = (&lt;div tabIndex={user.id}&gt;&lt;/div&gt;);
+const element1 = (&lt;div tabIndex=&quot;admin&quot;&gt;&lt;/div&gt;);
+</code></pre>
+<h2 id="13-jsx防注入攻击">1.3 JSX防注入攻击</h2>
+<p>React DOM 在渲染之前默认会过滤所有传入的值.它可以确保你的应用不会被注入攻击.所有的内容在渲染之前都会被转换为字符串,这样可以有效的防止XSS(跨站脚本)攻击.</p>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

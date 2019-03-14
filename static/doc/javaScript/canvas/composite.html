@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <link rel="stylesheet" href="/static/threeComponent/md/common.css">
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="组合-compositing">组合 Compositing</h1>
+<p>在之前的例子里面，我们总是将一个图形画在另一个之上，对于其他更多的情况，仅仅这样是远远不够的。比如，对合成的图形来说，绘制顺序会有限制。不过，我们可以利用 globalCompositeOperation 属性来改变这种状况。此外, clip属性允许我们隐藏不想看到的部分图形.</p>
+<h2 id="globalcompositeoperation">globalCompositeOperation</h2>
+<p>我们不仅可以在已有图形后面再画新图形，还可以用来遮盖指定区域，清除画布中的某些部分（清除区域不仅限于矩形，像clearRect()方法做的那样 ）以及更多其他操作。</p>
+<ul>
+<li><strong>globalCompositeOperation = type</strong></li>
+</ul>
+<p>这个属性设定了在画新图形时采用的遮盖策略，其值是一个标识12种遮盖方式的字符串。</p>
+<h3 id="source-over">source-over</h3>
+<p>This is the default setting and draws new shapes on top of the existing canvas content.（这个是默认设置。新画的形状在已存在的图形上方。）</p>
+<p><img src="./img/old.png" alt=""></p>
+<p><img src="./img/new.png" alt=""></p>
+<p><img src="./img/source-over.png" alt=""></p>
+<h3 id="source-in">source-in</h3>
+<p>The new shape is drawn only where both the new shape and the destination canvas overlap. Everything else is made transparent.（新形状只有在新形状和目标画布重叠的地方才绘制。其他一切都是透明）</p>
+<p><img src="./img/old.png" alt=""></p>
+<p><img src="./img/new.png" alt=""></p>
+<p><img src="./img/source-in.png" alt=""></p>
+<h3 id="source-out">source-out</h3>
+<p>The new shape is drawn where it doesn&#39;t overlap the existing canvas content.(在不重叠现有画布内容的地方绘制新的形状)</p>
+<p><img src="./img/old.png" alt=""></p>
+<p><img src="./img/new.png" alt=""></p>
+<p><img src="./img/source-out.png" alt=""></p>
+<h3 id="source-atop">source-atop</h3>
+<p>The new shape is only drawn where it overlaps the existing canvas content.(新图形只在与现有画布重叠的地方绘制)</p>
+<p><img src="./img/old.png" alt=""></p>
+<p><img src="./img/new.png" alt=""></p>
+<p><img src="./img/souce-atop.png" alt=""></p>
+<h3 id="destination-over">destination-over</h3>
+<p>New shapes are drawn behind the existing canvas content.(新的形状被绘制在现有的画布内容后面)</p>
+<p><img src="./img/old.png" alt=""></p>
+<p><img src="./img/new.png" alt=""></p>
+<p><img src="./img/destination-over.png" alt=""></p>
+<h3 id="destination-in">destination-in</h3>
+<p>The existing canvas content is kept where both the new shape and existing canvas content overlap. Everything else is made transparent.(现有的画布内容保持在新的形状和现有的画布重叠的地方。其他一起都是透明的)</p>
+<p><img src="./img/old.png" alt=""></p>
+<p><img src="./img/new.png" alt=""></p>
+<p><img src="./img/destination-in.png" alt=""></p>
+<h3 id="destination-out">destination-out</h3>
+<p>The existing content is kept where it doesn&#39;t overlap the new shape.(现有的内容保留在不重叠新形状的地方)</p>
+<p><img src="./img/old.png" alt=""></p>
+<p><img src="./img/new.png" alt=""></p>
+<p><img src="./img/destination-out.png" alt=""></p>
+<h3 id="destination-atop">destination-atop</h3>
+<p>The existing canvas is only kept where it overlaps the new shape. The new shape is drawn behind the canvas content.（现有的画布只保留与新图形重叠的地方。新的形状被绘制在画布的内容后面）</p>
+<p><img src="./img/old.png" alt=""></p>
+<p><img src="./img/new.png" alt=""></p>
+<p><img src="./img/destination-atop.png" alt=""></p>
+<h3 id="lighter">lighter</h3>
+<p>Where both shapes overlap the color is determined by adding color values.（在两种形状重叠的地方，颜色是通过添加颜色值来确定的）</p>
+<p><img src="./img/old.png" alt=""></p>
+<p><img src="./img/new.png" alt=""></p>
+<p><img src="./img/lighter.png" alt=""></p>
+<h3 id="copy">copy</h3>
+<p>Only the new shape is shown.</p>
+<p><img src="./img/old.png" alt=""></p>
+<p><img src="./img/new.png" alt=""></p>
+<p><img src="./img/new.png" alt=""></p>
+<h3 id="xor">xor</h3>
+<p>Shapes are made transparent where both overlap and drawn normal everywhere else.（重叠部分透明）</p>
+<p><img src="./img/old.png" alt=""></p>
+<p><img src="./img/new.png" alt=""></p>
+<p><img src="./img/xor.png" alt=""></p>
+<h3 id="multiply">multiply</h3>
+<p>The pixels are of the top layer are multiplied with the corresponding pixel of the bottom layer. A darker picture is the result.（顶层的像素与底层的相应像素相乘。一般来说会更暗）</p>
+<p><img src="./img/old.png" alt=""></p>
+<p><img src="./img/new.png" alt=""></p>
+<p><img src="./img/multiply.png" alt=""></p>
+<h3 id="screen">screen</h3>
+<p>The pixels are inverted, multiplied, and inverted again. A lighter picture is the result (opposite of multiply)（像素被倒转，放大和再次倒转。一般来说会亮一些）</p>
+<p><img src="./img/old.png" alt=""></p>
+<p><img src="./img/new.png" alt=""></p>
+<p><img src="./img/screen.png" alt=""></p>
+<h3 id="overlay">overlay</h3>
+<p>A combination of multiply and screen. Dark parts on the base layer become darker, and light parts become lighter.（multiply和screen模式的组合。暗的地方变的更暗，亮的地方变的更亮）</p>
+<p><img src="./img/old.png" alt=""></p>
+<p><img src="./img/new.png" alt=""></p>
+<p><img src="./img/overlay.png" alt=""></p>
+<h3 id="darken">darken</h3>
+<p>Retains the darkest pixels of both layers.（保留两层最暗的像素）</p>
+<p><img src="./img/old.png" alt=""></p>
+<p><img src="./img/new.png" alt=""></p>
+<p><img src="./img/darken.png" alt=""></p>
+<h3 id="lighten">lighten</h3>
+<p>Retains the lightest pixels of both layers.（保留两层最亮的像素）</p>
+<p><img src="./img/old.png" alt=""></p>
+<p><img src="./img/new.png" alt=""></p>
+<p><img src="./img/lighten.png" alt=""></p>
+<h3 id="color-dodge">color-dodge</h3>
+<p>Divides the bottom layer by the inverted top layer.()</p>
+<h2 id="裁切路径-clipping-paths">裁切路径 Clipping paths</h2>
+<p>裁切路径和普通的 canvas 图形差不多，不同的是它的作用是遮罩，用来隐藏不需要的部分。如右图所示。红边五角星就是裁切路径，所有在路径以外的部分都不会在 canvas 上绘制出来。</p>
+<p>如果和上面介绍的 globalCompositeOperation 属性作一比较，它可以实现与 source-in 和 source-atop 差不多的效果。最重要的区别是裁切路径不会在 canvas 上绘制东西，而且它永远不受新图形的影响。这些特性使得它在特定区域里绘制图形时相当好用。</p>
+<p>在 <img src="./drawShape.md" alt="绘制图形"> 一章中，我只介绍了 stroke 和 fill 方法，这里介绍第三个方法 clip。</p>
+<ul>
+<li><strong>clip()</strong>
+Turns the path currently being built into the current clipping path.</li>
+</ul>
+<p>我们使用 clip() 方法来创建一个新的裁切路径。</p>
+<p>默认情况下，canvas 有一个与它自身一样大的裁切路径（也就是没有裁切效果）。</p>
+<h3 id="clip-的例子">clip 的例子</h3>
+<p>这个例子，我会用一个圆形的裁切路径来限制随机星星的绘制区域。</p>
+<pre><code class="language-javaScript">function draw() {
+  var ctx = document.getElementById(&#39;canvas&#39;).getContext(&#39;2d&#39;);
+  ctx.fillRect(0,0,150,150);
+  ctx.translate(75,75);
+
+  // Create a circular clipping path
+  ctx.beginPath();
+  ctx.arc(0,0,60,0,Math.PI*2,true);
+  ctx.clip();
+
+  // draw background
+  var lingrad = ctx.createLinearGradient(0,-75,0,75);
+  lingrad.addColorStop(0, &#39;#232256&#39;);
+  lingrad.addColorStop(1, &#39;#143778&#39;);
+
+  ctx.fillStyle = lingrad;
+  ctx.fillRect(-75,-75,150,150);
+
+  // draw stars
+  for (var j=1;j&lt;50;j++){
+    ctx.save();
+    ctx.fillStyle = &#39;#fff&#39;;
+    ctx.translate(75-Math.floor(Math.random()*150),
+                  75-Math.floor(Math.random()*150));
+    drawStar(ctx,Math.floor(Math.random()*4)+2);
+    ctx.restore();
+  }
+
+}
+function drawStar(ctx,r){
+  ctx.save();
+  ctx.beginPath()
+  ctx.moveTo(r,0);
+  for (var i=0;i&lt;9;i++){
+    ctx.rotate(Math.PI/5);
+    if(i%2 == 0) {
+      ctx.lineTo((r/0.525731)*0.200811,0);
+    } else {
+      ctx.lineTo(r,0);
+    }
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}</code></pre>
+<p>首先，我画了一个与 canvas 一样大小的黑色方形作为背景，然后移动原点至中心点。然后用 clip 方法创建一个弧形的裁切路径。裁切路径也属于 canvas 状态的一部分，可以被保存起来。如果我们在创建新裁切路径时想保留原来的裁切路径，我们需要做的就是保存一下 canvas 的状态。</p>
+<p>裁切路径创建之后所有出现在它里面的东西才会画出来。在画线性渐变时我们就会注意到这点。然后会绘制出50 颗随机位置分布（经过缩放）的星星，当然也只有在裁切路径里面的星星才会绘制出来。</p>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

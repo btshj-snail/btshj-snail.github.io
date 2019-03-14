@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <link rel="stylesheet" href="/static/threeComponent/md/common.css">
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="relative-record">Relative Record</h1>
+<ol>
+<li><p>数字与金钱格式相互转换</p>
+<p> a. <strong>使用方式:</strong></p>
+<p> 在要使用转换功能的input标签处，在其class属性中添加snail-money-covert类。例如：
+ &lt;input type=&quot;text&quot; class=&quot;snail-money-covert form-control&quot; name=&quot;amount&quot; /&gt;</p>
+<p> b. <strong>具体逻辑：</strong></p>
+<ul>
+<li>在输入框获取焦点的时候，会将金钱格式转换为数字</li>
+<li>在输入框失去焦点的时候，会将数字转为金钱格式</li>
+<li>如果转换不成功，则还是显示输入的值，不做改变</li>
+<li>在调用datasetToForm 时，会自动将数字转换为金钱格式 写入指定的input中</li>
+<li>在调用formToDataset或者formToJson时，会自动将金钱格式转为数字，写在dataset或json中。</li>
+<li>如果在对input直接操作时，要人为调用num2Money 或者money2Num 进行转换</li>
+</ul>
+</li>
+</ol>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

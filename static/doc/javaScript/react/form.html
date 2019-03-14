@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <link rel="stylesheet" href="/static/threeComponent/md/common.css">
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="表单">表单</h1>
+<p>HTML表单元素与React中的其他DOM元素有所不同,因为表单元素生来就保留一些内部状态。例如，下面这个表单只接受一个唯一的name。</p>
+<pre><code class="language-javascript">
+&lt;form&gt;
+  &lt;label&gt;
+    Name:
+    &lt;input type=&quot;text&quot; name=&quot;name&quot; /&gt;
+  &lt;/label&gt;
+  &lt;input type=&quot;submit&quot; value=&quot;Submit&quot; /&gt;
+&lt;/form&gt;
+</code></pre>
+<p>当用户提交表单时，HTML的默认行为会使这个表单跳转到一个新页面。在React中亦是如此。</p>
+<p>但大多数情况下，我们都会构造一个处理提交表单并可访问用户输入表单数据的函数。实现这一点的标准方法是使用一种称为“受控组件”的技术。</p>
+<h2 id="受控组件">受控组件</h2>
+<p>在HTML当中，像&lt;input&gt;,&lt;textarea&gt;, 和 &lt;select&gt;这类表单元素会维持自身状态，并根据用户输入进行更新。
+但在React中，可变的状态通常保存在组件的状态中，并且只能用 setState(). 方法进行更新.</p>
+<p>我们通过使react变成一种单一数据源的状态来结合二者。React负责渲染表单的组件仍然控制用户后续输入时所发生的变化。相应的，其值由React控制的输入表单元素称为“受控组件”。</p>
+<p>例如，我们想要使上个例子中在提交表单时输出name,我们可以写成“受控组件”的形式:</p>
+<pre><code class="language-javascript">
+class NameForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: &#39;&#39;};
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+
+  handleSubmit(event) {
+    alert(&#39;A name was submitted: &#39; + this.state.value);
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      &lt;form onSubmit={this.handleSubmit}&gt;
+        &lt;label&gt;
+          Name:
+          &lt;input type=&quot;text&quot; value={this.state.value} onChange={this.handleChange} /&gt;
+        &lt;/label&gt;
+        &lt;input type=&quot;submit&quot; value=&quot;Submit&quot; /&gt;
+      &lt;/form&gt;
+    );
+  }
+}
+</code></pre>
+<p>由于 value 属性是在我们的表单元素上设置的，因此显示的值将始终为 React数据源上this.state.value 的值。
+由于每次按键都会触发 handleChange 来更新当前React的state，所展示的值也会随着不同用户的输入而更新。
+使用”受控组件”,每个状态的改变都有一个与之相关的处理函数。这样就可以直接修改或验证用户输入。例如，我们如果想限制输入全部是大写字母，我们可以将handleChange 写为如下：</p>
+<pre><code class="language-javascript">
+handleChange(event) {
+  this.setState({value: event.target.value.toUpperCase()});
+}
+</code></pre>
+<h2 id="textarea标签">textarea标签</h2>
+<p>在HTML当中，&lt;textarea&gt; 元素通过子节点来定义它的文本内容。</p>
+<pre><code class="language-javascript">
+&lt;textarea&gt;
+  Hello there, this is some text in a text area
+&lt;/textarea&gt;
+</code></pre>
+<p>在React中，&lt;textarea&gt;会用value属性来代替。这样的话，表单中的&lt;textarea&gt; 非常类似于使用单行输入的表单：</p>
+<pre><code class="language-javascript">
+class EssayForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: &#39;Please write an essay about your favorite DOM element.&#39;
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+
+  handleSubmit(event) {
+    alert(&#39;An essay was submitted: &#39; + this.state.value);
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      &lt;form onSubmit={this.handleSubmit}&gt;
+        &lt;label&gt;
+          Name:
+          &lt;textarea value={this.state.value} onChange={this.handleChange} /&gt;
+        &lt;/label&gt;
+        &lt;input type=&quot;submit&quot; value=&quot;Submit&quot; /&gt;
+      &lt;/form&gt;
+    );
+  }
+}
+</code></pre>
+<p>注意this.state.value是在构造函数中初始化，这样文本区域就能获取到其中的文本。</p>
+<h2 id="select标签">select标签</h2>
+<p>在HTML当中，&lt;select&gt;会创建一个下拉列表。例如这个HTML就创建了一个下拉列表的原型。</p>
+<pre><code class="language-javascript">
+&lt;select&gt;
+  &lt;option value=&quot;grapefruit&quot;&gt;Grapefruit&lt;/option&gt;
+  &lt;option value=&quot;lime&quot;&gt;Lime&lt;/option&gt;
+  &lt;option selected value=&quot;coconut&quot;&gt;Coconut&lt;/option&gt;
+  &lt;option value=&quot;mango&quot;&gt;Mango&lt;/option&gt;
+&lt;/select&gt;
+</code></pre>
+<p>请注意，Coconut选项最初由于selected属性是被选中的。在React中，会在根select标签上而不是在当前的selected属性上使用value属性。</p>
+<pre><code class="language-javascript">
+class FlavorForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: &#39;coconut&#39;};
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+
+  handleSubmit(event) {
+    alert(&#39;Your favorite flavor is: &#39; + this.state.value);
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      &lt;form onSubmit={this.handleSubmit}&gt;
+        &lt;label&gt;
+          Pick your favorite La Croix flavor:
+          &lt;select value={this.state.value} onChange={this.handleChange}&gt;
+            &lt;option value=&quot;grapefruit&quot;&gt;Grapefruit&lt;/option&gt;
+            &lt;option value=&quot;lime&quot;&gt;Lime&lt;/option&gt;
+            &lt;option value=&quot;coconut&quot;&gt;Coconut&lt;/option&gt;
+            &lt;option value=&quot;mango&quot;&gt;Mango&lt;/option&gt;
+          &lt;/select&gt;
+        &lt;/label&gt;
+        &lt;input type=&quot;submit&quot; value=&quot;Submit&quot; /&gt;
+      &lt;/form&gt;
+    );
+  }
+}
+</code></pre>
+<h1 id="多个输入的解决方法">多个输入的解决方法</h1>
+<p>当你有处理多个受控的input元素时，你可以通过给每个元素添加一个name属性，来让处理函数根据 event.target.name的值来选择做什么。</p>
+<pre><code class="language-javascript">
+class Reservation extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isGoing: true,
+      numberOfGuests: 2
+    };
+
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.type === &#39;checkbox&#39; ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
+  }
+
+  render() {
+    return (
+      &lt;form&gt;
+        &lt;label&gt;
+          Is going:
+          &lt;input
+            name=&quot;isGoing&quot;
+            type=&quot;checkbox&quot;
+            checked={this.state.isGoing}
+            onChange={this.handleInputChange} /&gt;
+        &lt;/label&gt;
+        &lt;br /&gt;
+        &lt;label&gt;
+          Number of guests:
+          &lt;input
+            name=&quot;numberOfGuests&quot;
+            type=&quot;number&quot;
+            value={this.state.numberOfGuests}
+            onChange={this.handleInputChange} /&gt;
+        &lt;/label&gt;
+      &lt;/form&gt;
+    );
+  }
+}
+</code></pre>
+<p>注意我们如何使用ES6当中的<a href="../es6/attrNameExpression.html">计算属性名语法</a>来更新与给定输入名称相对应的状态键：</p>
+<pre><code class="language-javascript">
+this.setState({
+      [name]: value
+    });
+</code></pre>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <link rel="stylesheet" href="/static/threeComponent/md/common.css">
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="协调（reconciliation）">协调（Reconciliation）</h1>
+<p>React提供了一组声明式API以让你不必关心每次更新的变化。
+这使得应用的编写容易了很多，但在React中如何实现并不是很清晰。
+这篇文章解释了React对比算法的选择以让组件更新可预测并使得高性能应用足够快。</p>
+<h2 id="目的">目的</h2>
+<p>当你使用React，在单一时间点你可以考虑render()函数作为创建React元素的树。
+在下一次状态或属性更新，render()函数将返回一个不同的React元素的树。
+React需要算出如何高效更新UI以匹配最新的树。</p>
+<p>有一些解决将一棵树转换为另一棵树的最小操作数算法问题的通用方案。
+然而，树中元素个数为n，最先进的算法 的时间复杂度为O(n3) 。</p>
+<p>若我们在React中使用，展示1000个元素则需要进行10亿次的比较。
+这操作太过昂贵，相反，React基于两点假设，实现了一个启发的O(n)算法：</p>
+<ol>
+<li><p>两个不同类型的元素将产生不同的树。</p>
+</li>
+<li><p>通过渲染器附带key属性，开发者可以示意哪些子元素可能是稳定的。</p>
+</li>
+</ol>
+<p>实践中，上述假设适用于大部分应用场景。</p>
+<h2 id="对比算法">对比算法</h2>
+<p>当对比两棵树时，React首先比较两个根节点。根据不同类型的根元素，其行为也不同。</p>
+<h2 id="元素的不同类型">元素的不同类型</h2>
+<p>每当根元素有不同类型，React将卸载旧树并重新构建新树。
+从&lt;a&gt;到&lt;img&gt;或从&lt;Article&gt;到&lt;Comment&gt;，或从&lt;Button&gt; 到 &lt;div&gt;，任何的调整都会导致全部重建。</p>
+<p>当树被卸载，旧的DOM节点将被销毁。组件实例将会接收到componentWillUnmount()方法。
+当构建一棵新树，新的DOM节点被插入到DOM中。组件实例将接收到componentWillMount()以及之后的componentDidMount()。
+任何有关旧树的状态都将被丢弃。</p>
+<p>下面任何组件的根节点将会被卸载同时他们的状态将销毁。例如，在进行对比：</p>
+<pre><code>&lt;div&gt;
+  &lt;Counter /&gt;
+&lt;/div&gt;
+
+&lt;span&gt;
+  &lt;Counter /&gt;
+&lt;/span&gt;</code></pre><p>这将会销毁旧的Counter并重装新节点。</p>
+<h2 id="相同类型的dom元素">相同类型的DOM元素</h2>
+<p>当比较两个相同类型的React DOM元素时，React则会观察二者的属性，保持相同的底层DOM节点，并仅更新变化的属性。例如：</p>
+<pre><code>&lt;div className=&quot;before&quot; title=&quot;stuff&quot; /&gt;
+
+&lt;div className=&quot;after&quot; title=&quot;stuff&quot; /&gt;</code></pre><p>通过比较两个元素，React知道仅更改底层DOM元素的className。</p>
+<p>当更新style时，React同样知道仅更新变更的属性。例如：</p>
+<pre><code>&lt;div style={{&#39;{{&#39;}}color: &#39;red&#39;, fontWeight: &#39;bold&#39;}} /&gt;
+
+&lt;div style={{&#39;{{&#39;}}color: &#39;green&#39;, fontWeight: &#39;bold&#39;}} /&gt;</code></pre><p>当在调整两个元素时，React知道仅改变color样式而不是fontWeight。
+在处理完DOM元素后，React递归其子元素。</p>
+<h2 id="相同类型的组件元素">相同类型的组件元素</h2>
+<p>当组件更新时，实例仍保持一致，以让状态能够在渲染之间保留。
+React更新底层组件实例的属性以满足新元素，
+并在底层实例上调用componentWillReceiveProps() 和 componentWillUpdate() 方法。</p>
+<p>接下来，render()方法被调用，同时对比算法会递归处理之前的结果和新的结果。</p>
+<h2 id="递归子节点">递归子节点</h2>
+<p>默认时。当递归DOM节点的子节点，React仅在同一时间点递归两个子节点列表，并在有不同时产生一个变更。</p>
+<p>例如，当在子节点末尾增加一个元素，两棵树的转换效果很好：</p>
+<pre><code>&lt;ul&gt;
+  &lt;li&gt;first&lt;/li&gt;
+  &lt;li&gt;second&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;first&lt;/li&gt;
+  &lt;li&gt;second&lt;/li&gt;
+  &lt;li&gt;third&lt;/li&gt;
+&lt;/ul&gt;</code></pre><p>React将会匹配两棵树的&lt;li&gt;first&lt;/li&gt;，并匹配两棵树的&lt;li&gt;second&lt;/li&gt; 节点，并插入&lt;li&gt;third&lt;/li&gt;节点树。</p>
+<p>若原生实现，在开始插入元素会使得性能更棘手。例如，两棵树的转换效果则比较糟糕：</p>
+<pre><code>&lt;ul&gt;
+  &lt;li&gt;Duke&lt;/li&gt;
+  &lt;li&gt;Villanova&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Connecticut&lt;/li&gt;
+  &lt;li&gt;Duke&lt;/li&gt;
+  &lt;li&gt;Villanova&lt;/li&gt;
+&lt;/ul&gt;</code></pre><p>React会调整每个子节点，而非意识到可以完整保留&lt;li&gt;Duke&lt;/li&gt; 和 &lt;li&gt;Villanova&lt;/li&gt;子树。低效成了一个问题。</p>
+<h2 id="keys">Keys</h2>
+<p>为解决该问题，React支持了一个key属性。当子节点有key时，React使用key来匹配原本树的子节点和新树的子节点。
+例如，增加一个key在之前效率不高的样例中能让树的转换变得高效：</p>
+<pre><code>&lt;ul&gt;
+  &lt;li key=&quot;2015&quot;&gt;Duke&lt;/li&gt;
+  &lt;li key=&quot;2016&quot;&gt;Villanova&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ul&gt;
+  &lt;li key=&quot;2014&quot;&gt;Connecticut&lt;/li&gt;
+  &lt;li key=&quot;2015&quot;&gt;Duke&lt;/li&gt;
+  &lt;li key=&quot;2016&quot;&gt;Villanova&lt;/li&gt;
+&lt;/ul&gt;</code></pre><p>现在React知道带有&#39;2014&#39;的key的元素是新的，并仅移动带有&#39;2015&#39;和&#39;2016&#39;的key的元素。</p>
+<p>实践中，发现key通常不难。你将展示的元素可能已经带有一个唯一的ID，因此key可以来自于你的数据中：</p>
+<pre><code>&lt;li key={item.id}&gt;{item.name}&lt;/li&gt;</code></pre><p>当这已不再是问题，你可以增加一个新的ID属性到数据层或内容的部分哈希值以生成key。
+key必须在其兄弟节点中是唯一的，而非全局唯一。</p>
+<p>万不得已，你可以传递他们在数组中的索引作为key。若元素没有重排，该方法效果不错，但重排会使得其变慢。</p>
+<h2 id="权衡">权衡</h2>
+<p>牢记协调算法的实现细节非常重要。React可能会在每次操作时渲染整个应用；而结果仍是相同的。
+为保证大多数场景效率能更快，我们通常提炼启发式的算法。</p>
+<p>在目前实现中，可以表明一个事实，即子树在其兄弟节点中移动，但你无法告知其移动到哪。该算法会重渲整个子树。</p>
+<p>由于React依赖于该启发式算法，若其背后的假设没得到满足，则其性能将会受到影响：</p>
+<ol>
+<li><p>算法无法尝试匹配不同组件类型的子元素。
+若你发现两个输出非常相似的组件类型交替出现，你可能希望使其成为相同类型。
+实践中，我们并非发现这是一个问题。</p>
+</li>
+<li><p>Keys应该是稳定的，可预测的，且唯一的。
+不稳定的key（类似由Math.random()生成的）将使得大量组件实例和DOM节点进行不必要的重建，
+使得性能下降并丢失子组件的状态。</p>
+</li>
+</ol>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

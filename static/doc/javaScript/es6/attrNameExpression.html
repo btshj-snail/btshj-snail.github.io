@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <link rel="stylesheet" href="/static/threeComponent/md/common.css">
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="属性名表达式">属性名表达式</h1>
+<ol>
+<li>标识符作为属性名</li>
+</ol>
+<pre><code class="language-javascript">
+    obj.foo = true;
+</code></pre>
+<ol start="2">
+<li>表达式作为属性名</li>
+</ol>
+<pre><code class="language-javascript">
+    obj[&#39;a&#39;+&#39;b&#39;] = true;
+    //相当于
+    obj[&#39;ab&#39;] = tue;
+</code></pre>
+<ol start="3">
+<li>ES6 允许字面量定义对象时，用表达式作为对象的属性名，即把表达式放在方括号内。</li>
+</ol>
+<pre><code class="language-javascript">
+    let key = &#39;foo&#39;;
+
+    let obj = {
+        [key]:true,
+        [&#39;a&#39;+&#39;b&#39;]:123
+    }
+</code></pre>
+<ol start="4">
+<li>表达式定义方法名</li>
+</ol>
+<pre><code class="language-javascript">
+    let obj = {
+        [&#39;say&#39;+&#39;Something&#39;](){
+            return &#39;Hello snail&#39;
+        }
+
+    }
+</code></pre>
+<p>注意，属性名表达式与简洁表示法，不能同时使用，否则会报错。</p>
+<pre><code class="language-javascript">
+    //wrong
+    let foo = &#39;abc&#39;;
+    let o = {[foo]};
+
+    //correct
+    let foo = &#39;abc&#39;;
+    let o = {[foo]:foo}
+</code></pre>
+<p>注意，属性名表达式如果是一个对象，默认情况下会自动将对象转换为字符串[object object],这点要特别注意</p>
+<pre><code class="language-javascript">
+    let user = {name:&#39;jack&#39;,age:18};
+
+    let o = {[user]:&quot;tom&quot;}
+
+    console.log(o) // {[object object]:&#39;tom&#39;}
+</code></pre>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

@@ -6,7 +6,7 @@
 
 我们不仅可以在已有图形后面再画新图形，还可以用来遮盖指定区域，清除画布中的某些部分（清除区域不仅限于矩形，像clearRect()方法做的那样 ）以及更多其他操作。
 
-**globalCompositeOperation = type**
+- **globalCompositeOperation = type**
 
 这个属性设定了在画新图形时采用的遮盖策略，其值是一个标识12种遮盖方式的字符串。
 
@@ -187,7 +187,7 @@ Divides the bottom layer by the inverted top layer.()
 
 在 ![绘制图形](./drawShape.md) 一章中，我只介绍了 stroke 和 fill 方法，这里介绍第三个方法 clip。
 
-**clip()**
+- **clip()**
 Turns the path currently being built into the current clipping path.
 
 我们使用 clip() 方法来创建一个新的裁切路径。
