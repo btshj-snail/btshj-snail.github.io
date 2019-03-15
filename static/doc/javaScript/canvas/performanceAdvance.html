@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="性能优化">性能优化</h1>
+<p>canvas元素是众多广泛使用的网络2D图像渲染标准之一。它被广泛用于游戏及复杂的图像可视化中。然而，随着网站和应用将canvas画布推至极限，性能开始成为问题。此文目标是给使用canvas画布元素的优化带来建议，去保证你的网站或者应用表现卓越。</p>
+<h2 id="性能贴士">性能贴士</h2>
+<p>下面是一些改善性能的建议</p>
+<h3 id="在离屏canvas上预渲染相似的图形或重复的对象">在离屏canvas上预渲染相似的图形或重复的对象</h3>
+<p>如果你发现你的在每一帧里有好多复杂的画图运算，请考虑创建一个离屏canvas，将图像在这个画布上画一次（或者每当图像改变的时候画一次），然后在每帧上画出视线以外的这个画布。</p>
+<pre><code class="language-javaScript">
+myEntity.offscreenCanvas = document.createElement(&quot;canvas&quot;);
+myEntity.offscreenCanvas.width = myEntity.width;
+myEntity.offscreenCanvas.height = myEntity.height;
+myEntity.offscreenContext = myEntity.offscreenCanvas.getContext(&quot;2d&quot;);
+
+myEntity.render(myEntity.offscreenContext);
+</code></pre>
+<h3 id="避免浮点数的坐标点，用整数取而代之">避免浮点数的坐标点，用整数取而代之</h3>
+<p>当你画一个没有整数坐标点的对象时会发生子像素渲染。</p>
+<pre><code>ctx.drawImage(myImage, 0.3, 0.5);</code></pre><p>浏览器为了达到抗锯齿的效果会做额外的运算。为了避免这种情况，请保证在你调用drawImage()函数时，用Math.floor()函数对所有的坐标点取整。</p>
+<h3 id="不要在用drawimage时缩放图像">不要在用drawImage时缩放图像</h3>
+<p>在离屏canvas中缓存图片的不同尺寸，而不要用drawImage()去缩放它们。</p>
+<h3 id="使用多层画布去画一个复杂的场景">使用多层画布去画一个复杂的场景</h3>
+<p>你可能会发现，你有些元素不断地改变或者移动，而其它的元素，例如外观，永远不变。这种情况的一种优化是去用多个画布元素去创建不同层次。</p>
+<p>例如，你可以在最顶层创建一个外观层，而且仅仅在用户输入的时候被画出。你可以创建一个游戏层，在上面会有不断更新的元素和一个背景层，给那些较少更新的元素。</p>
+<pre><code class="language-html">&lt;div id=&quot;stage&quot;&gt;
+  &lt;canvas id=&quot;ui-layer&quot; width=&quot;480&quot; height=&quot;320&quot;&gt;&lt;/canvas&gt;
+  &lt;canvas id=&quot;game-layer&quot; width=&quot;480&quot; height=&quot;320&quot;&gt;&lt;/canvas&gt;
+  &lt;canvas id=&quot;background-layer&quot; width=&quot;480&quot; height=&quot;320&quot;&gt;&lt;/canvas&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+  #stage {
+    width: 480px;
+    height: 320px;
+    position: relative;
+    border: 2px solid black
+  }
+  canvas { position: absolute; }
+  #ui-layer { z-index: 3 }
+  #game-layer { z-index: 2 }
+  #background-layer { z-index: 1 }
+&lt;/style&gt;
+</code></pre>
+<h3 id="用css设置大的背景图">用CSS设置大的背景图</h3>
+<p>如果像大多数游戏那样，你有一张静态的背景图，用一个静态的&lt;div&gt;元素，结合background 特性，以及将它置于画布元素之后。这么做可以避免在每一帧在画布上绘制大图。</p>
+<h3 id="用css-transforms特性缩放画布">用CSS transforms特性缩放画布</h3>
+<p>CSS transforms 特性由于调用GPU，因此更快捷。最好的情况是，不要将小画布放大，而是去将大画布缩小。例如Firefox系统，目标分辨率480 x 320 px。</p>
+<pre><code class="language-javaScript">
+var scaleX = canvas.width / window.innerWidth;
+var scaleY = canvas.height / window.innerHeight;
+
+var scaleToFit = Math.min(scaleX, scaleY);
+var scaleToCover = Math.max(scaleX, scaleY);
+
+stage.style.transformOrigin = &quot;0 0&quot;; //scale from top left
+stage.style.transform = &quot;scale(&quot; + scaleToFit + &quot;)&quot;;
+</code></pre>
+<h3 id="使用moz-opaque属性仅限gecko">使用moz-opaque属性(仅限Gecko)</h3>
+<p>如果你的游戏使用画布而且不需要透明，请在画布上设置moz-opaque属性。这能够用于内部渲染优化。</p>
+<pre><code>&lt;canvas id=&quot;mycanvas&quot; moz-opaque&gt;&lt;/canvas&gt;</code></pre><h3 id="更多的贴士">更多的贴士</h3>
+<ul>
+<li>将画布的函数调用集合到一起（例如，画一条折线，而不要画多条分开的直线）</li>
+<li>避免不必要的画布状态改变</li>
+<li>渲染画布中的不同点，而非整个新状态</li>
+<li>尽可能避免 shadowBlur特性</li>
+<li>尽可能避免text rendering</li>
+<li>使用不同的办法去清除画布(clearRect() vs. fillRect() vs. 调整canvas大小)</li>
+<li>有动画，请使用window.requestAnimationFrame() 而非window.setInterval()</li>
+<li>请谨慎使用大型物理库</li>
+<li>用JSPerf测试性能</li>
+</ul>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="syntheticevent">syntheticEvent</h1>
+<h2 id="概述">概述</h2>
+<p>您的事件处理函数将会接收SyntheticEvent的实例，一个基于浏览器原生事件的跨浏览器实现。
+它拥有和浏览器原生事件一样的接口，包括stopPropagation()和preventDefault()，除了那些所有浏览器功能一样的事件。</p>
+<p>出于某些原因，你得使用一些底层的浏览器事件，只需用nativeEvent的属性就能找到。每个SyntheicEvent对象都有如下属性：</p>
+<pre><code>boolean bubbles
+boolean cancelable
+DOMEventTarget currentTarget
+boolean defaultPrevented
+number eventPhase
+boolean isTrusted
+DOMEvent nativeEvent
+void preventDefault()
+boolean isDefaultPrevented()
+void stopPropagation()
+boolean isPropagationStopped()
+DOMEventTarget target
+number timeStamp
+string type</code></pre><blockquote>
+<p>敲黑板： 由于在v0.14版本中，事件处理函数返回false不会再阻止事件传播, 所以必须得手动触发e.stopPropagation()和e.preventDefault() 方法。</p>
+</blockquote>
+<h2 id="事件池">事件池</h2>
+<p>SyntheticEvent是共享的。那就意味着在调用事件回调之后，SyntheticEvent对象将会被重用，并且所有属性会被置空。这是出于性能因素考虑的。 因此，您无法以异步方式访问事件。</p>
+<pre><code class="language-javascript">
+function onClick(event) {
+  console.log(event); // =&gt; nullified object.
+  console.log(event.type); // =&gt; &quot;click&quot;
+  const eventType = event.type; // =&gt; &quot;click&quot;
+
+  setTimeout(function() {
+    console.log(event.type); // =&gt; null
+    console.log(eventType); // =&gt; &quot;click&quot;
+  }, 0);
+
+  // Won&#39;t work. this.state.clickEvent will only contain null values.
+  this.setState({clickEvent: event});
+
+  // You can still export event properties.
+  this.setState({eventType: event.type});
+}
+</code></pre>
+<blockquote>
+<p>黑板：
+  如果您想以异步的方式访问事件的属性值，你必须在事件回调中调用event.persist()方法，这样会在池中删除合成事件，并且在用户代码中保留对事件的引用。</p>
+</blockquote>
+<h2 id="支持的事件">支持的事件</h2>
+<p>React标准化了事件，使其在不同的浏览器中拥有一致的属性。</p>
+<p>下面的事件处理函数由冒泡阶段的事件触发。在事件名后面加Capture就能在事件捕获阶段注册事件处理函数。
+举个例子，你可以使用onClickCapture代替onClick在事件捕获阶段来处理点击事件。</p>
+<ul>
+<li>Clipboard Events</li>
+<li>Composition Events</li>
+<li>Keyboard Events</li>
+<li>Focus Events</li>
+<li>Form Events</li>
+<li>Mouse Events</li>
+<li>Selection Events</li>
+<li>Touch Events</li>
+<li>UI Events</li>
+<li>Wheel Events</li>
+<li>Media Events</li>
+<li>Image Events</li>
+<li>Animation Events</li>
+<li>Transition Events</li>
+<li>Other Events</li>
+</ul>
+<h2 id="参考">参考</h2>
+<h3 id="clipboard-events">Clipboard Events</h3>
+<p>事件名:</p>
+<pre><code>onCopy onCut onPaste</code></pre><p>属性:</p>
+<pre><code>DOMDataTransfer clipboardData</code></pre><h3 id="composition-events">Composition Events</h3>
+<p>事件名:</p>
+<pre><code>onCompositionEnd onCompositionStart onCompositionUpdate</code></pre><p>属性:</p>
+<pre><code>string data</code></pre><h3 id="keyboard-events">Keyboard Events</h3>
+<p>事件名:</p>
+<pre><code>onKeyDown onKeyPress onKeyUp</code></pre><p>属性:</p>
+<pre><code>boolean altKey
+number charCode
+boolean ctrlKey
+boolean getModifierState(key)
+string key
+number keyCode
+string locale
+number location
+boolean metaKey
+boolean repeat
+boolean shiftKey
+number which</code></pre><h3 id="focus-events">Focus Events</h3>
+<p>事件名:</p>
+<pre><code>onFocus onBlur</code></pre><p>这些焦点事件适用于React DOM中的所有元素，而不仅仅是表单元素。</p>
+<p>属性:</p>
+<pre><code>DOMEventTarget relatedTarget</code></pre><h3 id="form-events">Form Events</h3>
+<p>事件名:</p>
+<pre><code>onChange onInput onSubmit</code></pre><h3 id="mouse-events">Mouse Events</h3>
+<p>事件名:</p>
+<pre><code>onClick onContextMenu onDoubleClick onDrag onDragEnd onDragEnter onDragExit
+onDragLeave onDragOver onDragStart onDrop onMouseDown onMouseEnter onMouseLeave
+onMouseMove onMouseOut onMouseOver onMouseUp</code></pre><p>onMouseEnter 和 onMouseLeave 事件由失去焦点的元素到正在输入的元素传播，并不是普通的冒泡，也没有捕获阶段。</p>
+<p>属性:</p>
+<pre><code>boolean altKey
+number button
+number buttons
+number clientX
+number clientY
+boolean ctrlKey
+boolean getModifierState(key)
+boolean metaKey
+number pageX
+number pageY
+DOMEventTarget relatedTarget
+number screenX
+number screenY
+boolean shiftKey</code></pre><h3 id="selection-events">Selection Events</h3>
+<p>事件名:</p>
+<pre><code>onSelect</code></pre><h3 id="touch-events">Touch Events</h3>
+<p>事件名:</p>
+<pre><code>onTouchCancel onTouchEnd onTouchMove onTouchStart</code></pre><p>属性:</p>
+<pre><code>boolean altKey
+DOMTouchList changedTouches
+boolean ctrlKey
+boolean getModifierState(key)
+boolean metaKey
+boolean shiftKey
+DOMTouchList targetTouches
+DOMTouchList touches</code></pre><h3 id="ui-events">UI Events</h3>
+<p>事件名:</p>
+<pre><code>onScroll</code></pre><p>属性:</p>
+<pre><code>number detail
+DOMAbstractView view</code></pre><h3 id="wheel-events">Wheel Events</h3>
+<p>事件名:</p>
+<pre><code>onWheel</code></pre><p>属性:</p>
+<pre><code>number deltaMode
+number deltaX
+number deltaY
+number deltaZ</code></pre><h3 id="media-events">Media Events</h3>
+<p>事件名:</p>
+<pre><code>onAbort onCanPlay onCanPlayThrough onDurationChange onEmptied onEncrypted 
+onEnded onError onLoadedData onLoadedMetadata onLoadStart onPause onPlay 
+onPlaying onProgress onRateChange onSeeked onSeeking onStalled onSuspend 
+onTimeUpdate onVolumeChange onWaiting</code></pre><h3 id="image-events">Image Events</h3>
+<p>事件名:</p>
+<pre><code>onLoad onError</code></pre><h3 id="animation-events">Animation Events</h3>
+<p>事件名:</p>
+<pre><code>onAnimationStart onAnimationEnd onAnimationIteration</code></pre><p>属性:</p>
+<pre><code>string animationName
+string pseudoElement
+float elapsedTime</code></pre><h3 id="transition-events">Transition Events</h3>
+<p>事件名:</p>
+<pre><code>onTransitionEnd</code></pre><p>属性:</p>
+<pre><code>string propertyName
+string pseudoElement
+float elapsedTime</code></pre><h3 id="other-events">Other Events</h3>
+<p>事件名:</p>
+<pre><code>onToggle</code></pre>
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

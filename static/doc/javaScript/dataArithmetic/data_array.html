@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="数组">数组</h1>
+<p>几乎所有的编程语言都原生支持数组类型，因为数组是最简单的内存数据结构。</p>
+<p>大多数语言，数组都是用于存储一些列同一种数据类型的值。但是在js中，数组可以存储不同类型的值。</p>
+<h2 id="创建数组">创建数组</h2>
+<pre><code class="language-javaScript">
+let a = new Array();
+let b = new Array(7);
+let c = new Array(1,2,3,4,5,6,7);
+console.log(a)
+console.log(b)
+console.log(c)
+</code></pre>
+<p>使用new关键字，就能简单地声明初始化一个数组实例。但是这个并不是最佳的实践方案，如果你想创建一个数组，可以尝试像下面代码一样：</p>
+<pre><code class="language-javaScript">
+let a = [];
+let b = [1,2,3,4,5,6]
+</code></pre>
+<h2 id="迭代器">迭代器</h2>
+<h3 id="使用every方法迭代">使用every方法迭代</h3>
+<p>every方法是对数组中每一元素运行指定的函数，如果该函数的每一项都返回true，则返回true</p>
+<p><strong>* 注意：该方法是短路运行的。也就意味着，只要在某个元素判定到为false后，就不会再继续向后执行了. *</strong></p>
+<pre><code class="language-javaScript">
+let ary = [1,2,3,4,5,6,7]
+ary.every(function(item,index,ary){
+    console.log(item)
+    return item&gt;3;
+})
+//输出应该是：1
+</code></pre>
+<h3 id="使用some方法迭代">使用some方法迭代</h3>
+<p>some方法是对数组中每一个元素运行指定的元素，如果该函数中的某项返回true，则返回true。</p>
+<p><strong><em>注意：该方法是短路运行的。也就意味着，只要在某个元素判定到为false后，就不会再继续向后执行了.</em></strong></p>
+<pre><code class="language-javaScript">
+let ary = [1,23,4,5,6,7];
+
+ary.some(function(item,index,ary){
+    console.log(item);
+    return item&gt;3
+})
+//输出应该是 1 23</code></pre>
+<h3 id="使用foreach方法迭代">使用forEach方法迭代</h3>
+<p> 如果要迭代整个数组，可以使用forEach方法。他和for循环基本一致</p>
+<pre><code class="language-javaScript">
+let ary = [1,2,3];
+
+ary.forEach(function(item,index,ary){
+    console.log(item);
+})
+</code></pre>
+<p><strong>* 注意forEach中不能使用continue，break等关键字。若要跳出本次循环，可以使用return。若要结束所有循环，只有使用for循环语句 *</strong></p>
+<h3 id="使用map和filter方法迭代">使用map和filter方法迭代</h3>
+<p>这两个方法都会返回一个新的数组。</p>
+<p>map 方法 是将指定函数的返回值作为新数组的元素。</p>
+<pre><code class="language-javaScript">
+let ary = [1,2,3,4];
+
+console.log(ary.map(function(item,index,ary){
+    return item&gt;2;
+}))
+// 输出结果应该为：false,false,true,true</code></pre>
+<p>filter 方法 是将指定函数返回true的元素放入到新的数组中。</p>
+<pre><code class="language-javaScript">
+let ary = [1,2,3,4];
+
+console.log(ary.filter(function(item,index,ary){
+    return item&gt;2;
+}))
+// 输出结果应该为：3,4</code></pre>
+<h3 id="reduce-迭代">reduce 迭代</h3>
+<p>reduce方法接收一个函数作为参数，这个函数有四个参数：previousValue、currentValue、index和array。这个函数会返回一个将被叠加到累加器的值，reduce方法停止执行后会返回这个累加器。reduce的第二个参数是previousValue的初始值。</p>
+<pre><code class="language-javaScript">
+let ary = [1,2,3,4,5,6,7,8,9];
+let result = ary.reduce(function(prevValue,item,index,ary){
+    return prevValue+item;
+},0)
+console.log(result);
+// 输出结果应该是45</code></pre>
+<h2 id="es6、es7新特性新方法">ES6、ES7新特性新方法</h2>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">@@iterator</td>
+<td align="left">返回一个包含数组键值对的迭代器对象，可以通过同步调用得到数组元素的键值对</td>
+</tr>
+<tr>
+<td align="left">copyWithin</td>
+<td align="left">复制数组中一系列元素到同一数组指定的起始位置</td>
+</tr>
+<tr>
+<td align="left">entries</td>
+<td align="left">返回包含数组所有键值对的@@iterator</td>
+</tr>
+<tr>
+<td align="left">includes</td>
+<td align="left">如果数组中存在某个元素，就返回true，否则返回false，ES7新增</td>
+</tr>
+<tr>
+<td align="left">find</td>
+<td align="left">根据回调函数给定的条件从数组中查找元素，如果找到则返回该元素</td>
+</tr>
+<tr>
+<td align="left">findIndex</td>
+<td align="left">根据回调函数给定的条件从数组中查找元素，如果找到则返回该元素的索引</td>
+</tr>
+<tr>
+<td align="left">fill</td>
+<td align="left">用静态值填充数组</td>
+</tr>
+<tr>
+<td align="left">from</td>
+<td align="left">根据已有数组创建新数组</td>
+</tr>
+<tr>
+<td align="left">keys</td>
+<td align="left">返回包含数组所有索引的@@iterator</td>
+</tr>
+<tr>
+<td align="left">of</td>
+<td align="left">根据传入的参数创建新的数组</td>
+</tr>
+<tr>
+<td align="left">values</td>
+<td align="left">返回包含数组所有值得@@iterator</td>
+</tr>
+</tbody></table>
+<h3 id="使用es6新的迭代器（iterator）">使用ES6新的迭代器（@@iterator）</h3>
+<p>ES6为Array类增加了一个@@iterator属性，需要通过Symbol.iterator来访问。代码如下：</p>
+<pre><code class="language-javaScript">
+let ary = [1,2,3];
+
+let iterator = ary[Symbol.iterator]();
+console.log(iterator.next().value);
+console.log(iterator.next().value);
+console.log(iterator.next().value);
+console.log(iterator.next().value);
+// 输出应该是1,2,3,undefined</code></pre>
+<p>不断调用迭代器的next方法就能依次得到数组中的值。数组中的值都迭代完了之后，iterator.next().value就会返回undefined</p>
+<h3 id="entrieskeysvalues">entries,keys,values</h3>
+<p>ES6添加了三种从数组中获取iterator的方法。</p>
+<ol>
+<li>entries</li>
+</ol>
+<p>entries返回包含键值对的@@iterator</p>
+<pre><code class="language-javaScript">
+let ary = [1,2]
+
+let iterator = ary.entries();
+
+console.log(iterator.next().value)
+console.log(iterator.next().value)
+
+//输出应该是[0,1] [1,2] .[]里面分别是元素索引，对应值</code></pre>
+<ol start="2">
+<li>keys
+keys返回包含索引的@@iterator</li>
+</ol>
+<pre><code class="language-javaScript">
+let ary = [1,2]
+
+let iterator = ary.keys();
+
+console.log(iterator.next())
+console.log(iterator.next())
+console.log(iterator.next())
+
+//输出应该是{value:0,done:false} {value:1,done:false} {value:undefined,done:true}
+</code></pre>
+<p>keys方法会返回numbers数组的索引。一旦没有可迭代的值，iterator.next()就会返回一个value属性为undefined，done属性为true的对象。如果done属性的值为false，就意味着还有可迭代的值。</p>
+<ol start="3">
+<li>values</li>
+</ol>
+<p>values返回包含值得@@iterator</p>
+<pre><code class="language-javaScript">
+let ary = [1,2]
+
+let iterator = ary.keys();
+
+console.log(iterator.next().value)
+console.log(iterator.next().value)
+
+//输出应该是1,2
+</code></pre>
+<p><strong>* 注意在当前不是所有浏览器都支持ES6的情况，使用ES6提供的方法，最好是使用babel *</strong></p>
+<h3 id="from">from</h3>
+<p>Array.from通过已有的数组，创建一个新的数组。比如要复制一个数组，则可以使用Array.from</p>
+<pre><code class="language-javaScript">
+let ary = [1,2,3,{a:1,b:2}];
+
+let newAry = Array.from(ary);
+
+let o = ary[3];
+
+o.b = 4;
+
+ary.push(4);
+
+console.log(ary)   // 输出： [1,2,3,{a:1,b:4},4]
+console.log(newAry) //输出：[1,2,3,{a:1,b:4}]
+</code></pre>
+<p>通过以上代码可以知道，Array.from 并不是是指针的引用，而是元素的拷贝，只不过是浅拷贝。上面的列子中可以看出，元素为引用值时，Array.from只是将引用值的地址进行了拷贝。</p>
+<p>Array.from 还具有第二个参数。可以传入一个的根据条件改变值得函数。</p>
+<pre><code class="language-javaScript">
+let ary = [1,2,3,4,5];
+
+let newAry = Array.from(ary,item=&gt;item&gt;3);
+
+console.log(newAry); //输出[false,false,false,true,true]
+</code></pre>
+<h3 id="of">of</h3>
+<p>Array.of方法根据传入的参数创建一个新的数组</p>
+<pre><code class="language-javaScript">
+let ary = Array.of(1);
+let ary1 = Array.of(1,2,3)
+
+//等效
+
+let ary = [1];
+let ary1 = [1,2,3]
+
+//通过解构也可以复制数组
+
+let ary = [1,2,3,4]
+let ary1 = Array.of(...ary)
+</code></pre>
+<h3 id="fill方法">fill方法</h3>
+<p>fill用静态值填充数组。</p>
+<p>fill一共有三个参数</p>
+<p>第一个 填充的值</p>
+<p>第二个 开始填充的索引</p>
+<p>第三个 结束填充的索引(不包含这个索引)</p>
+<pre><code class="language-javaScript">
+let ary = new Array(6);
+
+ary.fill(0);
+
+console.log(ary) //[0,0,0,0,0,0]
+
+ary.fill(1,1) 
+
+console.log(ary) //[0,1,1,1,1,1]
+
+ary.fill(2,2,3);
+
+console.log(ary) //[0,1,2,1,1,1]
+</code></pre>
+<h3 id="copywithin">copyWithin</h3>
+<p>copyWithin方法是复制数组中的指定的元素到该数组的指定位置。</p>
+<p>copyWithin 一共有三个参数</p>
+<p>第一个 将要复制到的位置</p>
+<p>第二个 将要复制的元素开始索引</p>
+<p>第三个 将要复制的元素结束索引（不包括该索引）</p>
+<pre><code class="language-javaScript">
+let ary = [1,2,3,4,5,6];
+
+ary.copyWithin(0,3);
+
+console.log(ary); //[4,5,6,4,5,6];
+
+ary.copyWithin(0,4,6); //[5,6,6,4,5,6];
+</code></pre>
+<h2 id="类型数组">类型数组</h2>
+<p>与C和Java等其他语言不同，javaScript数组不是强类型的，因此它可以存储任意类型的数据。</p>
+<p>而类型数组则用于存储单一类型的数据。它的语法是 let myArray = new TypeArray(length),其中TypeArray需要替换为下表所列之一。</p>
+<table>
+<thead>
+<tr>
+<th align="left">类型数组</th>
+<th align="left">数据类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Int8Array</td>
+<td align="left">8位二进制补码整数</td>
+</tr>
+<tr>
+<td align="left">Unit8Array</td>
+<td align="left">8位无符号整数</td>
+</tr>
+<tr>
+<td align="left">Unit8ClampedArray</td>
+<td align="left">8位无符号整数</td>
+</tr>
+<tr>
+<td align="left">Int16Array</td>
+<td align="left">16位二进制补码整数</td>
+</tr>
+<tr>
+<td align="left">Unit16Array</td>
+<td align="left">16位二进制无符号整数</td>
+</tr>
+<tr>
+<td align="left">Int32Array</td>
+<td align="left">32位二进制补码整数</td>
+</tr>
+<tr>
+<td align="left">Unit32Array</td>
+<td align="left">32位二进制无符号整数</td>
+</tr>
+<tr>
+<td align="left">Float32Array</td>
+<td align="left">32位IEEE浮点数</td>
+</tr>
+<tr>
+<td align="left">Float64Array</td>
+<td align="left">64位IEEE浮点数</td>
+</tr>
+</tbody></table>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

@@ -83,7 +83,7 @@ const plugins = function (env) {
         //清除编译文件存放空间
         p_ary.push(
             new CleanWebpackPlugin(['./static'],{
-                exclude:["threeComponent","i18n","mdDoc"],
+                exclude:["threeComponent","i18n","doc"],
                 root:config_obj.PROJECT_PATH,
                 verbose:true,
                 dry:false

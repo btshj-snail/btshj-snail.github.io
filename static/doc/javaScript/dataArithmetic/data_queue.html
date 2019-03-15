@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="队列">队列</h1>
+<h2 id="队列数据结构">队列数据结构</h2>
+<p>队列是遵循<strong>* FIFO *</strong>（FirstInFirstOut，先进先出，也称为先来先服务）原则的一组有序的项。队列在尾部添加新元素，并从顶部移除元素。最新添加的元素必须排在队列的末尾。</p>
+<h2 id="创建队列">创建队列</h2>
+<pre><code class="language-javaScript">
+let Queue = (function(){
+    let weakMap = new WeakMap();
+    function _getItems(key){
+        return weakMap.get(key);
+    }
+
+    function _setItems(key,val){
+        weakMap.set(key,val);
+    }
+
+    return class {
+        constructor(){
+            _setItems(this,[]);
+        }
+
+        front(){
+            return _getItems(this)[0];
+        }
+
+        size(){
+            return _getItems(this).length;
+        }
+
+        isEmpty(){
+            return _getItems(this).length===0;
+        }
+
+        print(){
+            console.log(_getItems(this).toString());
+        }
+
+        enqueue(){
+            let items = _getItems(this);
+            items.push.apply(items,arguments);
+        }
+
+        dequeue(){
+          return _getItems(this).shift();
+        }
+
+    }
+
+})();
+</code></pre>
+<h2 id="优先队列">优先队列</h2>
+<p>优先队列-元素的添加和移除是有优先级的。</p>
+<p>一个现实的列子就是机场登机的顺序。头等舱和商务舱乘客的优先级要高于经济舱乘客。在有些国家，老年人和孕妇（或带小孩的妇女）登机时也享有高于其他乘客的优先级。</p>
+<p>另一个现实中的例子是医院的（急诊科）候诊室。医生会优先处理病情比较严重的患者。通常，护士会鉴别分类，根据患者病情的严重程度放号。</p>
+<p>实现一个优先队列，有两种选项：设置优先级，然后在正确的位置添加元素；或者用入列操作添加元素，然后按照优先级移除它们。在这个示例中，我们将会在正确的位置添加元素，因此可以对它们使用默认的出列操作：</p>
+<pre><code class="language-javaScript">
+    let PriorityQueue = (function () {
+            let weakMap = new WeakMap();
+
+            function _getItems(key) {
+                return weakMap.get(key);
+            }
+
+            function _setItems(key, val) {
+                weakMap.set(key, val);
+            }
+
+            class QueueEl {
+                constructor(val, priority) {
+                    this.val = val;
+                    this.priority = priority;
+                }
+
+                getValue() {
+                    return this.val;
+                }
+
+                getPriority() {
+                    return this.priority;
+                }
+            }
+
+            return class {
+                constructor() {
+                    _setItems(this, []);
+                }
+
+                front() {
+                    return _getItems(this)[0].getValue();
+                }
+
+                isEmpty() {
+                    return _getItems(this).length === 0;
+                }
+
+                print() {
+                    console.log(_getItems(this));
+                }
+
+                enqueue(val, priority) {
+                    let queueEl = new QueueEl(val, priority),items = _getItems(this),isWrite = false;
+                    for (let i = 0, l = items.length; i &lt; l; i++) {
+                        let qel = items[i];
+                        if (!!this.priorityStrategy(qel.getPriority(), priority)) {
+                            items.splice(i, 0, queueEl);
+                            isWrite = true;
+                            break;
+                        }
+                    }
+
+                  !isWrite &amp;&amp; items.push(queueEl);
+                }
+
+                dequeue() {
+                    return _getItems(this).shift().getValue();
+                }
+
+                priorityStrategy(curPriority, selfPriority) {
+                    return curPriority &gt; selfPriority;
+                }
+
+                setPriorityStrategy(fun) {
+                    this.priorityStrategy = fun;
+                }
+
+            }
+
+        })();
+
+        let pq = new PriorityQueue();
+        pq.setPriorityStrategy(function(curVal,selfVal){
+                return curVal&lt;selfVal;
+        })
+        pq.enqueue(&quot;jack&quot;,10);
+        pq.enqueue(&quot;tom&quot;,1);
+        pq.enqueue(&quot;lucy&quot;,5);
+        pq.print(); //[{val:jack,priority:10},{val:lucy,priority:5},{val:tom,priority:1}]
+</code></pre>
+<h2 id="循环队列--击鼓传花">循环队列--击鼓传花</h2>
+<p>还有另一个修改版的队列实现，就是循环队列。循环队列的一个例子就是击鼓传花游戏（HotPotato）。在这个游戏中，孩子们围成一个圆圈，把花尽快地传递给旁边的人。某一时刻传花停止，这个时候花在谁手里，谁就退出圆圈结束游戏。重复这个过程，直到只剩一个孩子（胜者）。</p>
+<p>在下面这个示例中，我们要实现一个模拟的击鼓传花游戏：</p>
+<p>使用了我们之前创建的Queue类</p>
+<pre><code class="language-javaScript">
+function hotPotato(nameList,num){
+    //将参与活动的人放入队列中
+    let queue = new Queue();
+    nameList.forEach((item)=&gt;{
+        queue.enqueue(item);
+    })
+
+    //将被淘汰的人移除队列
+
+    while(queue.size()&gt;1){
+        // 将传递次数之前的人先出队列 再入队列
+        for(let i=0;i&lt;num;i++){
+            queue.enqueue(queue.dequeue());
+        }
+        let name = queue.dequeue();
+        console.log(`出局：${name}`);
+    }
+    //返回最终胜出的人
+    return queue.dequeue();
+}
+
+let names = [&quot;jack&quot;,&quot;tom&quot;,&quot;lucy&quot;,&quot;lili&quot;,&quot;hanmeimei&quot;,&quot;rosh&quot;,&quot;jni&quot;,&quot;foo&quot;,&quot;goog&quot;];
+
+console.log(`最终胜利的人：${hotPotato(names,5)}`);
+</code></pre>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

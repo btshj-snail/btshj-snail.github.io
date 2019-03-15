@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="元素渲染">元素渲染</h1>
+<p>元素是构成React应用的最小单位.</p>
+<p>与浏览器的DOM元素不同,<strong><em>React当中的元素事实上是普通的对象</em></strong>,React DOM 可以确保浏览器DOM的数据内容与React元素保持一致.</p>
+<blockquote>
+<p>注意:
+元素和组件是不同的概念.元素只是构成组件的一个部分.</p>
+</blockquote>
+<h2 id="将元素渲染到dom中">将元素渲染到DOM中</h2>
+<p>首先我们在一个HTML页面中添加一个id=&quot;root&quot;的div;</p>
+<pre><code>&lt;div id=&quot;root&quot;&gt;&lt;/div&gt;</code></pre><p>在此div中所有的内容都将由React DOM来管理,所以我们称之为&quot;根&quot;DOM节点.</p>
+<p>要将React元素渲染到根DOM节点中,我们通过ReactDOM.render()的方法来将其渲染到页面上.</p>
+<pre><code class="language-javascript">
+const el = &lt;h1&gt;Hello , world&lt;/h1&gt;;
+ReactDOM.render(
+    el,
+    document.querySelector(&quot;#root&quot;)
+)
+</code></pre>
+<h2 id="更新元素渲染">更新元素渲染</h2>
+<p>React元素都是immutable(不可变的)的.当元素被创建后,你是无法改变其内容和属性的.一个元素就像动画里面的帧,他代表应用界面在某一时间点的样子.</p>
+<p>后面会介绍到我们将通过其他方式来改变内容和属性.</p>
+<h2 id="react只会更新必要的部分">React只会更新必要的部分</h2>
+<p>ReactDOM 首先会比较元素内容先后的不同,而在渲染的过程中只会更新不同的部分.</p>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

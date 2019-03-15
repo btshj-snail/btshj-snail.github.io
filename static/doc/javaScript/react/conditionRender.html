@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="条件渲染">条件渲染</h1>
+<p>在React中，可以创建不同的组件来封装各种需要的行为。然后可以根据应用的状态变化只渲染其中一部分。</p>
+<p>React中的条件渲染和javaScript中的一致，使用javaScript操作符if或条件运算符来创建表示当前状态的元素，然后让React根据它们来渲染UI</p>
+<h2 id="与运算符">与运算符</h2>
+<pre><code class="language-javascript">
+function Mailbox(props){
+    const unReadMessages = props.unReadMessages;
+
+    return (
+        &lt;div&gt;
+            &lt;h1&gt;Hello !&lt;/h1&gt;
+            {
+                unReadMessages.length&gt;0 &amp;&amp; 
+
+                &lt;h2&gt;you have {unReadMessages.length} unread message&lt;/h2&gt;    
+            }
+        &lt;/div&gt;
+    )
+}
+</code></pre>
+<h2 id="三目运算">三目运算</h2>
+<pre><code class="language-javascript">
+function Login(props){
+    return (
+        &lt;div&gt;
+            &lt;h1&gt;Hello !&lt;/h1&gt;
+            {
+               props.isLogin ? &lt;span&gt;已登录&lt;/span&gt;:&lt;span&gt;请登录&lt;/span&gt;
+            }
+        &lt;/div&gt;
+    )
+}
+</code></pre>
+<p>你可以根据自己的爱好，团队的习惯选取条件渲染的方式。当然如果条件变得过于复杂，可能就是提取组件的好时机了。</p>
+<h2 id="阻止组件渲染">阻止组件渲染</h2>
+<p>在极少数的情况下，你可能希望隐藏组件，即使它被其他组件渲染。让render方法返回null 而不是它渲染结果即可实现。</p>
+<p>在下面的例子，<WarningBanner/>根据属性warn的值条件渲染。如果warn的值是false，则组件不会渲染。</p>
+<pre><code class="language-javascript">
+function WarningBanner(props){
+    if(!props.warn){
+        return null;
+    }
+
+    return (
+        &lt;div&gt;
+            Warning!
+        &lt;/div&gt;
+    )
+}
+
+class Page extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {showWarning:true};
+        this.handleToggleClick = this.handleToggleClick.bind(this);
+    }
+
+    handleToggleClick(){
+        this.setState(prevState=&gt;({showWarning:!prevState.warning}));
+    }
+
+    render(){
+        return (
+            &lt;div&gt;
+                &lt;Warning warn={this.state.showWarning}/&gt;
+                &lt;button onClick={this.handleToggleClick}&gt;{this.state.showWarning?&#39;Hide&#39;:&#39;Show&#39;}&lt;/button&gt;
+            &lt;/div&gt;
+        )
+    }
+}
+</code></pre>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

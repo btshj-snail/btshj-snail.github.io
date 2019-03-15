@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="绘制文本">绘制文本</h1>
+<p>canvas提供了两种绘制文本的方式</p>
+<p><strong>fillText(text, x, y [, maxWidth])</strong></p>
+<p>在指定的(x,y)位置填充指定的文本，绘制的最大宽度是可选的.</p>
+<p><strong>strokeText(text, x, y [, maxWidth])</strong></p>
+<p>在指定的(x,y)位置绘制文本边框，绘制的最大宽度是可选的.</p>
+<h2 id="一个填充文本的示例">一个填充文本的示例</h2>
+<p>文本用当前的填充方式被填充：</p>
+<pre><code class="language-javaScript">
+function draw() {
+  var ctx = document.getElementById(&#39;canvas&#39;).getContext(&#39;2d&#39;);
+  ctx.font = &quot;48px serif&quot;;
+  ctx.fillText(&quot;Hello world&quot;, 10, 50);
+}
+</code></pre>
+<h2 id="一个文本边框的示例">一个文本边框的示例</h2>
+<p>文本用当前的边框样式被绘制：</p>
+<pre><code class="language-javaScript">
+function draw() {
+  var ctx = document.getElementById(&#39;canvas&#39;).getContext(&#39;2d&#39;);
+  ctx.font = &quot;48px serif&quot;;
+  ctx.strokeText(&quot;Hello world&quot;, 10, 50);
+}
+</code></pre>
+<h2 id="有样式的文本">有样式的文本</h2>
+<p>在上面的例子用我们已经使用了 font 来使文本比默认尺寸大一些. 还有更多的属性可以让你改变canvas显示文本的方式：</p>
+<p><strong>font = value</strong></p>
+<p>当前我们用来绘制文本的样式. 这个字符串使用和 CSS font 属性相同的语法. 默认的字体是 10px sans-serif。</p>
+<p><strong>textAlign = value</strong>
+文本对齐选项. 可选的值包括：start, end, left, right or center. 默认值是 start。</p>
+<p><strong>textBaseline = value</strong></p>
+<p>基线对齐选项. 可选的值包括：top, hanging, middle, alphabetic, ideographic, bottom。默认值是 alphabetic。</p>
+<p><strong>direction = value</strong>
+文本方向。可能的值包括：ltr, rtl, inherit。默认值是 inherit。</p>
+<h2 id="先进的文本测量">先进的文本测量</h2>
+<p>当你需要获得更多的文本细节时，下面的方法可以给你测量文本的方法。</p>
+<p><strong>measureText()</strong></p>
+<p>将返回一个 TextMetrics对象的宽度、所在像素，这些体现文本特性的属性。
+下面的代码段将展示如何测量文本来获得它的宽度：</p>
+<pre><code class="language-javaScript">function draw() {
+  var ctx = document.getElementById(&#39;canvas&#39;).getContext(&#39;2d&#39;);
+  var text = ctx.measureText(&quot;foo&quot;); // TextMetrics object
+  text.width; // 16;
+}</code></pre>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

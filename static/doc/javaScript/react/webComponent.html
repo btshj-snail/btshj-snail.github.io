@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="web-components">Web Components</h1>
+<p>** React 和 web组件 被用以解决不同问题。Web组件为可重用组件提供了强大的封装能力，
+而React则是提供了保持DOM和数据同步的声明式库。二者目标互补。作为开发者，
+你可以随意地在Web组件里使用React，或者在React里使用Web组件，或都有。 **</p>
+<p>大部分使用 React 的开发者并不使用Web组件，但你可能想要，
+尤其若你正在使用那些用 Web组件编写的第三方UI组件。</p>
+<h2 id="在react中使用web组件">在React中使用Web组件</h2>
+<pre><code class="language-javascript">
+class HelloMessage extends React.Component {
+  render() {
+    return &lt;div&gt;Hello &lt;x-search&gt;{this.props.name}&lt;/x-search&gt;!&lt;/div&gt;;
+  }
+}
+</code></pre>
+<blockquote>
+<p>注意：
+Web组件通常暴露一个必要的API，例如，一个videoWeb组件可能会暴露play()和pause()方法。
+为访问组件的必要 API，你需要使用一个引用以能够直接和DOM节点交互。
+若你正在使用第三方Web组件，其最好的解决方案是编写一个 React组件，以包装该 Web组件。
+由Web组件触发的事件可能无法通过React渲染树来正确冒泡。
+    你需要手动捕获事件处理器以处理那些在React组件里的事件。</p>
+</blockquote>
+<p>一个普遍的困扰是 Web组件 使用 “class” 而非 “className”。</p>
+<pre><code class="language-javascript">
+function BrickFlipbox() {
+  return (
+    &lt;brick-flipbox class=&quot;demo&quot;&gt;
+      &lt;div&gt;front&lt;/div&gt;
+      &lt;div&gt;back&lt;/div&gt;
+    &lt;/brick-flipbox&gt;
+  );
+}
+</code></pre>
+<h2 id="在web组件中使用react">在Web组件中使用React</h2>
+<pre><code class="language-javascript">
+const proto = Object.create(HTMLElement.prototype, {
+  attachedCallback: {
+    value: function() {
+      const mountPoint = document.createElement(&#39;span&#39;);
+      this.createShadowRoot().appendChild(mountPoint);
+
+      const name = this.getAttribute(&#39;name&#39;);
+      const url = &#39;https://www.google.com/search?q=&#39; + encodeURIComponent(name);
+      ReactDOM.render(&lt;a href={url}&gt;{name}&lt;/a&gt;, mountPoint);
+    }
+  }
+});
+document.registerElement(&#39;x-search&#39;, {prototype: proto});
+</code></pre>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

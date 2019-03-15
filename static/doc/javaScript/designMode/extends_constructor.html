@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="构造函数继承">构造函数继承</h1>
+<pre><code class="language-javaScript">
+function SuperClass(id){
+    this.books = [&quot;javaScript&quot;,&quot;html&quot;,&quot;css&quot;];
+    this.id = id;
+}
+
+SuperClass.prototype.showBooks = function(){
+    return this.books;
+}
+
+function SubClass(id){
+    SuperClass.call(this,id);
+}
+
+var instance1 = new SubClass(10);
+var instance2 = new SubClass(11);
+
+instance1.books.push(&quot;设计模式&quot;);
+
+console.log(instance1.books) //[&quot;javaScript&quot;,&quot;html&quot;,&quot;css&quot;,&quot;设计模式&quot;]
+console.log(instance1.id) //10
+console.log(instance2.books) //[&quot;javaScript&quot;,&quot;html&quot;,&quot;css&quot;]
+console.log(instance2.id) //11
+
+instance1.showBooks(); //instance1.showBooks is not a function
+</code></pre>
+<p>其实构造函数继承的精华在于 SuperClass.call(this,id)。</p>
+<p>该方法有两个注意点：</p>
+<ol>
+<li>是直接调用构造函数，而不是用new。这里是将构造函数当作普通的函数进行的使用。</li>
+<li>call方法的使用。由于call这个方法可以更改函数的作用环境，因此在子类中，对superClass调用这个方法就是将子类的变量在父类中执行一遍。由于这种类型的继承没有涉及原型prototype，所以父类的原型方法自然不会被子类京城，而如果想被子类继承就必须要放在构造函数中，这样创建出来的每个实例都会单独拥有一份，而不会共用，这样违背了代码复用的原则。</li>
+</ol>
+<p>那么为了综合类继承和构造函数继承，就有了下一节的<a href="./extends_assemble.html">组合式继承</a></p>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

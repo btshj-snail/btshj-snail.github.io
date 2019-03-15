@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="使用-proptypes-进行类型检查">使用 PropTypes 进行类型检查</h1>
+<blockquote>
+<p>注意: React.PropTypes 自 React v15.5 起已弃用。请使用 prop-types 库代替。</p>
+</blockquote>
+<p>随着应用日渐庞大，你可以通过类型检查捕获大量错误。 对于某些应用来说，你还可以使用 Flow 或 TypeScript 这样的 JavsScript 扩展来对整个应用程序进行类型检查。
+然而即使你不用它们，React 也有一些内置的类型检查功能。要检查组件的属性，你需要配置特殊的 propTypes 属性：</p>
+<pre><code class="language-javascript">
+import PropTypes from &#39;prop-types&#39;;
+
+class Greeting extends React.Component {
+  render() {
+    return (
+      &lt;h1&gt;Hello, {this.props.name}&lt;/h1&gt;
+    );
+  }
+}
+
+Greeting.propTypes = {
+  name: PropTypes.string
+};
+
+</code></pre>
+<p>PropTypes 包含一整套验证器，可用于确保你接收的数据是有效的。
+在这个示例中，我们使用了 PropTypes.string。当你给属性传递了无效值时，JavsScript 控制台将会打印警告。出于性能原因，propTypes 只在开发模式下进行检查。</p>
+<h2 id="proptypes">PropTypes</h2>
+<p>下面是使用不同验证器的例子：</p>
+<pre><code class="language-javascript">
+import PropTypes from &#39;prop-types&#39;;
+
+MyComponent.propTypes = {
+  // 你可以将属性声明为以下 JS 原生类型
+  optionalArray: PropTypes.array,
+  optionalBool: PropTypes.bool,
+  optionalFunc: PropTypes.func,
+  optionalNumber: PropTypes.number,
+  optionalObject: PropTypes.object,
+  optionalString: PropTypes.string,
+  optionalSymbol: PropTypes.symbol,
+
+  // 任何可被渲染的元素（包括数字、字符串、子元素或数组）。
+  optionalNode: PropTypes.node,
+
+  // 一个 React 元素
+  optionalElement: PropTypes.element,
+
+  // 你也可以声明属性为某个类的实例，这里使用 JS 的
+  // instanceof 操作符实现。
+  optionalMessage: PropTypes.instanceOf(Message),
+
+  // 你也可以限制你的属性值是某个特定值之一
+  optionalEnum: PropTypes.oneOf([&#39;News&#39;, &#39;Photos&#39;]),
+
+  // 限制它为列举类型之一的对象
+  optionalUnion: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.instanceOf(Message)
+  ]),
+
+  // 一个指定元素类型的数组
+  optionalArrayOf: PropTypes.arrayOf(PropTypes.number),
+
+  // 一个指定类型的对象
+  optionalObjectOf: PropTypes.objectOf(PropTypes.number),
+
+  // 一个指定属性及其类型的对象
+  optionalObjectWithShape: PropTypes.shape({
+    color: PropTypes.string,
+    fontSize: PropTypes.number
+  }),
+
+  // 你也可以在任何 PropTypes 属性后面加上 `isRequired` 
+  // 后缀，这样如果这个属性父组件没有提供时，会打印警告信息
+  requiredFunc: PropTypes.func.isRequired,
+
+  // 任意类型的数据
+  requiredAny: PropTypes.any.isRequired,
+
+  // 你也可以指定一个自定义验证器。它应该在验证失败时返回
+  // 一个 Error 对象而不是 `console.warn` 或抛出异常。
+  // 不过在 `oneOfType` 中它不起作用。
+  customProp: function(props, propName, componentName) {
+    if (!/matchme/.test(props[propName])) {
+      return new Error(
+        &#39;Invalid prop `&#39; + propName + &#39;` supplied to&#39; +
+        &#39; `&#39; + componentName + &#39;`. Validation failed.&#39;
+      );
+    }
+  },
+
+  // 不过你可以提供一个自定义的 `arrayOf` 或 `objectOf` 
+  // 验证器，它应该在验证失败时返回一个 Error 对象。 它被用
+  // 于验证数组或对象的每个值。验证器前两个参数的第一个是数组
+  // 或对象本身，第二个是它们对应的键。
+  customArrayProp: PropTypes.arrayOf(function(propValue, key, componentName, location, propFullName) {
+    if (!/matchme/.test(propValue[key])) {
+      return new Error(
+        &#39;Invalid prop `&#39; + propFullName + &#39;` supplied to&#39; +
+        &#39; `&#39; + componentName + &#39;`. Validation failed.&#39;
+      );
+    }
+  })
+};
+
+</code></pre>
+<h2 id="限制单个子代">限制单个子代</h2>
+<p>使用 PropTypes.element 你可以指定只传递一个子代</p>
+<pre><code class="language-javascript">
+import PropTypes from &#39;prop-types&#39;;
+
+class MyComponent extends React.Component {
+  render() {
+    // This must be exactly one element or it will warn.
+    const children = this.props.children;
+    return (
+      &lt;div&gt;
+        {children}
+      &lt;/div&gt;
+    );
+  }
+}
+
+MyComponent.propTypes = {
+  children: PropTypes.element.isRequired
+};
+</code></pre>
+<h2 id="属性默认值">属性默认值</h2>
+<p>你可以通过配置 defaultProps 为 props定义默认值：</p>
+<pre><code class="language-javascript">
+class Greeting extends React.Component {
+  render() {
+    return (
+      &lt;h1&gt;Hello, {this.props.name}&lt;/h1&gt;
+    );
+  }
+}
+
+// 为属性指定默认值:
+Greeting.defaultProps = {
+  name: &#39;Stranger&#39;
+};
+
+// 渲染 &quot;Hello, Stranger&quot;:
+ReactDOM.render(
+  &lt;Greeting /&gt;,
+  document.getElementById(&#39;example&#39;)
+);
+</code></pre>
+<p>defaultProps 用来确保 this.props.name 在父组件没有特别指定的情况下，有一个初始值。
+类型检查发生在 defaultProps 赋值之后，所以类型检查也会应用在 defaultProps 上面。</p>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>
