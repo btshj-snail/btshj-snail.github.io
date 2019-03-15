@@ -1,54 +1,139 @@
+html{
+    height:100%;
+    padding:0;
+    margin:0;
+}
+body {
+    padding: 0px;
+}
+
 .page-container {
-    padding:0 20px;
-}
-
-.page-container .left-area{
-    width:300px;
-    height:100vh;
-    float:left;
-    border-right:dashed 1px #999;
-}
-
-.page-container .right-area{
-    margin-left:300px;
-    padding-left:20px;
-}
-
-.md-content-null-right{
-    padding-right:220px;
-}
-
-.vertical-menu>ul{
-    position: fixed;
-    list-style:none;
     
 }
-.vertical-menu>ul>li{
-    font-size:16px;
-    font-weight:500;
-    color:#333;
-    line-height:1.8;
-    cursor:pointer;
 
+.page-container .left-area {
+    width: 300px;
+    height: 100vh;
+    float: left;
+    border-right: dashed 1px #bbb;
 }
 
-.vertical-menu>ul>li:hover{
+.page-container .right-area {
+    margin-left: 300px;
+    padding: 0 20px;
+    border-top: solid 1px transparent;
+}
+
+.vertical-menu{
+    position: fixed;
+    width:300px;
+}
+
+.vertical-menu .vertical-menu-header{
+    margin:10px 0px;
+    padding-bottom:10px;
+    padding-left:70px;
+    /* background:url('./img/snail_orange.png') no-repeat; */
+    background:var(--theme-logo-img-name) no-repeat;
+    background-size:45px 45px;
+    background-position-x: 10px;
+    height:45px;
+    line-height:45px;
+    color:var(--theme-main-color);
+    font-weight:bold;
+    font-size:24px;
+    border-bottom:dashed 1px #bbb;
+}
+
+.vertical-menu>ul {
+    list-style: none;
+    padding:0 1em;
+}
+
+.vertical-menu>ul>li {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    line-height: 1.8;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+
+
+/* .vertical-menu>ul>li:hover{
    color:#999; 
-}
+} */
 
-.vertical-menu>ul>li>p{
+.vertical-menu>ul>li>p {
     text-indent: 0%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
-.vertical-menu>ul>li>ul{
-    list-style:none;
-    padding-left:2em;
+.vertical-menu>ul>li>p:before {
+    content:'';
+    display:inline-block;
+    width:5px;
+    height:5px;
+    border-right:dashed 3px #ccc;
+    border-top:dashed 3px #ccc;
+    margin-right:10px;
+    transform: rotate(45deg)
 }
 
-.vertical-menu>ul>li>ul>li{
-    color:#555;
+.vertical-menu>ul>li>p:hover {
+    color: #999;
+    /* background: #336699;
+    box-shadow: inset -5px 0px 10px -5px #000; */
 }
 
-.vertical-menu>ul>li>ul>li:hover{
-    color:#999; 
- }
+.vertical-menu>ul>li>ul {
+    list-style: none;
+    padding-left: 2em;
+}
+
+.vertical-menu>ul>li>ul>li {
+    color: #555;
+    margin: 10px 0px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.vertical-menu>ul>li>p:after,
+.vertical-menu>ul>li>ul>li:after {
+    content: ' ';
+    width: 0;
+    height: 2px;
+    background-color: var(--theme-main-color);
+    transition: all 0.3s ease-in;
+    display: block;
+    opacity: 0;
+    margin: 0 auto;
+}
+
+.vertical-menu>ul>li>p.active:before,
+.vertical-menu>ul>li>p:hover:before{
+    border-color:var(--theme-main-color)
+}
+
+.vertical-menu>ul>li>p.active:after,
+.vertical-menu>ul>li>ul>li.active:after,
+.vertical-menu>ul>li>p:hover:after,
+.vertical-menu>ul>li>ul>li:hover:after {
+    opacity: 1;
+    width: 100%;
+}
+
+.vertical-menu>ul>li>p:hover,
+.vertical-menu>ul>li>ul>li:hover {
+    color: #999;
+
+}
+
+.vertical-menu>ul>li>p.active,
+.vertical-menu>ul>li>ul>li.active {
+    color: var(--theme-main-color);
+}

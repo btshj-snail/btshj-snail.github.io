@@ -9,9 +9,10 @@
     <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
 
     <link rel="stylesheet" href="/static/threeComponent/md/han.css">
-    <link rel="stylesheet" href="/static/threeComponent/md/common.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
 
     <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
 </head>
 
 <body>
@@ -30,17 +31,17 @@
 当没有设置宽度和高度的时候，canvas会初始化宽度为300像素和高度为150像素。
 该元素可以使用CSS来定义大小，但在绘制时图像会伸缩以适应它的框架尺寸：如果CSS的尺寸与初始画布的比例不一致，它会出现扭曲。</p>
 <blockquote>
-<p>注意: 如果你绘制出来的图像是扭曲的, 尝试用width和height属性为<canvas>明确规定宽高，而不是使用CSS。</p>
+<p>注意: 如果你绘制出来的图像是扭曲的, 尝试用width和height属性为&lt;canvas&gt;明确规定宽高，而不是使用CSS。</p>
 </blockquote>
-<p>id属性并不是<canvas>元素所特有的，而是每一个HTML元素（比如class元素）都默认具有的属性。
+<p>id属性并不是&lt;canvas&gt;元素所特有的，而是每一个HTML元素（比如class元素）都默认具有的属性。
 给每个标签都加上一个id属性是个好主意，因为这样你就能在我们的脚本中很容易的找到它。</p>
-<p><canvas>元素可以像任何一个普通的图像一样（有margin，border，background等等属性）被设计。
+<p>&lt;canvas&gt;元素可以像任何一个普通的图像一样（有margin，border，background等等属性）被设计。
 然而，这些样式不会影响在canvas中的实际图像。我们将会在一个专门的章节里看到这是如何解决的。
 当开始时没有为canvas规定样式规则，其将会完全透明。</p>
 <h2 id="替换内容">替换内容</h2>
 <p>&lt;canvas&gt;元素不同于在其中的&lt;img&gt;标签，就像&lt;video&gt;，&lt;audio&gt;，或者 &lt;picture&gt;元素一样，很容易定义一些替代内容。
 由于某些较老的浏览器（尤其是IE9之前的IE浏览器）或者文本浏览器不支持HTML元素&quot;canvas&quot;，在这些浏览器上你应该总是能展示替代内容。</p>
-<p>这非常简单：我们只是在<canvas>标签中提供了替换内容。支持<canvas>的浏览器将会忽略在容器中包含的内容，并且只是正常渲染canvas。</p>
+<p>这非常简单：我们只是在&lt;canvas&gt;标签中提供了替换内容。支持&lt;canvas&gt;的浏览器将会忽略在容器中包含的内容，并且只是正常渲染canvas。</p>
 <p>举个例子，我们可以提供对canvas内容的文字描述或者是提供动态生成内容相对应的静态图片，如下所示：</p>
 <pre><code class="language-html">
 &lt;canvas id=&quot;stockGraph&quot; width=&quot;150&quot; height=&quot;150&quot;&gt;
