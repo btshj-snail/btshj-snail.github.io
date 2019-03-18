@@ -8,47 +8,116 @@
     <title>Title</title>
     <script src="./static/threeComponent/jquery-3.2.1.min.js"></script>
     <style>
-        .div{
-            height:300px;
-            width:1600px;
+        body{
+            padding:0;
+            margin:0;
+            clear: both;
+            /* font-size:0; */
+        }
+        /* div{
+            padding:0px;
+            margin:0px;
+            font-size:14px;
+        }
+        .top{
+            height:200px;
+            width:100%;
+            background-color:#ff0;
+        }
+        .left{
+            height:200px;
+            display: inline-block;
+            width:50%;
+            border:solid 1px blue;
+            padding:20px;
+            box-sizing:border-box;
+            background-color:#ff9900;
+          
+        }
+        .right{
+            height:200px;
+            display: inline-block;
+            width:50%;
+            box-sizing:border-box;
+            border:solid 1px blue;
+            background-color:#ff0000;
+            white-space:nowrap;
+        } */
+        .col-wrapper{
+            display: table;
+            overflow: hidden;
+            width:1000px;
+        }
+        .col{
+            /* float:left; */
             border:solid 1px red;
-            position:relative;
+            display:table-cell;
         }
-        .gg{
-            position:absolute;
-            /*animation:fadeInUp 1s 0.1s 1*/
+        .col-1{
+            background-color:#ff4400;
         }
-        .ff{
-            animation-name:fadeInUp;
-            animation-duration:0.5s;
+        .col-2{
+            background-color:#ff9;
         }
-
-        @keyframes fadeInUp {
-            0% {
-                color:#ff00ff;
-                opacity: 0;
-                left:0px;
-
-            }
-            100% {
-                color:#000;
-                opacity: 1;
-                left:1000px;
-
-            }
+        .col-3{
+            background-color:blue;
+        }
+        .col-4{
+            background-color:black;
+        }
+        .col-collapse{
+            display:none;
         }
     </style>
 
 </head>
 <body>
-<div class="div">
-     <span class="gg">
-        womf
-    </span>
-</div>
 
+    <!-- <div class="top">
+    </div>
+    <div class="left">1</div>
+    <div class="right">1</div> -->
+<div class="col-wrapper">
+    <div class="col">sdfsdfdasf</div>
+    <div class="col">
+        asdfsadf<br>
+        asdfsadfasdfas<br>
+        sadf><br>
+    </div>
+    <div class="col ">
+        asdfsadfasdfasasdfd<br>
+
+        asdfsadf<br>
+
+        asdfsadfasdfas<br>
+        asdfsadfasdfas<br>
+        asdfsadfasdfas<br>
+        aafdfas 
+    </div>
+    <div class="col ">
+            asdfsadfasdfasasdfd<br>
+
+            asdfsadf<br>
+    
+            asdfsadfasdfas<br>
+            asdfsadfasdfas<br>
+            asdfsadfasdfas<br>
+            aafdfas <br>
+
+            asdfsadf<br>
+    
+            asdfsadfasdfas<br>
+            asdfsadfasdfas<br>
+            asdfsadfasdfas<br>
+            aafdfas <br>
+    </div>
+
+    <div>1</div>
+    <div>2</div>
+    <div class="col-collapse">3</div>
+    <div>4</div>
+</div>
     <script>
-        $(".gg").css({"animation-delay":"0.5s"}).addClass("ff")
     </script>
 </body>
 </html>
