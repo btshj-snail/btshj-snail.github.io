@@ -40,3 +40,14 @@ console.log(result);
 // => "#hello#"
 
 ```
+
+多行匹配模式时，^,$是指每行的开头和结尾，这个需要我们的注意：
+
+```javaScript
+
+var result = "I\nlove\njavaScript".replace(/^|$/gm,'#');
+console.log(result);
+
+
+
+```
