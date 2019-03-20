@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>snail的技术笔记</title>
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="Shortcut Icon" href="/favicon.ico"  type="image/x-icon" /> 
+    <link rel="Bookmark" href="/favicon.ico" type="image/x-icon" /> 
+
+
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="正则表达式位置匹配攻略">正则表达式位置匹配攻略</h1>
+<p>正则表达式是匹配模式，要么匹配字符，要么匹配位置。请记住这句话。</p>
+<p>然而大部分人学习正则时，对于匹配位置的重视程度没有那么高。</p>
+<p>本章讲讲正则匹配位置的总总。</p>
+<p>内容包括：</p>
+<ul>
+<li>什么是位置？</li>
+<li>如何匹配位置？</li>
+<li>位置的特性</li>
+<li>几个应用实例分析</li>
+</ul>
+<h2 id="1什么是位置">1.什么是位置</h2>
+<p>位置是相邻字符之间的位置。比如，下图中箭头所指的地方：</p>
+<p><img src="./img/regexp_1.png" alt=""></p>
+<h2 id="2如何匹配位置">2.如何匹配位置</h2>
+<p>在ES5中，共有6个锚字符：</p>
+<blockquote>
+<p>^ $ \b \B (?=p) (?!p)</p>
+</blockquote>
+<h3 id="21-和">2.1 ^和$</h3>
+<p>^（脱字符）匹配开头，在多行匹配中匹配行开头。</p>
+<p>$（美元符号）匹配结尾，在多行匹配中匹配行结尾。</p>
+<p>比如我们把字符串的开头和结尾用&quot;#&quot;替换（位置可以替换成字符的！）：</p>
+<pre><code class="language-javaScript">
+var result = &quot;hello&quot;.replace(/^|$/g, &#39;#&#39;);
+console.log(result); 
+// =&gt; &quot;#hello#&quot;
+</code></pre>
+<p>多行匹配模式时，加入m,那么^,$是指每行的开头和结尾，这个需要我们的注意：</p>
+<pre><code class="language-javaScript">
+var result = &quot;I\nlove\njavaScript&quot;.replace(/^|$/gm,&#39;#&#39;);
+console.log(result);
+/*
+#I#
+#love#
+#javascript#
+*/</code></pre>
+<h3 id="22-b和b">2.2 \b和\B</h3>
+<p>\b是单词边界，具体就是\w和\W之间的位置，也包括\w和^之间的位置，也包括\w和$之间的位置。</p>
+<p>比如一个文件名是&quot;[JS] Lesson_01.mp4&quot;中的\b，如下：</p>
+<pre><code class="language-javaScript">
+var result = &quot;[JS] Lesson_01.mp4&quot;.replace(/\b/g, &#39;#&#39;);
+console.log(result); 
+// =&gt; &quot;[#JS#] #Lesson_01#.#mp4#&quot;
+</code></pre>
+<p>首先，我们知道，\w是字符组[0-9a-zA-Z_]的简写形式，即\w是字母数字或者下划线的中任何一个字符。而\W是排除字符组[^0-9a-zA-Z_]的简写形式，即\W是\w以外的任何一个字符。</p>
+<p>此时我们可以看看&quot;[#JS#] #Lesson_01#.#mp4#&quot;中的每一个&quot;#&quot;，是怎么来的。</p>
+<ul>
+<li>第一个&quot;#&quot;，两边是&quot;[&quot;与&quot;J&quot;，是\W和\w之间的位置。</li>
+<li>第二个&quot;#&quot;，两边是&quot;S&quot;与&quot;]&quot;，也就是\w和\W之间的位置。</li>
+<li>第三个&quot;#&quot;，两边是空格与&quot;L&quot;，也就是\W和\w之间的位置。</li>
+<li>第四个&quot;#&quot;，两边是&quot;1&quot;与&quot;.&quot;，也就是\w和\W之间的位置。</li>
+<li>第五个&quot;#&quot;，两边是&quot;.&quot;与&quot;m&quot;，也就是\W和\w之间的位置。</li>
+<li>第六个&quot;#&quot;，其对应的位置是结尾，但其前面的字符&quot;4&quot;是\w，即\w和$之间的位置。</li>
+</ul>
+<p>\B就是\b的反面的意思，非单词边界。例如在字符串中所有位置中，扣掉\b，剩下的都是\B的。</p>
+<p>具体说来就是\w与\w、\W与\W、^与\W，\W与$之间的位置。</p>
+<p>比如上面的例子，把所有\B替换成&quot;#&quot;：</p>
+<pre><code class="language-javaScript">
+var result = &quot;[JS] Lesson_01.mp4&quot;.replace(/\B/g, &#39;#&#39;);
+console.log(result); 
+// =&gt; &quot;#[J#S]# L#e#s#s#o#n#_#0#1.m#p#4&quot;
+</code></pre>
+<h3 id="23-p和p">2.3 (?=p)和(?!p)</h3>
+<p>(?=p)，其中p是一个子模式，即p前面的位置。</p>
+<p>比如(?=l)，表示&#39;l&#39;字符前面的位置，例如：</p>
+<pre><code class="language-javaScript">
+var result = &quot;hello&quot;.replace(/(?=l)/g, &#39;#&#39;);
+console.log(result); 
+// =&gt; &quot;he#l#lo&quot;
+</code></pre>
+<p>而(?!p)就是(?=p)的反面意思，比如：</p>
+<pre><code class="language-javaScript">
+var result = &quot;hello&quot;.replace(/(?!l)/g, &#39;#&#39;);
+
+console.log(result); 
+// =&gt; &quot;#h#ell#o#&quot;
+</code></pre>
+<p>二者的学名分别是positive lookahead和negative lookahead。</p>
+<p>中文翻译分别是正向先行断言和负向先行断言。</p>
+<p>ES6中，还支持positive lookbehind和negative lookbehind。</p>
+<p>具体是(?&lt;=p)和(?&lt;!p)。</p>
+<p>有书上把这四个东西，翻译成环视，即看看右边或看看左边。</p>
+<p>但一般书上，没有很好强调这四者是个位置。</p>
+<p>比如(?=p)，一般都理解成：要求接下来的字符与p匹配，但不能包括p的那些字符。</p>
+<p>而在本人看来(?=p)就与^一样好理解，就是p前面的那个位置。</p>
+<h2 id="位置的特性">位置的特性</h2>
+<p>对于位置的理解，我们可以理解成空字符&quot;&quot;。</p>
+<p>比如&quot;hello&quot;字符串等价于如下的形式：</p>
+<pre><code>&quot;hello&quot; == &quot;&quot; + &quot;h&quot; + &quot;&quot; + &quot;e&quot; + &quot;&quot; + &quot;l&quot; + &quot;&quot; + &quot;l&quot; + &quot;o&quot; + &quot;&quot;;</code></pre><p>也等价于：</p>
+<pre><code>&quot;hello&quot; == &quot;&quot; + &quot;&quot; + &quot;hello&quot;</code></pre><p>因此，把/^hello$/写成/^^hello$$$/，是没有任何问题的：</p>
+<pre><code class="language-javaScript">
+var result = /^^hello$$$/.test(&quot;hello&quot;);
+console.log(result); 
+// =&gt; true
+</code></pre>
+<p>甚至可以写成更复杂的:</p>
+<pre><code class="language-javaScript">
+var result = /(?=he)^^he(?=\w)llo$\b\b$/.test(&quot;hello&quot;);
+console.log(result); 
+// =&gt; true
+</code></pre>
+<p>也就是说字符之间的位置，可以写成多个。</p>
+<p>把位置理解空字符，是对位置非常有效的理解方式。</p>
+<h2 id="4相关案例">4.相关案例</h2>
+<h3 id="41-不匹配任何东西的正则">4.1 不匹配任何东西的正则</h3>
+<p>让你写个正则不匹配任何东西</p>
+<pre><code>/.^/</code></pre><p>因为此正则要求只有一个字符，但该字符后面是开头。</p>
+<h3 id="42-数字的千位分隔符表示法">4.2 数字的千位分隔符表示法</h3>
+<p>比如把&quot;12345678&quot;，变成&quot;12,345,678&quot;。</p>
+<p>可见是需要把相应的位置替换成&quot;,&quot;。</p>
+<p>思路是什么呢？</p>
+<h4 id="421-弄出最后一个逗号">4.2.1 弄出最后一个逗号</h4>
+<p>使用(?=\d{3}$)就可以做到：</p>
+<pre><code class="language-javaScript">
+var result = &quot;12345678&quot;.replace(/(?=\d{3}$)/g, &#39;,&#39;)
+console.log(result); 
+// =&gt; &quot;12345,678&quot;
+</code></pre>
+<h4 id="422-弄出所有的逗号">4.2.2 弄出所有的逗号</h4>
+<p>因为逗号出现的位置，要求后面3个数字一组，也就是\d{3}至少出现一次。</p>
+<p>此时可以使用量词+：</p>
+<pre><code class="language-javaScript">
+var result = &quot;12345678&quot;.replace(/(?=\d{3}+$)/g, &#39;,&#39;)
+console.log(result); 
+// =&gt; &quot;12345,678&quot;
+</code></pre>
+<h4 id="423-匹配其余案例">4.2.3 匹配其余案例</h4>
+<p>写完正则后，要多验证几个案例，此时我们会发现问题：</p>
+<pre><code class="language-javaScript">
+var result = &quot;123456789&quot;.replace(/(?=(\d{3})+$)/g, &#39;,&#39;)
+console.log(result); 
+// =&gt; &quot;,123,456,789&quot;
+</code></pre>
+<p>因为上面的正则，仅仅表示把从结尾向前数，一但是3的倍数，就把其前面的位置替换成逗号。因此才会出现这个问题。</p>
+<p>怎么解决呢？我们要求匹配的到这个位置不能是开头。</p>
+<p>我们知道匹配开头可以使用^，但要求这个位置不是开头怎么办？</p>
+<p>(?!^)，你想到了吗？测试如下：</p>
+<pre><code class="language-javaScript">
+var string1 = &quot;12345678&quot;,
+string2 = &quot;123456789&quot;;
+
+reg = /(?!^)(?=(\d{3})+$)/g;
+
+var result = string1.replace(reg, &#39;,&#39;)
+console.log(result); 
+// =&gt; &quot;12,345,678&quot;
+
+result = string2.replace(reg, &#39;,&#39;);
+console.log(result); 
+// =&gt; &quot;123,456,789&quot;
+</code></pre>
+<h4 id="424-支持其他形式">4.2.4 支持其他形式</h4>
+<p>如果要把&quot;12345678 123456789&quot;替换成&quot;12,345,678 123,456,789&quot;。</p>
+<p>此时我们需要修改正则，把里面的开头^和结尾$，替换成\b：</p>
+<pre><code class="language-javaScript">
+var string = &quot;12345678 123456789&quot;,
+reg = /(?!\b)(?=(\d{3})+\b)/g;
+
+var result = string.replace(reg, &#39;,&#39;)
+console.log(result); 
+// =&gt; &quot;12,345,678 123,456,789&quot;
+</code></pre>
+<h3 id="43-验证密码问题">4.3 验证密码问题</h3>
+<p>密码长度6-12位，由数字、小写字符和大写字母组成，但必须至少包括2种字符。</p>
+<p>此题，如果写成多个正则来判断，比较容易。但要写成一个正则就比较困难。</p>
+<p>那么，我们就来挑战一下。看看我们对位置的理解是否深刻。</p>
+<h4 id="431-简化">4.3.1 简化</h4>
+<p>不考虑“但必须至少包括2种字符”这一条件。我们可以容易写出：</p>
+<pre><code class="language-javaScript">
+var reg = /^[0-9A-Za-z]{6,12}$/;
+</code></pre>
+<h4 id="432-判断是否包含有某一种字符">4.3.2 判断是否包含有某一种字符</h4>
+<p>假设，要求的必须包含数字，怎么办？此时我们可以使用(?=.*[0-9])来做。<strong>也就是(?=.*[0-9])坐在位置的右边满足后续的匹配</strong></p>
+<p>因此正则变成：</p>
+<pre><code class="language-javaScript">var reg = /(?=.*[0-9])^[0-9A-Za-z]{6,12}$/;</code></pre>
+<h4 id="433-同时包含具体两种字符">4.3.3 同时包含具体两种字符</h4>
+<p>比如同时包含数字和小写字母，可以用(?=.*[0-9])(?=.*[a-z])来做。</p>
+<p>因此正则变成：</p>
+<pre><code class="language-javaScript">var reg = /(?=.*[0-9])(?=.*[a-z])^[0-9A-Za-z]{6,12}$/;</code></pre>
+<h4 id="434-解答">4.3.4 解答</h4>
+<p>我们可以把原题变成下列几种情况之一：</p>
+<p>同时包含数字和小写字母
+同时包含数字和大写字母
+同时包含小写字母和大写字母
+同时包含数字、小写字母和大写字母
+以上的4种情况是或的关系（实际上，可以不用第4条）。</p>
+<p>最终答案是：</p>
+<pre><code class="language-javaScript">
+var reg = /((?=.*[0-9])(?=.*[a-z])|(?=.*[0-9])(?=.*[A-Z])|(?=.*[a-z])(?=.*[A-Z]))^[0-9A-Za-z]{6,12}$/;
+console.log( reg.test(&quot;1234567&quot;) ); // false 全是数字
+console.log( reg.test(&quot;abcdef&quot;) ); // false 全是小写字母
+console.log( reg.test(&quot;ABCDEFGH&quot;) ); // false 全是大写字母
+console.log( reg.test(&quot;ab23C&quot;) ); // false 不足6位
+console.log( reg.test(&quot;ABCDEF234&quot;) ); // true 大写字母和数字
+console.log( reg.test(&quot;abcdEF234&quot;) ); // true 三者都有
+</code></pre>
+<h4 id="435-解惑">4.3.5 解惑</h4>
+<p>上面的正则看起来比较复杂，只要理解了第二步，其余就全部理解了。</p>
+<pre><code>/(?=.*[0-9])^[0-9A-Za-z]{6,12}$/</code></pre><p>对于这个正则，我们只需要弄明白(?=.*[0-9])^即可。</p>
+<p>分开来看就是(?=.*[0-9])和^。表示开头前面还有个位置（当然也是开头，即同一个位置，想想之前的空字符类比）。</p>
+<p>(?=.*[0-9])表示该位置后面的字符匹配.*[0-9]，即，有任何多个任意字符，后面再跟个数字。</p>
+<p>翻译成大白话，就是接下来的字符，必须包含个数字。</p>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

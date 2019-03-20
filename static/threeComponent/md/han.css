@@ -11,6 +11,7 @@
   --control-text-color: #666;
   --theme-main-color:#ff9900;
   --theme-main-color-2:#fba21b;
+  --theme-main-color-3:#fff5f5;
   --theme-logo-img-name:url("./img/snail_orange.png")
 }
 
@@ -669,4 +670,10 @@ h2{
 }
 h3{
   color:var(--theme-main-color-2);
+}
+
+code{
+  background-color:var(--theme-main-color-3);
+  color:var(--theme-main-color);
+  padding:.065em .4em;
 }
