@@ -37,8 +37,8 @@ console.log( string.match(regex) );
 
 比如，要匹配如下的字符串：
 
-> I love JavaScript<br>
-I love Regular Expression
+> - I love JavaScript
+- I love Regular Expression
 
 ```javaScript
 
@@ -151,9 +151,9 @@ console.log(result);
 还是以日期为例。
 比如要写一个正则支持匹配如下三种格式：
 
->   2016-06-12<br>
-2016/06/12<br>
-2016.06.12<br>
+> - 2016-06-12
+- 2016/06/12
+- 2016.06.12
 
 最先可能想到的正则是:
 
@@ -337,6 +337,6 @@ dasherize('ThisATom');
 
 ```
 
-
+---
 
 本文来自 JS正则表达式完整教程（略长）[https://juejin.im/post/5965943ff265da6c30653879]

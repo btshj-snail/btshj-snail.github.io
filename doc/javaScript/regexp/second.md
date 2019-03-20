@@ -341,5 +341,6 @@ console.log( reg.test("abcdEF234") ); // true 三者都有
 
 翻译成大白话，就是接下来的字符，必须包含个数字。
 
+---
 
 本文来自 JS正则表达式完整教程（略长）[https://juejin.im/post/5965943ff265da6c30653879]

@@ -122,7 +122,7 @@ console.log( string.match(regex) );
 
 
 
-
+---
 
 
 本文来自 JS正则表达式完整教程（略长）[https://juejin.im/post/5965943ff265da6c30653879]

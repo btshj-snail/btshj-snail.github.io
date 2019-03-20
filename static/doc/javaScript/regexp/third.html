@@ -58,8 +58,10 @@ console.log( string.match(regex) );
 <p>而在多选分支结构(p1|p2)中，此处括号的作用也是不言而喻的，提供了子表达式的所有可能。</p>
 <p>比如，要匹配如下的字符串：</p>
 <blockquote>
-<p>I love JavaScript<br>
-I love Regular Expression</p>
+<ul>
+<li>I love JavaScript</li>
+<li>I love Regular Expression</li>
+</ul>
 </blockquote>
 <pre><code class="language-javaScript">
 var regex = /^I love (JavaScript|Regular Expression)$/;
@@ -137,9 +139,11 @@ console.log(result);
 还是以日期为例。
 比如要写一个正则支持匹配如下三种格式：</p>
 <blockquote>
-<p>  2016-06-12<br>
-2016/06/12<br>
-2016.06.12<br></p>
+<ul>
+<li>2016-06-12</li>
+<li>2016/06/12</li>
+<li>2016.06.12</li>
+</ul>
 </blockquote>
 <p>最先可能想到的正则是:</p>
 <pre><code class="language-javaScript">
@@ -258,6 +262,7 @@ dasherize(&#39;ThisATom&#39;);
 <pre><code class="language-javaScript">
 /&lt;([^&gt;]).*?&gt;[\d\D]*?&lt;\/\1&gt;/.test(&#39;&lt;a id=&quot;a&quot; class=&quot;a&quot;&gt;&lt;/a&gt;&#39;)
 </code></pre>
+<hr>
 <p>本文来自 JS正则表达式完整教程（略长）[<a href="https://juejin.im/post/5965943ff265da6c30653879%5D">https://juejin.im/post/5965943ff265da6c30653879]</a></p>
 
 </div>
