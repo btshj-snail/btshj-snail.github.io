@@ -362,5 +362,264 @@ js数据类型分为两大类,基本类型和引用类型.基本类型包括(str
 
 当我们在程序中创建一个对象时，这个对象将被保存到运行时数据区中，以便反复利用（因为对象的创建成本开销较大），这个运行时数据区就是堆内存。堆内存中的对象不会随方法的结束而销毁，即使方法结束后，这个对象还可能被另一个引用变量所引用（方法的参数传递时很常见），则这个对象依然不会被销毁，只有当一个对象没有任何引用变量引用它时，系统的垃圾回收机制才会在核实的时候回收它。
 
+## 17. Javascript继承的几种方式
+
+- 构造继承
+
+核心：借用父类的构造函数来增强子类实例，等于是复制父类的实例属性给子类。
+
+优点：实例之间独立。
+
+创建子类实例，可以向父类构造函数传参数。
+
+子类实例不共享父类构造函数的引用属性。如arr属性
+
+缺点：
+
+父类的方法不能复用
+
+```javaScript
+
+function Parent(name) {
+    this.name = name; // 实例基本属性 (该属性，强调私有，不共享)
+     this.arr = [1]; // (该属性，强调私有)
+    this.say = function() { // 实例引用属性 (该属性，强调复用，需要共享)
+        console.log('hello')
+    }
+}
+function Child(name,like) {
+    Parent.call(this,name);  // 核心
+    this.like = like;
+}
+let boy1 = new Child('小红','apple');
+let boy2 = new Child('小明', 'orange ');
+
+// 优点1：可传参
+console.log(boy1.name, boy2.name); // 小红， 小明
+
+// 优点2：不共享父类构造函数的引用属性
+boy1.arr.push(2);
+console.log(boy1.arr,boy2.arr);// [1,2] [1]
+
+// 缺点1：方法不能复用
+console.log(boy1.say === boy2.say) // false (说明，boy1和boy2 
+的say方法是独立，不是共享的)
+
+// 缺点2：不能继承父类原型上的方法
+Parent.prototype.walk = function () {   // 在父类的原型对象上定义一个walk方法。
+    console.log('我会走路')
+}
+boy1.walk;  // undefined (说明实例，不能获得父类原型上的方法)
+
+```
 
 
+- 原型继承
+
+原型链继承
+
+核心：将父类实例作为子类原型
+
+优点：方法复用
+
+由于方法定义在父类的原型上，复用了父类构造函数的方法。比如say方法。
+
+缺点：
+
+创建子类实例的时候，不能传参数。
+
+子类实例共享了父类构造函数的引用属性，比如arr属性。
+
+```javaScript
+
+function Parent() {
+    this.name = '父亲'; // 实例基本属性 (该属性，强调私有，不共享)
+    this.arr = [1]; // (该属性，强调私有)
+}
+Parent.prototype.say = function() { // -- 将需要复用、共享的方法定义在父类原型上 
+    console.log('hello')
+}
+function Child(like) {
+    this.like = like;
+}
+Child.prototype = new Parent() // 核心
+
+let boy1 = new Child()
+let boy2 = new Child()
+
+// 优点：共享了父类构造函数的say方法
+console.log(boy1.say(), boy2.say(), boy1.say === boy2.say); // hello , hello , true
+
+// 缺点1：不能传参数
+// 缺点2：
+console.log(boy1.name, boy2.name, boy1.name===boy2.name); // 父亲，父亲，true
+
+boy1.arr.push(2); // 修改了boy1的arr属性，boy2的arr属性，也会变化，因为两个实例的原型上(Child.prototype)有了父类构造函数的实例属性arr；所以只要修改了boy1.arr,boy2.arr的属性也会变化。  ----  原型上的arr属性是共享的。
+console.log(boy2.arr); // [1,2]
+
+注意：修改boy1的name属性，是不会影响到boy2.name。因为name是基本属性，不是引用属性。
+
+```
+
+- 组合继承
+
+`核心`：通过调用父类构造函数，继承父类的属性并保留传参的优点；然后通过将父类实例作为子类原型，实现函数复用。
+
+`优点`：
+
+保留构造函数的优点：创建子类实例，可以向父类构造函数传参数。
+
+保留原型链的优点：父类的实例方法定义在父类的原型对象上，可以实现方法复用。
+
+不共享父类的引用属性。比如arr属性
+
+`缺点`：
+
+由于调用了2次父类的构造方法，会存在一份多余的父类实例属性，具体原因见文末。
+注意：'组合继承'这种方式，要记得修复Child.prototype.constructor指向
+
+
+> 第一次Parent.call(this);从父类拷贝一份父类实例属性，作为子类的实例属性，第二次Child.prototype = new Parent();创建父类实例作为子类原型，此时这个父类实例就又有了一份实例属性，但这份会被第一次拷贝来的实例属性屏蔽掉，所以多余。
+
+```javaScript
+
+function Parent(name) {
+    this.name = name; // 实例基本属性 (该属性，强调私有，不共享)
+    this.arr = [1]; // (该属性，强调私有)
+}
+Parent.prototype.say = function() { // --- 将需要复用、共享的方法定义在父类原型上 
+    console.log('hello')
+}
+function Child(name,like) {
+    Parent.call(this,name,like) // 核心   第二次
+    this.like = like;
+}
+Child.prototype = new Parent() // 核心   第一次
+
+<!--这里是修复构造函数指向的代码-->
+
+let boy1 = new Child('小红','apple')
+let boy2 = new Child('小明','orange')
+
+// 优点1：可以传参数
+console.log(boy1.name,boy1.like); // 小红，apple
+
+// 优点2：可复用父类原型上的方法
+console.log(boy1.say === boy2.say) // true
+
+// 优点3：不共享父类的引用属性，如arr属性
+boy1.arr.push(2)
+console.log(boy1.arr,boy2.arr); // [1,2] [1] 可以看出没有共享arr属性。
+
+//注意：为啥要修复构造函数的指向？
+console.log(boy1.constructor); // Parent 你会发现实例的构造函数居然是Parent。
+//而实际上，我们希望子类实例的构造函数是Child,所以要记得修复构造函数指向。修复如下
+Child.prototype.constructor = Child;
+
+```
+- 组合继承优化1
+
+`核心`：
+通过这种方式，砍掉父类的实例属性，这样在调用父类的构造函数的时候，就不会初始化两次实例，避免组合继承的缺点。
+
+`优点`：
+
+只调用一次父类构造函数。
+保留构造函数的优点：创建子类实例，可以向父类构造函数传参数。
+保留原型链的优点：父类的实例方法定义在父类的原型对象上，可以实现方法复用。
+
+`缺点`：
+
+修正构造函数的指向之后，父类实例的构造函数指向，同时也发生变化(这是我们不希望的)
+**注意：'组合继承优化1'这种方式，要记得修复Child.prototype.constructor指向**
+
+```javaScript
+
+function Parent(name) {
+    this.name = name; // 实例基本属性 (该属性，强调私有，不共享)
+    this.arr = [1]; // (该属性，强调私有)
+}
+Parent.prototype.say = function() { // --- 将需要复用、共享的方法定义在父类原型上 
+    console.log('hello')
+}
+function Child(name,like) {
+    Parent.call(this,name,like) // 核心  
+    this.like = like;
+}
+Child.prototype = Parent.prototype // 核心  子类原型和父类原型，实质上是同一个
+
+//这里是修复构造函数指向的代码
+
+let boy1 = new Child('小红','apple')
+let boy2 = new Child('小明','orange')
+let p1 = new Parent('小爸爸')
+
+// 优点1：可以传参数
+console.log(boy1.name,boy1.like); // 小红，apple
+// 优点2：
+console.log(boy1.say === boy2.say) // true
+
+// 缺点1：当修复子类构造函数的指向后，父类实例的构造函数指向也会跟着变了。
+//具体原因：因为是通过原型来实现继承的，Child.prototype的上面是没有constructor属性的，就会往上找，这样就找到了Parent.prototype上面的constructor属性；当你修改了子类实例的construtor属性，所有的constructor的指向都会发生变化。
+
+//没修复之前：console.log(boy1.constructor); // Parent
+//修复代码：Child.prototype.constructor = Child
+//修复之后：console.log(boy1.constructor); // Child
+ //         console.log(p1.constructor);// Child 这里就是存在的问题(我们希望是Parent)
+
+
+```
+
+- 组合继承优化2 又称 寄生组合继承 --- 完美方式
+
+```javaScript
+
+function Parent(name) {
+    this.name = name; // 实例基本属性 (该属性，强调私有，不共享)
+    this.arr = [1]; // (该属性，强调私有)
+}
+Parent.prototype.say = function() { // --- 将需要复用、共享的方法定义在父类原型上 
+    console.log('hello')
+}
+function Child(name,like) {
+    Parent.call(this,name,like) // 核心  
+    this.like = like;
+}
+Child.prototype = Object.create(Parent.prototype) // 核心  通过创建中间对象，子类原型和父类原型，就会隔离开。不是同一个啦，有效避免了方式4的缺点。
+
+//这里是修复构造函数指向的代码
+Child.prototype.constructor = Child
+
+let boy1 = new Child('小红','apple')
+let boy2 = new Child('小明','orange')
+let p1 = new Parent('小爸爸')
+
+
+//注意：这种方法也要修复构造函数的
+//修复代码：Child.prototype.constructor = Child
+//修复之后：console.log(boy1.constructor); // Child
+          //console.log(p1.constructor);// Parent  完美
+
+
+```
+
+## 18. undefined与null区别
+
+`null` 表示一个对象是“没有值”的值，也就是值为“空”；
+`undefined` 表示一个变量声明了没有初始化(赋值)；
+
+`undefined`不是一个有效的`JSON`，而`null`是；
+`undefined`的类型(typeof)是`undefined`；
+`null`的类型(typeof)是`object`；
+
+## 19. javascript 代码中的"use strict";
+
+use strict是一种ECMAscript 5 添加的（严格）运行模式,这种模式使得 Javascript 在更严格的条件下运行,
+
+ 使JS编码更加规范化的模式,消除Javascript语法的一些不合理、不严谨之处，减少一些怪异行为。
+ 默认支持的糟糕特性都会被禁用，比如不能用with，也不能在意外的情况下给全局变量赋值;
+ 全局变量的显示声明,函数必须声明在顶层，不允许在非函数代码块内声明函数,arguments.callee也不允许使用；
+ 消除代码运行的一些不安全之处，保证代码运行的安全,限制函数中的arguments修改，严格模式下的eval函数的行为和非严格模式的也不相同;
+
+ 提高编译器效率，增加运行速度；
+ 为未来新版本的Javascript标准化做铺垫。
