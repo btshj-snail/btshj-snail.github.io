@@ -1,4 +1,8 @@
-
+var __const_title = [
+    ["因依老宿发心初","半学修心半读书"],
+    ["所赖今天子","汉道日休明"],
+    ["江山代有才人出","各领风骚数百年"],
+];
 var menuOper = {
     getMenuData : function(){
         var dom_container = document.getElementById('mdContent');

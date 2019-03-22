@@ -12,7 +12,7 @@
   --theme-main-color:#ff9900;
   --theme-main-color-2:#fba21b;
   --theme-main-color-3:#fff5f5;
-  --theme-logo-img-name:url("./img/snail_orange.png")
+  --theme-logo-img-name:url("./img/snail_orange_border.png")
 }
 
 /* 防止用户自定义背景颜色对网页的影响，添加让用户可以自定义字体 */
