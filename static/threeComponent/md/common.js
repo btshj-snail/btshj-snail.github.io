@@ -1,8 +1,4 @@
-var __const_title = [
-    ["因依老宿发心初","半学修心半读书"],
-    ["所赖今天子","汉道日休明"],
-    ["江山代有才人出","各领风骚数百年"],
-];
+
 var menuOper = {
     getMenuData : function(){
         var dom_container = document.getElementById('mdContent');
@@ -39,8 +35,17 @@ var menuOper = {
         var dom_container = document.getElementById("verticalMenu");
         var dom_header = document.createElement('div');
         dom_header.className = 'vertical-menu-header';
-        dom_header.innerText = "目录"
         dom_container.appendChild(dom_header);
+
+        var prefix = document.createElement('p');
+        prefix.innerText = "纸上得来终觉浅,";
+        prefix.style.textIndent = "0em";
+        var suffix = document.createElement('p');
+        suffix.innerText = "绝知此事要躬行!";
+        suffix.style.textIndent = "5em";
+        dom_header.appendChild(prefix);
+        dom_header.appendChild(suffix);
+
     
         var dom_ul = document.createElement('ul');
         dom_ul.className = "vertical-menu-out"

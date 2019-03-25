@@ -10,9 +10,12 @@ ECMAScript 6.0（以下简称 ES6）是 JavaScript 语言的下一代标准，�
 
 ES6是javaScript语言的一次跨越，添加了许多新的语法特性。增加了js的易用性和灵活性。
 
+## 1. [let和const](./letAndConst.md)
 
-## 1. [属性名表达式](attrNameExpression.md)
+## 2. [变量的解构与赋值](./destructuring.md)
 
-## 2. [Set](set.md)
+## 2. [属性名表达式](attrNameExpression.md)
 
-## 3. [WeakSet](weakSet.md)
+## 3. [Set](set.md)
+
+## 4. [WeakSet](weakSet.md)
