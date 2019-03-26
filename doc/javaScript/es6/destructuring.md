@@ -65,3 +65,365 @@ let [x, y = 'b'] = ['a', undefined]; // x='a', y='b'
 
 ```
 
+注意，ES6 内部使用严格相等运算符`（===）`，判断一个位置是否有值。所以，只有当一个数组成员严格等于`undefined`，默认值才会生效。
+
+**如果默认值是一个表达式，那么这个表达式是惰性求值的，即只有在用到的时候，才会求值。**
+
+```javaScript
+
+function f() {
+  console.log('aaa');
+}
+
+let [x = f()] = [1];
+
+```
+
+默认值可以引用解构赋值的其他变量，但该变量必须已经声明。
+
+```javaScript
+
+let [x = 1, y = x] = [];     // x=1; y=1
+let [x = 1, y = x] = [2];    // x=2; y=2
+let [x = 1, y = x] = [1, 2]; // x=1; y=2
+let [x = y, y = 1] = [];     // ReferenceError: y is not defined
+
+```
+
+上面最后一个表达式之所以会报错，是因为x用y做默认值时，y还没有声明。
+
+## 对象的解构
+
+解构不仅可以用于数组，还可以用于对象。对象的解构与数组有一个重要的不同。数组的元素是按次序排列的，变量的取值由它的位置决定；而对象的属性没有次序，变量必须与属性同名，才能取到正确的值。
+
+```javaScript
+
+let { bar, foo } = { foo: "aaa", bar: "bbb" };
+foo // "aaa"
+bar // "bbb"
+
+let { baz } = { foo: "aaa", bar: "bbb" };
+baz // undefined
+
+```
+
+上面代码的第一个例子，等号左边的两个变量的次序，与等号右边两个同名属性的次序不一致，但是对取值完全没有影响。第二个例子的变量没有对应的同名属性，导致取不到值，最后等于undefined。如果变量名与属性名不一致，必须写成下面这样。
+
+```javaScript
+
+let { foo: baz } = { foo: 'aaa', bar: 'bbb' };
+baz // "aaa"
+
+let obj = { first: 'hello', last: 'world' };
+let { first: f, last: l } = obj;
+f // 'hello'
+l // 'world'
+
+```
+
+这实际上说明，对象的解构赋值的内部机制，是先找到同名属性，然后再赋给对应的变量。真正被赋值的是后者，而不是前者。
+
+```javaScript
+
+let { foo: baz } = { foo: "aaa", bar: "bbb" };
+baz // "aaa"
+foo // error: foo is not defined
+
+```
+上面代码中，`foo`是匹配的模式，`baz`才是变量。真正被赋值的是变量`baz`，而不是模式`foo`。
+
+与数组一样，解构也可以用于嵌套结构的对象。
+
+```javaScript
+let obj = {
+    p:[
+        'hello',{y:'world'}
+    ]
+}
+
+let {p:[h,o]} = obj;
+```
+
+如果解构模式是嵌套的对象，而且子对象所在的父属性不存在，那么将会报错。
+
+```javaScript
+
+// 报错
+let {foo: {bar}} = {baz: 'baz'};
+
+```
+如果要将一个已经声明的变量用于解构赋值，必须非常小心。上面代码的写法会报错，因为 JavaScript 引擎会将{x}理解成一个代码块，从而发生语法错误。只有不将大括号写在行首，避免 JavaScript 将其解释为代码块，才能解决这个问题。
+
+```javaScript
+
+// 错误的写法
+let x;
+{x} = {x: 1};
+// SyntaxError: syntax error
+
+
+let y;
+({y} = {x: 1});
+
+```
+由于数组本质是特殊的对象，因此可以对数组进行对象属性的解构。
+
+```javaScript
+
+let arr = [1, 2, 3];
+let {0 : first, [arr.length - 1] : last} = arr;
+first // 1
+last // 3
+
+```
+上面代码对数组进行对象解构。数组arr的0键对应的值是1，[arr.length - 1]就是2键，对应的值是3。方括号这种写法，属于“属性名表达式”（参见《[对象的扩展](./objExtend.md)》一章）。
+
+## 字符串的解构赋值
+
+字符串也可以解构赋值。这是因为此时，字符串被转换成了一个类似数组的对象。类似数组的对象都有一个length属性，因此还可以对这个属性解构赋值。
+
+```javaScript
+
+const [a, b, c, d, e] = 'hello';
+a // "h"
+b // "e"
+c // "l"
+d // "l"
+e // "o"
+
+let {length : len} = 'hello';
+len // 5
+
+```
+
+## 数值和布尔值的解构赋值
+
+解构赋值时，如果等号右边是数值和布尔值，则会先转为对象。
+
+```javaScript
+
+let {toString: s} = 123;
+s === Number.prototype.toString // true
+
+let {toString: s} = true;
+s === Boolean.prototype.toString // true
+
+let { prop: x } = undefined; // TypeError
+let { prop: y } = null; // TypeError
+```
+
+上面代码中，数值和布尔值的包装对象都有`toStrin`g属性，因此变量`s`都能取到值。解构赋值的规则是，只要等号右边的值不是对象或数组，就先将其转为对象。由于`undefined`和`null`无法转为对象，所以对它们进行解构赋值，都会报错。
+
+
+## 函数参数的解构赋值
+
+函数的参数也可以使用解构赋值。
+
+```javaScript
+
+
+function add([x, y]){
+  return x + y;
+}
+
+add([1, 2]); // 3
+
+```
+
+上面代码中，函数`add`的参数表面上是一个数组，但在传入参数的那一刻，数组参数就被解构成变量`x`和`y`。对于函数内部的代码来说，它们能感受到的参数就是`x`和`y`。
+
+```javaScript
+
+function move({x = 0, y = 0} = {}) {
+  return [x, y];
+}
+
+move({x: 3, y: 8}); // [3, 8]
+move({x: 3}); // [3, 0]
+move({}); // [0, 0]
+move(); // [0, 0]
+
+```
+
+上面代码中，函数move的参数是一个对象，通过对这个对象进行解构，得到变量x和y的值。如果解构失败，x和y等于默认值。
+
+注意，下面的写法会得到不一样的结果。
+```javaScript
+
+function move({x,y}={x:0,y:0}){
+    return [x,y];
+}
+move({x:3,y:8}) //[3,8]
+move({x:3}) //[3,undefined]
+move({})//[undefined,undefined]
+move() //[0,0]
+```
+
+上面代码是为函数move的参数指定默认值，而不是为变量x和y指定默认值，所以会得到与前一种写法不同的结果。
+
+## 圆括号问题
+
+解构赋值虽然很方便，但是解析起来并不容易。对于编译器来说，一个式子到底是模式，还是表达式，没有办法从一开始就知道，必须解析到（或解析不到）等号才能知道。由此带来的问题是，如果模式中出现圆括号怎么处理。ES6 的规则是，只要有可能导致解构的歧义，就不得使用圆括号。但是，这条规则实际上不那么容易辨别，处理起来相当麻烦。因此，建议只要有可能，就不要在模式中放置圆括号。
+
+### 不能使用圆括号的情况
+
+以下三种解构赋值不得使用圆括号。
+
+- (1). 变量声明语句
+
+```javaScript
+
+// 全部报错
+let [(a)] = [1];
+
+let {x: (c)} = {};
+let ({x: c}) = {};
+let {(x: c)} = {};
+let {(x): c} = {};
+
+let { o: ({ p: p }) } = { o: { p: 2 } };
+
+```
+上面 6 个语句都会报错，因为它们都是变量声明语句，模式不能使用圆括号。
+
+- (2). 函数参数
+
+函数参数也属于变量声明，因此不能带有圆括号。
+
+- (3). 赋值语句的模式部分
+
+```javaScript
+    // 全部报错
+    ({ p: a }) = { p: 42 };
+    ([a]) = [5];
+```
+
+上面代码将整个模式放在圆括号之中，导致报错。
+
+```javaScript
+    // 报错
+    [({ p: a }), { x: c }] = [{}, {}];
+```
+上面代码将一部分模式放在圆括号之中，导致报错。
+
+### 可以使用圆括号的情况
+
+***可以使用圆括号的情况只有一种：赋值语句的非模式部分，可以使用圆括号。***
+
+```javaScript
+
+[(b)] = [3]; // 正确
+({ p: (d) } = {}); // 正确
+[(parseInt.prop)] = [3]; // 正确
+
+```
+
+## 解构用途
+
+变量的解构赋值用途很多。
+
+- （1）交换变量的值
+
+```javaScript
+
+let x = 1;
+let y = 2;
+
+[x, y] = [y, x];
+
+```
+
+- （2）从函数返回多个值
+函数只能返回一个值，如果要返回多个值，只能将它们放在数组或对象里返回。有了解构赋值，取出这些值就非常方便。
+
+```javaScript
+
+// 返回一个数组
+
+function example() {
+  return [1, 2, 3];
+}
+let [a, b, c] = example();
+
+// 返回一个对象
+
+function example() {
+  return {
+    foo: 1,
+    bar: 2
+  };
+}
+let { foo, bar } = example();
+
+```
+
+- （3）函数参数的定义
+
+解构赋值可以方便地将一组参数与变量名对应起来。
+
+```javaScript
+
+// 参数是一组有次序的值
+function f([x, y, z]) { ... }
+f([1, 2, 3]);
+
+// 参数是一组无次序的值
+function f({x, y, z}) { ... }
+f({z: 3, y: 2, x: 1});
+
+```
+
+- （4）提取 JSON 数据
+
+ ```javaScript
+
+let jsonData = {
+  id: 42,
+  status: "OK",
+  data: [867, 5309]
+};
+
+let { id, status, data: number } = jsonData;
+
+console.log(id, status, number);
+
+ ```
+
+ - （5）函数参数的默认值
+
+ ```javaScript
+
+jQuery.ajax = function (url, {
+  async = true,
+  beforeSend = function () {},
+  cache = true,
+  complete = function () {},
+  crossDomain = false,
+  global = true,
+  // ... more config
+} = {}) {
+  // ... do stuff
+};
+
+ ```
+
+ 指定参数的默认值，就避免了在函数体内部再写`var foo = config.foo || 'default foo';`这样的语句。
+
+- （6）遍历 Map 结构
+
+任何部署了 `Iterator` 接口的对象，都可以用`for...of`循环遍历。`Map` 结构原生支持 `Iterator` 接口，配合变量的解构赋值，获取键名和键值就非常方便。
+
+```javaScript
+
+const map = new Map();
+map.set('first', 'hello');
+map.set('second', 'world');
+
+for (let [key, value] of map) {
+  console.log(key + " is " + value);
+}
+// first is hello
+// second is world
+
+
+```
