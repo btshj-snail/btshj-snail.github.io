@@ -139,23 +139,18 @@ console.log( today );
 <p>从上面可以看出用于正则操作的方法，共有6个，字符串实例4个，正则实例2个：</p>
 <blockquote>
 <ul>
-<li>String#search</li>
+<li>String#search<ul>
+<li>String#split</li>
+<li>String#match</li>
+<li>String#replace</li>
+<li>RegExp#test</li>
+<li>RegExp#exec</li>
+</ul>
+</li>
 </ul>
 </blockquote>
-<ul>
-<li><p>String#split</p>
-</li>
-<li><p>String#match</p>
-</li>
-<li><p>String#replace</p>
-</li>
-<li><p>RegExp#test</p>
-</li>
-<li><p>RegExp#exec</p>
-<p>本文不打算详细地讲解它们的方方面面细节，具体可以参考《JavaScript权威指南》的第三部分。本文重点列出一些容易忽视的地方，以飨读者。</p>
+<p> 本文不打算详细地讲解它们的方方面面细节，具体可以参考《JavaScript权威指南》的第三部分。本文重点列出一些容易忽视的地方，以飨读者。</p>
 <h3 id="21-search和match的参数问题">2.1 search和match的参数问题</h3>
-</li>
-</ul>
 <p>我们知道字符串实例的那4个方法参数都支持正则和字符串。</p>
 <p>但search和match，会把字符串转换为正则的。</p>
 <pre><code class="language-javaScript">
@@ -253,6 +248,128 @@ console.log( regex.test(&quot;ababc&quot;), regex.lastIndex );
 // =&gt; true 0
 // =&gt; true 0
 
+</code></pre>
+<h3 id="25-test整体匹配时需要使用和">2.5 test整体匹配时需要使用^和$</h3>
+<p>这个相对容易理解，因为<code>test</code>是看目标字符串中是否有子串匹配正则，即有部分匹配即可。</p>
+<p>如果，要整体匹配，正则前后需要添加开头和结尾：</p>
+<pre><code class="language-javaScript">
+console.log( /123/.test(&quot;a123b&quot;) );
+// =&gt; true
+console.log( /^123$/.test(&quot;a123b&quot;) );
+// =&gt; false
+console.log( /^123$/.test(&quot;123&quot;) );
+// =&gt; true
+</code></pre>
+<h3 id="26-split相关注意事项">2.6 split相关注意事项</h3>
+<p>split方法看起来不起眼，但要注意的地方有两个的。</p>
+<p>第一，它可以有第二个参数，表示结果数组的最大长度：</p>
+<pre><code class="language-javaScript">
+var string = &quot;html,css,javascript&quot;;
+console.log( string.split(/,/, 2) );
+// =&gt;[&quot;html&quot;, &quot;css&quot;]
+</code></pre>
+<p>第二，正则使用分组时，结果数组中是包含分隔符的：</p>
+<pre><code class="language-javaScript">
+var string = &quot;html,css,javascript&quot;;
+console.log( string.split(/(,)/) );
+// =&gt;[&quot;html&quot;, &quot;,&quot;, &quot;css&quot;, &quot;,&quot;, &quot;javascript&quot;]
+</code></pre>
+<h3 id="27-replace是很强大的">2.7 replace是很强大的</h3>
+<p>总体来说<code>replace</code>有两种使用形式，这是因为它的第二个参数，可以是字符串，也可以是函数。</p>
+<p>当第二个参数是字符串时，如下的字符有特殊的含义：</p>
+<blockquote>
+<ul>
+<li>$1,$2,...,$99 匹配第1~99个分组里捕获的文本</li>
+<li>$&amp; 匹配到的子串文本</li>
+<li>$` 匹配到的子串的左边文本 </li>
+<li>$&#39; 匹配到的子串的右边文本</li>
+<li>$$ 美元符号</li>
+</ul>
+</blockquote>
+<p>例如，把&quot;2,3,5&quot;，变成&quot;5=2+3&quot;：</p>
+<pre><code class="language-javaScript">
+var result = &quot;2,3,5&quot;.replace(/(\d+),(\d+),(\d+)/, &quot;$3=$1+$2&quot;);
+console.log(result);
+</code></pre>
+<p>又例如，把&quot;2,3,5&quot;，变成&quot;222,333,555&quot;:</p>
+<pre><code class="language-javaScript">
+var result = &quot;2,3,5&quot;.replace(/(\d+)/g, &quot;$&amp;$&amp;$&amp;&quot;);
+console.log(result);
+// =&gt; &quot;222,333,555&quot;
+</code></pre>
+<p>当第二个参数是函数时，我们需要注意该回调函数的参数具体是什么：</p>
+<pre><code class="language-javaScript">
+&quot;1234 2345 3456&quot;.replace(/(\d)\d{2}(\d)/g, function(match, $1, $2, index, input) {
+    console.log([match, $1, $2, index, input]);
+});
+// =&gt; [&quot;1234&quot;, &quot;1&quot;, &quot;4&quot;, 0, &quot;1234 2345 3456&quot;]
+// =&gt; [&quot;2345&quot;, &quot;2&quot;, &quot;5&quot;, 5, &quot;1234 2345 3456&quot;]
+// =&gt; [&quot;3456&quot;, &quot;3&quot;, &quot;6&quot;, 10, &quot;1234 2345 3456&quot;]
+</code></pre>
+<h3 id="28-使用构造函数需要注意的问题">2.8 使用构造函数需要注意的问题</h3>
+<p>一般不推荐使用构造函数生成正则，而应该优先使用字面量。因为用构造函数会多写很多<code>\</code>。</p>
+<pre><code class="language-javaScript">
+var string = &quot;2017-06-27 2017.06.27 2017/06/27&quot;;
+var regex = /\d{4}(-|\.|\/)\d{2}\1\d{2}/g;
+console.log( string.match(regex) );
+// =&gt; [&quot;2017-06-27&quot;, &quot;2017.06.27&quot;, &quot;2017/06/27&quot;]
+
+regex = new RegExp(&quot;\\d{4}(-|\\.|\\/)\\d{2}\\1\\d{2}&quot;, &quot;g&quot;);
+console.log( string.match(regex) );
+// =&gt; [&quot;2017-06-27&quot;, &quot;2017.06.27&quot;, &quot;2017/06/27&quot;]
+</code></pre>
+<h3 id="29-修饰符">2.9 修饰符</h3>
+<p>ES5中修饰符，共3个：</p>
+<ul>
+<li><strong>g</strong> 全局匹配，即找到所有匹配的，单词是global</li>
+<li><strong>i</strong> 忽略字母大小写，单词ingoreCase</li>
+<li><strong>m</strong> 多行匹配，只影响^和$，二者变成行的概念，即行开头和行结尾。单词是multiline</li>
+</ul>
+<h3 id="210-source属性">2.10 source属性</h3>
+<p>正则实例对象属性，除了global、ingnoreCase、multiline、lastIndex属性之外，还有一个source属性。</p>
+<p>它什么时候有用呢？</p>
+<p>比如，在构建动态的正则表达式时，可以通过查看该属性，来确认构建出的正则到底是什么：</p>
+<pre><code class="language-javaScript">
+var className = &quot;high&quot;;
+var regex = new RegExp(&quot;(^|\\s)&quot; + className + &quot;(\\s|$)&quot;);
+console.log( regex.source )
+// =&gt; (^|\s)high(\s|$) 即字符串&quot;(^|\\s)high(\\s|$)&quot;
+</code></pre>
+<h3 id="211-构造函数属性">2.11 构造函数属性</h3>
+<p>构造函数的静态属性基于所执行的最近一次正则操作而变化。除了是$1,...,$9之外，还有几个不太常用的属性（有兼容性问题）：</p>
+<blockquote>
+<ul>
+<li>RegExp.input 最近一次目标字符串，简写成RegExp[&quot;$_&quot;]</li>
+<li>RegExp.lastMatch 最近一次匹配的文本，简写成RegExp[&quot;$&amp;&quot;]</li>
+<li>RegExp.lastParen 最近一次捕获的文本，简写成RegExp[&quot;$+&quot;]</li>
+<li>RegExp.leftContext 目标字符串中lastMatch之前的文本，简写成RegExp[&quot;$`&quot;]</li>
+<li>RegExp.rightContext 目标字符串中lastMatch之后的文本，简写成RegExp[&quot;$&#39;&quot;]</li>
+</ul>
+</blockquote>
+<p>测试代码如下:</p>
+<pre><code class="language-javaScript">var regex = /([abc])(\d)/g;
+var string = &quot;a1b2c3d4e5&quot;;
+string.match(regex);
+
+console.log( RegExp.input );
+console.log( RegExp[&quot;$_&quot;]);
+// =&gt; &quot;a1b2c3d4e5&quot;
+
+console.log( RegExp.lastMatch );
+console.log( RegExp[&quot;$&amp;&quot;] );
+// =&gt; &quot;c3&quot;
+
+console.log( RegExp.lastParen );
+console.log( RegExp[&quot;$+&quot;] );
+// =&gt; &quot;3&quot;
+
+console.log( RegExp.leftContext );
+console.log( RegExp[&quot;$`&quot;] );
+// =&gt; &quot;a1b2&quot;
+
+console.log( RegExp.rightContext );
+console.log( RegExp[&quot;$&#39;&quot;] );
+// =&gt; &quot;d4e5&quot;
 </code></pre>
 
 </div>

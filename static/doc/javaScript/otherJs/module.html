@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>snail的技术笔记</title>
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="Shortcut Icon" href="/favicon.ico"  type="image/x-icon" /> 
+    <link rel="Bookmark" href="/favicon.ico" type="image/x-icon" /> 
+
+
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="js的模块化">JS的模块化</h1>
+<p>没有模块化的缺点:</p>
+<ol>
+<li>全局变量污染.不同开发都有可能定义全局变量,但谁又知道呢,谁又能保证不覆盖别人的,不被别人覆盖呢</li>
+<li>模块化会将有具有相同功能特性的业务,处理函数等聚集在一起.这样别人在做的时候,就不用再次开发这些.加强协同能力.</li>
+<li>解决文件依赖问题.以前文件的依赖全靠script标签的书写顺序,文件多了,难记,易错.现在每个模块的依赖由自己管理,这样就不会弄错了.</li>
+</ol>
+<h2 id="简单的模块化">简单的模块化</h2>
+<p>最原始的模块化实现:</p>
+<pre><code class="language-javaScript">
+var module = (function(){
+    var inner = 1;
+    var add = function(){
+        inner++;
+    }
+    return {
+        add:add
+    }
+})()
+</code></pre>
+<p>这样在自执行函数中定义的变量就都是私有函数了.外部只能访问模块暴露出来的方法了.</p>
+<p>如果想横向扩展这个模块呢,也就是在其他地方为这个模块加些方法呢..可以这样</p>
+<pre><code class="language-javaScript">
+var module = (function(_module){
+    var inner = 1;
+    _module.open = function(){
+        console.log(&#39;open&#39;)
+    }
+    return _module;
+})(module)
+</code></pre>
+<p>浏览器环境中，模块的各个部分通常都是从网上获取的，有时无法知道哪个部分会先加载。如果采用上一节的写法，第一个执行的部分有可能加载一个不存在空对象，这时就要采用&quot;宽放大模式&quot;。</p>
+<pre><code class="language-javaScript">
+var module = (function(_module){
+    var inner = 1;
+    _module.open = function(){
+        console.log(&#39;open&#39;)
+    }
+    return _module;
+})(module||{})
+</code></pre>
+<h2 id="commnjs">commn.js</h2>
+<p>2009年Node.js横空出世，将JavaScript带到了服务器端领域。而对于服务器端来说，没有模块化那可是不行的。因此CommonJs社区的大牛们开始发力了，制定了一个与社区同名的关于模块化的规范——CommonJs。它的规范主要如下：</p>
+<ol>
+<li>模块的标识应遵循的规则（书写规范）。</li>
+<li>定义全局函数require，通过传入模块标识来引入其他模块，执行的结果即为别的模块暴露出来的API。</li>
+<li>如果被require函数引入的模块中也包含依赖，那么依次加载这些依赖。</li>
+<li>如果引入模块失败，那么require函数应该报一个异常。</li>
+<li>模块通过变量exports来向外暴露API，exports只能是一个对象，暴露的API须作为此对象的属性。</li>
+</ol>
+<p>CommonJs看起来是一个很不错的选择，拥有模块化所需要的严格的入口和出口，看起来一切都很美好，但它的一个特性却决定了它只能在服务器端大规模使用，而在浏览器端发挥不了太大的作用，那就是同步！这在服务器端不是什么问题，但放在浏览器端就出现问题了，因为文件都放在服务器上，如果网速不够快的话，前面的文件如果没有加载完成，浏览器就会失去响应！因此为了在浏览器上也实现模块化得来个异步的模块化才行！根据这个需求，我们的下一位主角——AMD就产生了！</p>
+<h2 id="amd">AMD</h2>
+<p>AMD是异步模块化的规范,而require.js则是其的一个使用较多的实现.</p>
+<ol>
+<li>用全局函数define来定义模块;</li>
+<li>id为模块标识，遵从CommonJS Module Identifiers规范</li>
+<li>dependencies为依赖的模块数组，在factory中需传入形参与之一一对应</li>
+<li>如果dependencies的值中有&quot;require&quot;、&quot;exports&quot;或&quot;module&quot;，则与commonjs中的实现保持一致</li>
+<li>如果dependencies省略不写，则默认为[&quot;require&quot;, &quot;exports&quot;, &quot;module&quot;]，factory中也会默认传入require,exports,module</li>
+<li>如果factory为函数，模块对外暴漏API的方法有三种：return任意类型的数据、exports.xxx=xxx、module.exports=xxx</li>
+<li>如果factory为对象，则该对象即为模块的返回值</li>
+</ol>
+<p>AMD虽然是异步,但是也只是意味着浏览器不出现&quot;假死&quot;状态.反而AMD在加载之初,就会要求加载完所有的依赖,才会执行内部程序.这样在第一次加载的时候就会显的特别慢. 那么这样就出现了CMD模式.</p>
+<h2 id="cmd">CMD</h2>
+<p>CMD的全称是Common Module Definition，即通用模块定义。它是由蚂蚁金服的前端大佬——玉伯提出来的，实现的JavaScript库为sea.js。它和AMD的require.js很像，但加载方式不同，它是按需就近加载的，而不是在模块的开始全部加载完成。它有以下两大核心特点：</p>
+<ol>
+<li>简单友好的模块定义规范：Sea.js 遵循 CMD 规范，可以像 Node.js 一般书写模块代码。</li>
+<li>自然直观的代码组织方式：依赖的自动加载、配置的简洁清晰，可以让我们更多地享受编码的乐趣。</li>
+</ol>
+<p>在CMD规范中，一个文件就是一个模块，代码书写的格式是这样的</p>
+<pre><code class="language-javaScript">
+define(factory);
+</code></pre>
+<p>当factory为函数时，表示模块的构造方法，执行该方法，可以得到该模块对外提供的factory接口，factory 方法在执行时，默认会传入三个参数：require、exports 和 module：</p>
+<pre><code class="language-javaScript">
+// 所有模块都通过 define 来定义
+define(function(require, exports, module) {
+
+  // 通过 require 引入依赖
+  var $ = require(&#39;jquery&#39;);
+  var Spinning = require(&#39;./spinning&#39;);
+
+  // 通过 exports 对外提供接口
+  exports.doSomething = ...
+
+  // 或者通过 module.exports 提供整个接口
+  module.exports = ...
+
+});
+</code></pre>
+<p>它与AMD的具体区别其实我们也可以通过代码来表现出来，AMD需要在模块开始前就将依赖的模块加载出来，即依赖前置；而CMD则对模块按需加载，即依赖就近，只有在需要依赖该模块的时候再require就行了：</p>
+<pre><code class="language-javaScript">
+// AMD规范
+define([&#39;./a&#39;, &#39;./b&#39;], function(a, b) {  // 依赖必须一开始就写好  
+   a.doSomething()    
+   // 此处略去 100 行    
+   b.doSomething()    
+   ...
+});
+// CMD规范
+define(function(require, exports, module) {
+   var a = require(&#39;./a&#39;)   
+   a.doSomething()   
+   // 此处略去 100 行   
+   var b = require(&#39;./b&#39;) 
+   // 依赖可以就近书写   
+   b.doSomething()
+   // ... 
+});
+</code></pre>
+<p>从运行速度的角度来讲，AMD虽然在第一次使用时较慢，但在后面再访问时速度会很快；而CMD第一次加载会相对快点，但后面的加载都是重新加载新的模块，所以速度会慢点。总的来说,
+require.js的做法是并行加载所有依赖的模块, 等完成解析后, 再开始执行其他代码, 因此执行结果只会&quot;停顿&quot;1次, 而Sea.js在完成整个过程时则是每次需要相应模块都需要进行加载，这期间会停顿是多次的，因此require.js从整体而言相对会比Sea.js要快一些。</p>
+<hr>
+<p>参考:</p>
+<ol>
+<li><a href="https://www.jianshu.com/p/3fbaa3ae70e6/">简述JavaScript模块化编程</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2012/10/javascript_module.html">Javascript模块化编程（一）：模块的写法</a></li>
+</ol>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>
