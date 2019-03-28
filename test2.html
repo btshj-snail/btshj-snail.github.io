@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="Bookmark" href="/favicon.ico" type="image/x-icon" />
+    <title>Title</title>
+    <script src="./static/threeComponent/jquery-3.2.1.min.js"></script>
+    <style>
+    
+    </style>
+
+</head>
+
+<body>
+    <select name="selectDom">
+    </select>
+    <button id="button">click me</button>
+    <script>
+        $("[name='selectDom']").append('<option value="1">one</option>')
+        $("[name='selectDom']").append('<option value="2">two</option>')
+        $("#button").click(function(){
+            console.log($("[name='selectDom']").serialize())
+            console.log($("[name='selectDom']").val())
+        })
+        
+    </script>
+</body>
+
+</html>
