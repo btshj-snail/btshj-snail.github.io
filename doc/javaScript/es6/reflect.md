@@ -33,3 +33,68 @@ var loggedObj = new Proxy(obj, {
 
 
 ## 2. 静态方法
+
+Reflect对象一共有 13 个静态方法。
+
+- Reflect.apply(target, thisArg, args)
+- Reflect.construct(target, args)
+- Reflect.get(target, name, receiver)
+
+`Reflect.get`方法查找并返回`target`对象的`name`属性，如果没有该属性，则返回`undefined`。如果`name`属性部署了读取函数（`getter`），则读取函数的`this`绑定`receiver`。如果第一个参数不是对象，`Reflect.get`方法会报错。
+
+- Reflect.set(target, name, value, receiver)
+`Reflect.set`方法设置`target`对象的`name`属性等于`value`。
+
+
+- Reflect.defineProperty(target, name, desc)
+- Reflect.deleteProperty(target, name)
+- Reflect.has(target, name)
+- Reflect.ownKeys(target)
+- Reflect.isExtensible(target)
+- Reflect.preventExtensions(target)
+- Reflect.getOwnPropertyDescriptor(target, name)
+- Reflect.getPrototypeOf(target)
+- Reflect.setPrototypeOf(target, prototype)
+
+
+## 3. 实例：使用 Proxy 实现观察者模式 
+
+观察者模式（`Observer mode`）指的是函数自动观察数据对象，一旦对象有变化，函数就会自动执行。
+
+```javaScript
+
+const person = observable({
+  name: '张三',
+  age: 20
+});
+
+function print() {
+  console.log(`${person.name}, ${person.age}`)
+}
+
+observe(print);
+person.name = '李四';
+// 输出
+// 李四, 20
+
+```
+
+上面代码中，数据对象`person`是观察目标，函数`print`是观察者。一旦数据对象发生变化，`print`就会自动执行。
+
+下面，使用 `Proxy` 写一个观察者模式的最简单实现，即实现`observable`和`observe`这两个函数。思路是`observable`函数返回一个原始对象的 `Proxy` 代理，拦截赋值操作，触发充当观察者的各个函数。
+
+```javaScript
+
+let queuedObservers = new Set();
+
+let observer = fn => queuedObServer.add(fn);
+let observeable = obj => new Proxy(obj,{set});
+
+function set(target,propKey,propValue,receiver){
+    const result = Reflect.set(target,paropKey,propValue,receiver);
+    queuedObservers.forEach(observer => observer());
+    return result;
+}
+
+
+```
