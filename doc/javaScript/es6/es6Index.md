@@ -14,8 +14,38 @@ ES6是javaScript语言的一次跨越，添加了许多新的语法特性。增�
 
 ## 2. [变量的解构与赋值](./destructuring.md)
 
-## 2. [属性名表达式](attrNameExpression.md)
+## 3. [字符串扩展](./extendsString.md)
 
-## 3. [Set](set.md)
+## 4. [数值扩展](./extendsNumber.md)
 
-## 4. [WeakSet](weakSet.md)
+## 5. [函数扩展](./extendsFunction.md)
+
+## 6. [数组扩展](./extendsArray.md)
+
+## 7. [对象扩展](./extendsObject.md)
+
+## 8. [对象新增方法](./addObjectFun.md)
+
+## 9. [Symbol](./symbol.md)
+
+## 10. [Set和Map数据结构](./setAndMap.md)
+
+## 11. [Proxy](./proxy.md)
+
+## 12. [Reflect](./reflect.md)
+
+## 13. [Promise](./promise.md)
+
+## 14. [Iterator](./iterator.md)
+
+## 15. [Generator](./generator.md)
+
+## 16. [Async](./async.md)
+
+## 17. [Class](./class.md)
+
+## 18. [属性名表达式](attrNameExpression.md)
+
+## 19. [Set](set.md)
+
+## 20. [WeakSet](weakSet.md)

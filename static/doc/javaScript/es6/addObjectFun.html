@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>snail的技术笔记</title>
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="Shortcut Icon" href="/favicon.ico"  type="image/x-icon" /> 
+    <link rel="Bookmark" href="/favicon.ico" type="image/x-icon" /> 
+
+
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="对象新增的方法">对象新增的方法</h1>
+<h2 id="1-objectis">1. Object.is()</h2>
+<p>ES5 比较两个值是否相等，只有两个运算符：相等运算符（<code>==</code>）和严格相等运算符（<code>===</code>）。它们都有缺点，<strong>前者会自动转换数据类型</strong>，后者的<code>NaN</code>不等于自身，以及<code>+0</code>等于<code>-0</code>。JavaScript 缺乏一种运算，在所有环境中，只要两个值是一样的，它们就应该相等。</p>
+<p>ES6 提出“Same-value equality”（<strong>同值相等</strong>）算法，用来解决这个问题。Object.is就是部署这个算法的新方法。它用来比较两个值是否严格相等，与严格比较运算符（===）的行为基本一致。</p>
+<pre><code class="language-javaScript">
+Object.is(&#39;foo&#39;, &#39;foo&#39;)
+// true
+Object.is({}, {})
+// false
+
+Object.is(+0,-0); //false
+
+Object.is(NaN,NaN);//true
+</code></pre>
+<p>ES5 可以通过下面的代码，部署Object.is。</p>
+<pre><code class="language-javaScript">
+Object.defineProperty(Object,&#39;is&#39;,{
+    value:function(x,y){
+        if(x===y){
+            return x!==0 || 1/x === 1/y
+        }
+        return x!==x &amp;&amp; y!==y;
+    },
+    configurable:true,
+    enumerable:false,
+    writable:true,
+})
+
+</code></pre>
+<h2 id="2-objectassign">2. Object.assign()</h2>
+<p><code>Object.assign</code>方法用于对象的合并，将源对象（source）的所有<strong>可枚举属性</strong>，复制到目标对象（target）。<code>Object.assign</code>方法的第一个参数是目标对象，后面的参数都是源对象。注意，如果目标对象与源对象有同名属性，或多个源对象有同名属性，则后面的属性会覆盖前面的属性。
+如果只有一个参数，Object.assign会直接返回该参数。如果该参数不是对象，则会先转成对象，然后返回.由于<code>undefined</code>和<code>null</code>无法转成对象，所以如果它们作为参数，就会报错。</p>
+<pre><code class="language-javaScript">
+const obj = {a: 1};
+Object.assign(obj) === obj // true
+</code></pre>
+<p>如果非对象参数出现在源对象的位置（即非首参数），那么处理规则有所不同。首先，这些参数都会转成对象，如果无法转成对象，就会跳过。这意味着，如果<code>undefined</code>和<code>null</code>不在首参数，就不会报错。</p>
+<p>其他类型的值（即数值、字符串和布尔值）不在首参数，也不会报错。但是，除了字符串会以数组形式，拷贝入目标对象，其他值都不会产生效果。其他类型的值（即数值、字符串和布尔值）不在首参数，也不会报错。但是，除了字符串会以数组形式，拷贝入目标对象，其他值都不会产生效果。</p>
+<p><code>Object.assign</code>拷贝的属性是有限制的，只拷贝源对象的<strong>自身属性</strong>（不拷贝继承属性），也<strong>不拷贝不可枚举的属性</strong>（enumerable: false）。</p>
+<p>注意点:</p>
+<ul>
+<li>浅拷贝</li>
+</ul>
+<p><code>Object.assign</code>方法实行的是浅拷贝，而不是深拷贝。也就是说，如果源对象某个属性的值是对象，那么目标对象拷贝得到的是这个对象的引用。</p>
+<ul>
+<li>同名属性的替换</li>
+</ul>
+<p>对于这种嵌套的对象，一旦遇到同名属性，<code>Object.assign</code>的处理方法是替换，而不是添加。</p>
+<ul>
+<li>数组的处理</li>
+</ul>
+<p><code>Object.assign</code>可以用来处理数组，但是会把数组视为对象。</p>
+<pre><code class="language-javaScript">
+Object.assign([1, 2, 3], [4, 5])
+// [4, 5, 3]
+</code></pre>
+<ul>
+<li>取值函数的处理</li>
+</ul>
+<p><code>Object.assign</code>只能进行值的复制，如果要复制的值是一个取值函数，那么将求值后再复制。</p>
+<pre><code class="language-javaScript">
+const source = {
+  get foo() { return 1 }
+};
+const target = {};
+
+Object.assign(target, source)
+// { foo: 1 }
+</code></pre>
+<p>常见用途</p>
+<ul>
+<li><p>为对象添加属性</p>
+<pre><code class="language-javaScript">class Point {
+  constructor(x, y) {
+      Object.assign(this, {x, y});
+  }
+}</code></pre>
+</li>
+<li><p>为对象添加方法</p>
+</li>
+</ul>
+<pre><code class="language-javaScript">
+Object.assign(SomeClass.prototype, {
+  someMethod(arg1, arg2) {
+    ···
+  },
+  anotherMethod() {
+    ···
+  }
+});
+
+// 等同于下面的写法
+SomeClass.prototype.someMethod = function (arg1, arg2) {
+  ···
+};
+SomeClass.prototype.anotherMethod = function () {
+  ···
+};
+
+</code></pre>
+<ul>
+<li>克隆对象</li>
+</ul>
+<pre><code class="language-javaScript">function clone(origin) {
+  return Object.assign({}, origin);
+}</code></pre>
+<p>不过，采用这种方法克隆，只能克隆原始对象自身的值，不能克隆它继承的值。如果想要保持继承链，可以采用下面的代码。</p>
+<pre><code class="language-javaScript">
+function clone(origin){
+    let origin_proto = Object.getPrototypeOf(origin);
+    return Object.assign(Object.create(origin_proto),origin);
+}
+</code></pre>
+<ul>
+<li><p>合并多个对象</p>
+</li>
+<li><p>为属性指定默认值</p>
+</li>
+</ul>
+<h2 id="3-objectgetownpropertydescriptors">3. Object.getOwnPropertyDescriptors()</h2>
+<p>ES5 的<code>Object.getOwnPropertyDescriptor()</code>方法会返回某个对象属性的描述对象（descriptor）。ES2017 引入了<code>Object.getOwnPropertyDescriptors()</code>方法，返回指定对象所有自身属性（非继承属性）的描述对象。该方法的引入目的，主要是为了解决<code>Object.assign()</code>无法正确拷贝<code>get</code>属性和<code>set</code>属性的问题。</p>
+<pre><code class="language-javaScript">
+const source = {
+  set foo(value) {
+    console.log(value);
+  }
+};
+
+const target1 = {};
+Object.assign(target1, source);
+
+Object.getOwnPropertyDescriptor(target1, &#39;foo&#39;)
+// { value: undefined,
+//   writable: true,
+//   enumerable: true,
+//   configurable: true }
+</code></pre>
+<p>上面代码中，<code>source</code>对象的<code>foo</code>属性的值是一个赋值函数，<code>Object.assign</code>方法将这个属性拷贝给<code>target1</code>对象，结果该属性的值变成了<code>undefined</code>。这是因为<code>Object.assign</code>方法总是拷贝一个属性的值，而不会拷贝它背后的赋值方法或取值方法。</p>
+<p>这时，<code>Object.getOwnPropertyDescriptors</code>()方法配合<code>Object.defineProperties()</code>方法，就可以实现正确拷贝。</p>
+<pre><code class="language-javaScript">
+const source = {
+  set foo(value) {
+    console.log(value);
+  }
+};
+
+const target2 = {};
+Object.defineProperties(target2, Object.getOwnPropertyDescriptors(source));
+Object.getOwnPropertyDescriptor(target2, &#39;foo&#39;)
+// { get: undefined,
+//   set: [Function: set foo],
+//   enumerable: true,
+//   configurable: true }
+
+</code></pre>
+<h2 id="4-proto属性，objectsetprototypeof，objectgetprototypeof">4. <strong>proto</strong>属性，Object.setPrototypeOf()，Object.getPrototypeOf()</h2>
+<p>JavaScript 语言的对象继承是通过原型链实现的。ES6 提供了更多原型对象的操作方法。</p>
+<ul>
+<li><strong>proto</strong>属性
+<code>__proto__</code>属性（前后各两个下划线），用来读取或设置当前对象的<code>prototype</code>对象。目前，所有浏览器（包括 IE11）都部署了这个属性。</li>
+</ul>
+<pre><code class="language-javaScript">
+// es5 的写法
+const obj = {
+  method: function() { ... }
+};
+obj.__proto__ = someOtherObj;
+
+// es6 的写法
+var obj = Object.create(someOtherObj);
+obj.method = function() { ... };
+</code></pre>
+<p>该属性没有写入 ES6 的正文，而是写入了附录，原因是<code>__proto__</code>前后的双下划线，说明它本质上是一个内部属性，而不是一个正式的对外的 API，只是由于浏览器广泛支持，才被加入了 ES6。标准明确规定，只有浏览器必须部署这个属性，其他运行环境不一定需要部署，而且新的代码最好认为这个属性是不存在的。因此，无论从语义的角度，还是从兼容性的角度，都不要使用这个属性，而是使用下面的<code>Object.setPrototypeOf()</code>（写操作）、<code>Object.getPrototypeOf()</code>（读操作）、<code>Object.create()</code>（生成操作）代替。</p>
+<p>实现上，<code>__proto__</code>调用的是<code>Object.prototype.__proto__</code>，具体实现如下。</p>
+<pre><code class="language-javaScript">
+Object.defineProperty(Object.prototype, &#39;__proto__&#39;, {
+  get() {
+    let _thisObj = Object(this);
+    return Object.getPrototypeOf(_thisObj);
+  },
+  set(proto) {
+    if (this === undefined || this === null) {
+      throw new TypeError();
+    }
+    if (!isObject(this)) {
+      return undefined;
+    }
+    if (!isObject(proto)) {
+      return undefined;
+    }
+    let status = Reflect.setPrototypeOf(this, proto);
+    if (!status) {
+      throw new TypeError();
+    }
+  },
+});
+
+function isObject(value) {
+  return Object(value) === value;
+}
+
+</code></pre>
+<ul>
+<li>Object.setPrototypeOf() </li>
+</ul>
+<p><code>Object.setPrototypeOf</code>方法的作用与<code>__proto__</code>相同，用来设置一个对象的<code>prototype</code>对象，返回参数对象本身。它是 ES6 正式推荐的设置原型对象的方法.</p>
+<pre><code class="language-javaScript">
+// 格式
+Object.setPrototypeOf(object, prototype)
+</code></pre>
+<p>该方法等同于下面的函数。</p>
+<pre><code class="language-javaScript">
+function setPrototyeOf(object,prototype){
+    object.__proto__ = prototype;
+    return obj;
+}
+</code></pre>
+<ul>
+<li>Object.getPrototypeOf() </li>
+</ul>
+<p>该方法与<code>Object.setPrototypeOf</code>方法配套，用于读取一个对象的原型对象。</p>
+<h2 id="5-objectkeys，objectvalues，objectentries">5. Object.keys()，Object.values()，Object.entries()</h2>
+<ul>
+<li>Object.keys()</li>
+</ul>
+<p>ES5 引入了Object.keys方法，返回一个数组，成员是参数对象自身的（不含继承的）所有可遍历（enumerable）属性的键名。ES2017 引入了跟<code>Object.keys</code>配套的<code>Object.values</code>和<code>Object.entries</code>，作为遍历一个对象的补充手段，供<code>for...of</code>循环使用。</p>
+<pre><code class="language-javaScript">
+let {keys, values, entries} = Object;
+let obj = { a: 1, b: 2, c: 3 };
+
+for (let key of keys(obj)) {
+  console.log(key); // &#39;a&#39;, &#39;b&#39;, &#39;c&#39;
+}
+
+for (let value of values(obj)) {
+  console.log(value); // 1, 2, 3
+}
+
+for (let [key, value] of entries(obj)) {
+  console.log([key, value]); // [&#39;a&#39;, 1], [&#39;b&#39;, 2], [&#39;c&#39;, 3]
+}
+</code></pre>
+<h2 id="6-objectfromentries">6. Object.fromEntries()</h2>
+<p><code>Object.fromEntries()</code>方法是<code>Object.entries()</code>的逆操作，用于将一个键值对数组转为对象。该方法的主要目的，是将键值对的数据结构还原为对象，因此特别适合将 <code>Map</code> 结构转为对象。</p>
+<pre><code class="language-javaScript">// 例一
+const entries = new Map([
+  [&#39;foo&#39;, &#39;bar&#39;],
+  [&#39;baz&#39;, 42]
+]);
+
+Object.fromEntries(entries)
+// { foo: &quot;bar&quot;, baz: 42 }
+
+// 例二
+const map = new Map().set(&#39;foo&#39;, true).set(&#39;bar&#39;, false);
+Object.fromEntries(map)
+// { foo: true, bar: false }</code></pre>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

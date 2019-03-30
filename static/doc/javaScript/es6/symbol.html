@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>snail的技术笔记</title>
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="Shortcut Icon" href="/favicon.ico"  type="image/x-icon" /> 
+    <link rel="Bookmark" href="/favicon.ico" type="image/x-icon" /> 
+
+
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="symbol">Symbol</h1>
+<h2 id="概述">概述</h2>
+<p>ES5 的对象属性名都是字符串，这容易造成属性名的冲突。比如，你使用了一个他人提供的对象，但又想为这个对象添加新的方法（mixin 模式），新方法的名字就有可能与现有方法产生冲突。如果有一种机制，保证每个属性的名字都是独一无二的就好了，这样就从根本上防止属性名的冲突。这就是 ES6 引入<code>Symbol</code>的原因。</p>
+<p>ES6 引入了一种新的原始数据类型<code>Symbol</code>，表示独一无二的值。它是 JavaScript 语言的第七种数据类型，前六种是：undefined、null、布尔值（Boolean）、字符串（String）、数值（Number）、对象（Object）。</p>
+<p><code>Symbol</code> 值通过<code>Symbol</code>函数生成。这就是说，对象的属性名现在可以有两种类型，一种是原来就有的字符串，另一种就是新增的 <code>Symbol</code> 类型。凡是属性名属于 <code>Symbol</code> 类型，就都是独一无二的，可以保证不会与其他属性名产生冲突。</p>
+<p>注意，<code>Symbol</code>函数前不能使用<code>new</code>命令，否则会报错。这是因为生成的 <code>Symbol</code> 是一个原始类型的值，不是对象。也就是说，由于 <code>Symbol</code> 值不是对象，所以不能添加属性。基本上，它是一种类似于字符串的数据类型。</p>
+<p><code>Symbol</code>函数可以接受一个字符串作为参数，表示对 <code>Symbol</code> 实例的描述，主要是为了在控制台显示，或者转为字符串时，比较容易区分。</p>
+<p>注意，<code>Symbol</code>函数的参数只是表示对当前 <code>Symbol</code> 值的描述，因此相同参数的<code>Symbol</code>函数的返回值是不相等的。</p>
+<h2 id="作为属性名的-symbol">作为属性名的 Symbol</h2>
+<p>由于每一个 <code>Symbol</code> 值都是不相等的，这意味着 <code>Symbol</code> 值可以作为标识符，用于对象的属性名，就能保证不会出现同名的属性。这对于一个对象由多个模块构成的情况非常有用，能防止某一个键被不小心改写或覆盖。</p>
+<pre><code class="language-javaScript">
+let mySymbol = Symbol();
+
+// 第一种写法
+let a = {};
+a[mySymbol] = &#39;Hello!&#39;;
+
+// 第二种写法
+let a = {
+  [mySymbol]: &#39;Hello!&#39;
+};
+
+// 第三种写法
+let a = {};
+Object.defineProperty(a, mySymbol, { value: &#39;Hello!&#39; });
+
+// 以上写法都得到同样结果
+a[mySymbol] // &quot;Hello!&quot;
+</code></pre>
+<p>注意，<code>Symbol</code> 值作为对象属性名时，不能用点运算符。</p>
+<pre><code class="language-javaScript">const mySymbol = Symbol();
+const a = {};
+
+a.mySymbol = &#39;Hello!&#39;;
+a[mySymbol] // undefined
+a[&#39;mySymbol&#39;] // &quot;Hello!&quot;
+</code></pre>
+<h2 id="4-属性名的遍历">4. 属性名的遍历</h2>
+<p><code>Symbol</code> 作为属性名，该属性不会出现在<code>for...in</code>、<code>for...of</code>循环中，也不会被<code>Object.keys()</code>、<code>Object.getOwnPropertyNames()</code>、<code>JSON.stringify()</code>返回。但是，它也不是私有属性，有一个<code>Object.getOwnPropertySymbols</code>方法，可以获取指定对象的所有 <code>Symbol</code> 属性名。<code>Object.getOwnPropertySymbols</code>方法返回一个数组，成员是当前对象的所有用作属性名的 <code>Symbol</code> 值。</p>
+<p>由于以 <code>Symbol</code> 值作为名称的属性，不会被常规方法遍历得到。我们可以利用这个特性，为对象定义一些非私有的、但又希望只用于内部的方法</p>
+<h2 id="5-symbolfor，symbolkeyfor">5. Symbol.for()，Symbol.keyFor()</h2>
+<p>有时，我们希望重新使用同一个 <code>Symbol</code> 值，<code>Symbol.for</code>方法可以做到这一点。它接受一个字符串作为参数，然后搜索有没有以该参数作为名称的 <code>Symbol</code> 值。如果有，就返回这个 <code>Symbol</code> 值，否则就新建并返回一个以该字符串为名称的 <code>Symbol</code> 值。</p>
+<pre><code class="language-javaScript">
+let s1 = Symbol.for(&#39;test&#39;);
+let s2 = Symbol.for(&#39;test&#39;);
+
+console.log(s1===s2)// true</code></pre>
+<p><code>Symbol.for()</code>与<code>Symbol()</code>这两种写法，都会生成新的 <code>Symbol</code>。它们的区别是，前者会被登记在全局环境中供搜索，后者不会。<code>Symbol.for()</code>不会每次调用就返回一个新的 <code>Symbol</code> 类型的值，而是会先检查给定的<code>key</code>是否已经存在，如果不存在才会新建一个值。比如，如果你调用<code>Symbol.for(&quot;cat&quot;)</code>30 次，每次都会返回同一个 <code>Symbol</code> 值，但是调用<code>Symbol(&quot;cat&quot;)</code>30 次，会返回 30 个不同的 <code>Symbol</code> 值。</p>
+<p><code>Symbol.keyFor</code>方法返回一个已登记的 <code>Symbol</code> 类型值的<code>key</code>。也就是只能返回使用<code>Symbol.for()</code>定义的<code>symbol</code>的key.</p>
+<h2 id="6-实例--模块的-singleton-模式">6. 实例 : 模块的 Singleton 模式</h2>
+<p><code>Singleton</code> 模式指的是调用一个类，任何时候返回的都是同一个实例。</p>
+<p>对于 <code>Node</code> 来说，模块文件可以看成是一个类。怎么保证每次执行这个模块文件，返回的都是同一个实例呢？</p>
+<p>很容易想到，可以把实例放到顶层对象<code>global</code>。</p>
+<pre><code class="language-javaScript">
+// mod.js
+function A() {
+  this.foo = &#39;hello&#39;;
+}
+
+if (!global._foo) {
+  global._foo = new A();
+}
+
+module.exports = global._foo;</code></pre>
+<p>然后，加载上面的mod.js。</p>
+<pre><code class="language-javaScript">const a = require(&#39;./mod.js&#39;);
+console.log(a.foo);</code></pre>
+<p>上面代码中，变量a任何时候加载的都是A的同一个实例。</p>
+<p>但是，这里有一个问题，全局变量<code>global._foo</code>是可写的，任何文件都可以修改。</p>
+<pre><code class="language-javaScript">global._foo = { foo: &#39;world&#39; };
+
+const a = require(&#39;./mod.js&#39;);
+console.log(a.foo);</code></pre>
+<p>上面的代码，会使得加载<code>mod.js</code>的脚本都失真。</p>
+<p>为了防止这种情况出现，我们就可以使用 <code>Symbol</code>。</p>
+<pre><code class="language-javaScript">// mod.js
+const FOO_KEY = Symbol.for(&#39;foo&#39;);
+
+function A() {
+  this.foo = &#39;hello&#39;;
+}
+
+if (!global[FOO_KEY]) {
+  global[FOO_KEY] = new A();
+}
+
+module.exports = global[FOO_KEY];</code></pre>
+<p>上面代码中，可以保证<code>global[FOO_KEY]</code>不会被无意间覆盖，但还是可以被改写。</p>
+<pre><code class="language-javaScript">
+global[Symbol.for(&#39;foo&#39;)] = { foo: &#39;world&#39; };
+
+const a = require(&#39;./mod.js&#39;);</code></pre>
+<p>如果键名使用Symbol方法生成，那么外部将无法引用这个值，当然也就无法改写。</p>
+<pre><code class="language-javaScript">// mod.js
+const FOO_KEY = Symbol(&#39;foo&#39;);
+
+// 后面代码相同 ……</code></pre>
+<p>上面代码将导致其他脚本都无法引用<code>FOO_KEY</code>。但这样也有一个问题，就是如果多次执行这个脚本，每次得到的<code>FOO_KEY</code>都是不一样的。虽然 <code>Node</code> 会将脚本的执行结果缓存，一般情况下，不会多次执行同一个脚本，但是用户可以手动清除缓存，所以也不是绝对可靠。</p>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

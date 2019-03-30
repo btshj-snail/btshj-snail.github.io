@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>snail的技术笔记</title>
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="Shortcut Icon" href="/favicon.ico"  type="image/x-icon" /> 
+    <link rel="Bookmark" href="/favicon.ico" type="image/x-icon" /> 
+
+
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="promise对象">Promise对象</h1>
+<h2 id="1-promise-的含义">1. Promise 的含义</h2>
+<p><code>Promise</code> 是异步编程的一种解决方案，比传统的解决方案——回调函数和事件——更合理和更强大。它由社区最早提出和实现，ES6 将其写进了语言标准，统一了用法，原生提供了<code>Promise</code>对象。</p>
+<p>所谓<code>Promise</code>，简单说就是一个容器，里面保存着某个未来才会结束的事件（通常是一个异步操作）的结果。从语法上说，<code>Promise</code> 是一个对象，从它可以获取异步操作的消息。<code>Promise</code> 提供统一的 API，各种异步操作都可以用同样的方法进行处理。</p>
+<p><code>Promise</code>对象有以下两个特点。</p>
+<p>（1）对象的状态不受外界影响。<code>Promise</code>对象代表一个异步操作，有三种状态：pending（进行中）、fulfilled（已成功）和rejected（已失败）。只有异步操作的结果，可以决定当前是哪一种状态，任何其他操作都无法改变这个状态。这也是<code>Promise</code>这个名字的由来，它的英语意思就是“承诺”，表示其他手段无法改变。</p>
+<p>（2）一旦状态改变，就不会再变，任何时候都可以得到这个结果。<code>Promise</code>对象的状态改变，只有两种可能：从pending变为fulfilled和从pending变为rejected。只要这两种情况发生，状态就凝固了，不会再变了，会一直保持这个结果，这时就称为 resolved（已定型）。如果改变已经发生了，你再对<code>Promise</code>对象添加回调函数，也会立即得到这个结果。这与事件（Event）完全不同，事件的特点是，如果你错过了它，再去监听，是得不到结果的。</p>
+<p>注意，为了行文方便，本章后面的resolved统一只指fulfilled状态，不包含rejected状态。</p>
+<p>有了<code>Promise</code>对象，就可以将异步操作以同步操作的流程表达出来，避免了层层嵌套的回调函数。此外，<code>Promise</code>对象提供统一的接口，使得控制异步操作更加容易。</p>
+<p><code>Promise</code>也有一些缺点。</p>
+<p>首先，无法取消<code>Promise</code>，一旦新建它就会立即执行，无法中途取消。</p>
+<p>其次，如果不设置回调函数，<code>Promise</code>内部抛出的错误，不会反应到外部。</p>
+<p>第三，当处于pending状态时，无法得知目前进展到哪一个阶段（刚刚开始还是即将完成）。</p>
+<p>如果某些事件不断地反复发生，一般来说，使用 <code>Stream</code> 模式是比部署<code>Promise</code>更好的选择。</p>
+<p>ES6 规定，<code>Promise</code>对象是一个构造函数，用来生成<code>Promise</code>实例。</p>
+<p>下面代码创造了一个<code>Promise</code>实例。</p>
+<pre><code class="language-javaScript">const promise = new Promise(function(resolve, reject) {
+  // ... some code
+
+  if (/* 异步操作成功 */){
+    resolve(value);
+  } else {
+    reject(error);
+  }
+});</code></pre>
+<h2 id="3-promiseprototypethen">3. Promise.prototype.then()</h2>
+<p>它的作用是为 <code>Promise</code> 实例添加状态改变时的回调函数。前面说过，<code>then</code>方法的第一个参数是<code>resolved</code>状态的回调函数，第二个参数（可选）是<code>rejected</code>状态的回调函数.</p>
+<p><code>then</code>方法返回的是一个新的<code>Promise</code>实例（注意，不是原来那个<code>Promise</code>实例）。因此可以采用链式写法，即<code>then</code>方法后面再调用另一个<code>then</code>方法。</p>
+<h2 id="4-promiseprototypecatch">4. Promise.prototype.catch()</h2>
+<p><code>Promise.prototype.catch</code>方法是<code>.then(null, rejection)</code>或<code>.then(undefined, rejection)</code>的别名，用于指定发生错误时的回调函数。另外，<code>then</code>方法指定的回调函数，如果运行中抛出错误，也会被<code>catch</code>方法捕获。</p>
+<p><code>Promise</code> 对象的错误具有“冒泡”性质，会一直向后传递，直到被捕获为止。也就是说，错误总是会被下一个<code>catch</code>语句捕获。</p>
+<h2 id="5-promiseprototypefinally">5. Promise.prototype.finally()</h2>
+<p><code>finally</code>方法用于指定不管 <code>Promise</code> 对象最后状态如何，都会执行的操作。该方法是 ES2018 引入标准的。不管<code>promise</code>最后的状态，在执行完<code>then</code>或<code>catch</code>指定的回调函数以后，都会执行<code>finally</code>方法指定的回调函数。</p>
+<h2 id="6-promiseall">6. Promise.all()</h2>
+<p><code>Promise.all</code>方法用于将多个 <code>Promise</code> 实例，包装成一个新的 <code>Promise</code> 实例。</p>
+<p><code>Promise.all</code>方法的参数可以不是数组，但必须具有 <code>Iterator</code> 接口，且返回的每个成员都是 <code>Promise</code> 实例。）</p>
+<p>参数中所有的<code>promise</code>对象都变成了<code>fulfilled</code>状态，那么<code>Promise.all()</code>产生的新的<code>promise</code>才会变成<code>fulfilled</code></p>
+<p>参数中的<code>promise</code>对象，只要有个一变成了<code>rejected</code>状态，那么<code>Promise.all()</code>产生的新<code>promise</code>就会变成<code>rejected</code></p>
+<h2 id="7-promiserace">7. Promise.race()</h2>
+<p><code>Promise.race</code>方法同样是将多个 <code>Promise</code> 实例，包装成一个新的 <code>Promise</code> 实例。</p>
+<p>参数中的<code>promise</code>对象，只要有个一变成了<code>rejected</code>或者<code>fulfilled</code>状态，那么<code>Promise.race()</code>产生的新<code>promise</code>就会变成相同的状态。</p>
+<h2 id="8-promiseresolve">8. Promise.resolve()</h2>
+<p>有时需要将现有对象转为 <code>Promise</code> 对象，<code>Promise.resolve</code>方法就起到这个作用。</p>
+<p><code>Promise.resolve</code>等价于下面的写法。</p>
+<pre><code class="language-javaScript">Promise.resolve(&#39;foo&#39;)
+// 等价于
+new Promise(resolve =&gt; resolve(&#39;foo&#39;))</code></pre>
+<p><code>Promise.resolve</code>方法的参数分成四种情况。</p>
+<ul>
+<li><p>参数是一个 Promise 实例
+如果参数是 <code>Promise</code> 实例，那么<code>Promise.resolve</code>将不做任何修改、原封不动地返回这个实例。</p>
+</li>
+<li><p>参数是一个thenable对象
+<code>thenable</code>对象指的是具有<code>then</code>方法的对象，比如下面这个对象。</p>
+<pre><code class="language-javaScript">let thenable = {
+then: function(resolve, reject) {
+  resolve(42);
+}</code></pre>
+<p><code></code>Promise.resolve<code>方法会将这个对象转为</code>Promise<code>对象，然后就立即执行</code>thenable<code>对象的</code>then`方法。</p>
+</li>
+<li><p>参数不是具有then方法的对象，或根本就不是对象</p>
+</li>
+</ul>
+<p>如果参数是一个原始值，或者是一个不具有<code>then</code>方法的对象，则<code>Promise.resolve</code>方法返回一个新的 <code>Promise</code> 对象，状态为<code>resolved</code>。</p>
+<ul>
+<li>不带有任何参数</li>
+</ul>
+<p><code>Promise.resolve</code>方法允许调用时不带参数，直接返回一个<code>resolved</code>状态的 <code>Promise</code> 对象。</p>
+<p>需要注意的是，立即<code>resolve</code>的 <code>Promise</code>对象，是在本轮“事件循环”（<code>event loop</code>）的结束时，而不是在下一轮“事件循环”的开始时。</p>
+<pre><code class="language-javaScript">
+setTimeout(function () {
+  console.log(&#39;three&#39;);
+}, 0);
+
+Promise.resolve().then(function () {
+  console.log(&#39;two&#39;);
+});
+
+console.log(&#39;one&#39;);
+
+// one
+// two
+// three
+</code></pre>
+<p>上面代码中，<code>setTimeout(fn, 0)</code>在下一轮“事件循环”开始时执行，<code>Promise.resolve()</code>在本轮“事件循环”结束时执行，<code>console.log(&#39;one&#39;)</code>则是立即执行，因此最先输出。</p>
+<h2 id="9-promisereject">9. Promise.reject()</h2>
+<p><code>Promise.reject(reason)</code>方法也会返回一个新的 <code>Promise</code> 实例，该实例的状态为<code>rejected</code>。</p>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>snail的技术笔记</title>
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="Shortcut Icon" href="/favicon.ico"  type="image/x-icon" /> 
+    <link rel="Bookmark" href="/favicon.ico" type="image/x-icon" /> 
+
+
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="async-函数">async 函数</h1>
+<p>ES2017 标准引入了 async 函数，使得异步操作变得更加方便。</p>
+<p><code>async</code> 函数是什么？一句话，它就是 <code>Generator</code> 函数的语法糖。</p>
+<p><code>async</code>函数就是将 <code>Generator</code> 函数的星号（*）替换成<code>async</code>，将<code>yield</code>替换成<code>await</code>，仅此而已。</p>
+<p><code>async</code>函数对 <code>Generator</code> 函数的改进，体现在以下四点。</p>
+<ul>
+<li><p>内置执行器。</p>
+</li>
+<li><p>更好的语义。</p>
+</li>
+<li><p>更广的适用性。
+<code>co</code>模块约定，<code>yield</code>命令后面只能是 <code>Thunk</code> 函数或 <code>Promise</code> 对象，而<code>async</code>函数的<code>await</code>命令后面，可以是 <code>Promise</code> 对象和原始类型的值（数值、字符串和布尔值，但这时会自动转成立即 <code>resolved</code> 的 <code>Promise</code> 对象）。</p>
+</li>
+<li><p>返回值是 Promise。</p>
+</li>
+</ul>
+<p><code>async</code>函数的返回值是 <code>Promise</code> 对象，这比 <code>Generator</code> 函数的返回值是 <code>Iterator</code> 对象方便多了。你可以用<code>then</code>方法指定下一步的操作。</p>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>
