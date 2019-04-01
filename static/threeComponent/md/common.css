@@ -48,6 +48,7 @@ body {
 .vertical-menu>ul {
     list-style: none;
     padding:0 1em;
+    overflow-y:auto;
 }
 
 .vertical-menu>ul>li {

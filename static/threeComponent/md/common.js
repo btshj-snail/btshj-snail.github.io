@@ -48,7 +48,8 @@ var menuOper = {
 
     
         var dom_ul = document.createElement('ul');
-        dom_ul.className = "vertical-menu-out"
+        dom_ul.className = "vertical-menu-out";
+        console.log('---------',menu)
         menu.forEach(function(item){
             var dom_li = document.createElement("li");
     
@@ -63,6 +64,7 @@ var menuOper = {
                     var dom_sub_li = document.createElement("li");
                     dom_sub_li.innerText = sub.name;
                     dom_sub_li.dataset.id = sub.id;
+                    console.log(sub.id)
                     dom_sub_ul.appendChild(dom_sub_li);
                 })
                 dom_li.appendChild(dom_sub_ul);
@@ -123,12 +125,15 @@ function isInViewPortAndSee (el) {
 var initStyle = function(){
     var leftArea = document.querySelector('.left-area')
     var rightArea = document.querySelector('.right-area')
+    var menuOut = document.querySelector('.vertical-menu-out');
+    var menuHeader = document.querySelector('.vertical-menu-header');
+
     if(!!leftArea && !!rightArea ) {
     
         var sy = window.getComputedStyle(rightArea);
-    
-    
         leftArea.style.height = sy.height;
+        var mh = window.getComputedStyle(menuHeader);
+        menuOut.style.height = document.documentElement.clientHeight-((mh.height.replace('px','')-0)+(mh.marginTop.replace('px','')-0)+(mh.marginBottom.replace('px','')-0)+(mh.paddingTop.replace('px','')-0)+(mh.paddingBottom.replace('px','')-0)+1)+'px';
     }
    
 }
