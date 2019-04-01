@@ -157,7 +157,7 @@ function CustomTextInput(props) {
 
 适用于类组件和函数式组件。
 
-```javascript
+```javaScript
 
 function CustomTextInput(props) {
   return (
@@ -179,11 +179,11 @@ class Parent extends React.Component {
 
 ```
 
-在上面的例子中，Parent 将它的 ref 回调作为一个特殊的 inputRef 传递给 CustomTextInput，然后 CustomTextInput 通过 ref 属性将其传递给 <input>。
-最终，Parent 中的 this.inputElement 将被设置为与 CustomTextInput 中的 <input> 元素相对应的 DOM 节点。
+在上面的例子中，Parent 将它的 ref 回调作为一个特殊的 inputRef 传递给 CustomTextInput，然后 CustomTextInput 通过 ref 属性将其传递给 \<input>。
+最终，Parent 中的 this.inputElement 将被设置为与 CustomTextInput 中的 \<input> 元素相对应的 DOM 节点。
 
 请注意，上述示例中的 inputRef 属性没有特殊的含义，它只是一般的组件属性。
-然而，使用 <input> 本身的 ref 属性很重要，因为它告诉 React 将 ref 附加到它的 DOM 节点。
+然而，使用 \<input> 本身的 ref 属性很重要，因为它告诉 React 将 ref 附加到它的 DOM 节点。
 
 即使 CustomTextInput 是一个函数式组件，它也同样有效。
 与只能为 DOM 元素和 class 组件指定的 ref 不同，诸如 inputRef 这种自定义的组件属性则没有限制。
@@ -224,7 +224,7 @@ class Grandparent extends React.Component {
 
 上面的例子中，Grandparent 首先指定了 ref 回调函数。
 它通过一个常规的 inputRef 属性被传递到 Parent，Parent 也同样把它传递给了 CustomTextInput。
-最后 CustomTextInput 读取了 inputRef 属性并将传递的函数作为 ref 属性附加到 <input>。
+最后 CustomTextInput 读取了 inputRef 属性并将传递的函数作为 ref 属性附加到 \<input>。
 最终，Grandparent 中的 this.inputElement 被设置为 CustomTextInput 的 input 对应的 DOM 节点。
 
 ## 旧版 API：String 类型的 Refs

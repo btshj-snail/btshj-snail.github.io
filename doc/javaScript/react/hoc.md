@@ -246,13 +246,11 @@ function logProps(WrappedComponent) {
 而展示组件则负责处理渲染UI等事情。高阶组件使用容器组件作为实现的一部分。
 你也可以认为高阶组件就是参数化的容器组件定义。
 
-## 约定：将不相关的props属性传递给包裹组件
+## 约定：贯穿传递不相关props属性给被包裹的组件
 
-高阶组件给组件添加新特性。
-他们不应该大幅修改原组件的接口（译者注：应该就是props属性）。
-预期，从高阶组件返回的组件应该与原包裹的组件具有类似的接口。
+高阶组件添加了一些特性到一个组件，他们不应该大幅修改它的合约。被期待的是，从高阶组件返回的那个组件与被包裹的组件具有类似的接口。
 
-高阶组件应该传递与它要实现的功能点无关的props属性。大多数高阶组件都包含一个如下的render函数：
+高阶组件应该贯穿传递与它专门关注无关的props属性。大多数高阶组件都包含类似如下的渲染方法：
 
 ```javascript
 
@@ -336,7 +334,7 @@ const EnhancedComponent = enhance(WrappedComponent)
 为了便于调试，可以选择一个好的名字，确保能够识别出它是由高阶组件创建的新组件还是普通的组件。
 
 最常用的技术就是将包裹组件的名字包装在显示名字中。
-所以，如果你的高阶组件名字是 withSubscription，且包裹组件的显示名字是 CommentList，那么就是用 withSubscription(CommentList)这样的显示名字：
+所以，如果你的高阶组件名字是 `withSubscription`，且包裹组件的显示名字是 `CommentList`，那么就是用 withSubscription(CommentList)这样的显示名字：
 
 
 ```javascript

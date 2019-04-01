@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>snail的技术笔记</title>
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="Shortcut Icon" href="/favicon.ico"  type="image/x-icon" /> 
+    <link rel="Bookmark" href="/favicon.ico" type="image/x-icon" /> 
+
+
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="fragment">Fragment</h1>
+<p><code>React</code> 中一个常见模式是为一个组件返回多个元素。<code>Fragments</code> 可以让你聚合一个子元素列表，并且不在<code>DOM</code>中增加额外节点。</p>
+<p><code>Fragments</code> 看起来像空的 <code>JSX</code> 标签：</p>
+<pre><code class="language-javaScript">
+render() {
+  return (
+    &lt;&gt;
+      &lt;ChildA /&gt;
+      &lt;ChildB /&gt;
+      &lt;ChildC /&gt;
+    &lt;/&gt;
+  );
+}
+</code></pre>
+<h2 id="动机">动机</h2>
+<p>一个常见模式是为一个组件返回一个子元素列表。以这个示例的 <code>React</code> 片段为例：</p>
+<pre><code class="language-javaScript">
+class Table extends React.Component {
+  render() {
+    return (
+      &lt;table&gt;
+        &lt;tr&gt;
+          &lt;Columns /&gt;
+        &lt;/tr&gt;
+      &lt;/table&gt;
+    );
+  }
+}
+</code></pre>
+<p>为了渲染有效的 <code>HTML</code> ， <code>&lt;Columns /&gt;</code> 需要返回多个 <code>&lt;td&gt;</code> 元素。如果一个父 <code>div</code> 在 <code>&lt;Columns /&gt;</code> 的<code>render()</code> 函数里面使用，那么最终的 <code>HTML</code> 将是无效的。</p>
+<pre><code class="language-javaScript">
+
+class Columns extends React.Component {
+  render() {
+    return (
+      &lt;div&gt;
+        &lt;td&gt;Hello&lt;/td&gt;
+        &lt;td&gt;World&lt;/td&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+
+</code></pre>
+<p>在 <code>&lt;Table /&gt;</code> 组件中的输出结果如下：</p>
+<pre><code class="language-javaScript">
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;div&gt;
+      &lt;td&gt;Hello&lt;/td&gt;
+      &lt;td&gt;World&lt;/td&gt;
+    &lt;/div&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+</code></pre>
+<p>所以，我们介绍 <code>Fragments</code>。</p>
+<h2 id="使用">使用</h2>
+<pre><code class="language-javaScript">
+class Columns extends React.Component {
+  render() {
+    return (
+      &lt;&gt;
+        &lt;td&gt;Hello&lt;/td&gt;
+        &lt;td&gt;World&lt;/td&gt;
+      &lt;/&gt;
+    );
+  }
+}
+</code></pre>
+<p>在正确的 <code>&lt;Table /&gt;</code> 组件中，这个结果输出如下：</p>
+<pre><code class="language-javaScript">&lt;table&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Hello&lt;/td&gt;
+    &lt;td&gt;World&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;</code></pre>
+<p>你可以像使用其它元素那样使用 <code>&lt;&gt;&lt;/&gt;</code>。</p>
+<h2 id="清晰的形式">清晰的形式</h2>
+<p>另一种使用片段的方式是使用 <code>React.Fragment</code> 组件，<code>React.Fragment</code> 组件可以在 <code>React</code> 对象上使用。 这可能是必要的，如果你的工具还不支持 <code>JSX</code> 片段。 注意在 <code>React</code> 中， <code>&lt;&gt;&lt;/&gt;</code> 是 <code>&lt;React.Fragment/&gt;</code> 的语法糖。</p>
+<pre><code class="language-javaScript">
+class Columns extends React.Component {
+  render() {
+    return (
+      &lt;React.Fragment&gt;
+        &lt;td&gt;Hello&lt;/td&gt;
+        &lt;td&gt;World&lt;/td&gt;
+      &lt;/React.Fragment&gt;
+    );
+  }
+}
+</code></pre>
+<h2 id="带-key-的-fragments">带 key 的 Fragments</h2>
+<p><code>&lt;&gt;&lt;/&gt;</code> 语法不能接受键值或属性。</p>
+<p>如果你需要一个带 <code>key</code> 的片段，你可以直接使用 <code>&lt;React.Fragment /&gt;</code> 。 一个使用场景是映射一个集合为一个片段数组.例如：创建一个描述列表：</p>
+<pre><code class="language-javaScript">function Glossary(props) {
+  return (
+    &lt;dl&gt;
+      {props.items.map(item =&gt; (
+        // 没有`key`，将会触发一个key警告
+        &lt;React.Fragment key={item.id}&gt;
+          &lt;dt&gt;{item.term}&lt;/dt&gt;
+          &lt;dd&gt;{item.description}&lt;/dd&gt;
+        &lt;/React.Fragment&gt;
+      ))}
+    &lt;/dl&gt;
+  );
+}</code></pre>
+<p><code>key</code> 是唯一可以传递给 <code>Fragment</code> 的属性。在将来，我们可能增加额外的属性支持，比如事件处理。</p>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

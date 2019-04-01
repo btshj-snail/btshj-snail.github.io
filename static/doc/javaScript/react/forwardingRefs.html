@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>snail的技术笔记</title>
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="Shortcut Icon" href="/favicon.ico"  type="image/x-icon" /> 
+    <link rel="Bookmark" href="/favicon.ico" type="image/x-icon" /> 
+
+
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="转发-refs">转发 Refs</h1>
+<p><code>Ref</code> 转发是一种将<code>ref</code>通过组件传递给其子代之一的技术。这种技术对于高阶部件（也称为hocs）特别有用。</p>
+<p>让我们从一个<code>logs</code>组件属性到控制台的HOC示例开始：</p>
+<pre><code class="language-javaScript">
+function logProps(WrappedComponent) {
+  class LogProps extends React.Component {
+    componentDidUpdate(prevProps) {
+      console.log(&#39;old props:&#39;, prevProps);
+      console.log(&#39;new props:&#39;, this.props);
+    }
+
+    render() {
+      return &lt;WrappedComponent {...this.props} /&gt;;
+    }
+  }
+
+  return LogProps;
+}
+</code></pre>
+<p>The “logProps” HOC passes all props through to the component it wraps, so the rendered output will be the same. For example, we can use this HOC to log all props that get passed to our “fancy button” component:</p>
+<p>高阶组件<code>logProps</code>传递所有 <code>prop</code> 到包裹的组件,所以这样渲染输出是一样的.比如,我们可以使用高阶组件记录传递<code>FancyButton</code>组件的到所有<code>props</code></p>
+<pre><code class="language-javaScript">class FancyButton extends React.Component {
+  focus() {
+    // ...
+  }
+
+  // ...
+}
+
+// Rather than exporting FancyButton, we export LogProps.
+// It will render a FancyButton though.
+export default logProps(FancyButton);
+</code></pre>
+<p>上面的例子有一个地方需要告诫您:<code>refs</code>将不会被传递过来.这是因为<code>ref</code>并不是一个<code>prop</code>.<code>React</code>对他的处理像<code>key</code>一样.如果您在HOC上增加一个<code>ref</code>,那么这个<code>ref</code>将和最外面的容器组件相关联,而不会和包裹组件有任何关系.</p>
+<p>这意味着用于<code>FancyButton</code>组件的<code>refs</code>将实际附加到<code>logProps</code>组件：</p>
+<pre><code class="language-javaScript">
+import FancyButton from &#39;./FancyButton&#39;;
+
+const ref = React.createRef();
+
+// The FancyButton component we imported is the LogProps HOC.
+// Even though the rendered output will be the same,
+// Our ref will point to LogProps instead of the inner FancyButton component!
+// This means we can&#39;t call e.g. ref.current.focus()
+&lt;FancyButton
+  label=&quot;Click Me&quot;
+  handleClick={handleClick}
+  ref={ref}
+/&gt;;
+</code></pre>
+<p>幸好,我们可以使用API <code>React.forwardRef</code>很容易的将<code>refs</code>转发到内部<code>FancyButton</code>组件.<code>React.forwardRef</code>接受一个函数作为参数,这个函数拥有<code>props</code>和<code>ref</code>参数,并且这个函数返回<code>React</code>组件.例如:</p>
+<pre><code class="language-javaScript">function logProps(Component) {
+  class LogProps extends React.Component {
+    componentDidUpdate(prevProps) {
+      console.log(&#39;old props:&#39;, prevProps);
+      console.log(&#39;new props:&#39;, this.props);
+    }
+
+    render() {
+      const {forwardedRef, ...rest} = this.props;
+
+      // Assign the custom prop &quot;forwardedRef&quot; as a ref
+      return &lt;Component ref={forwardedRef} {...rest} /&gt;;
+    }
+  }
+
+  // Note the second param &quot;ref&quot; provided by React.forwardRef.
+  // We can pass it along to LogProps as a regular prop, e.g. &quot;forwardedRef&quot;
+  // And it can then be attached to the Component.
+  function forwardRef(props, ref) {
+    return &lt;LogProps {...props} forwardedRef={ref} /&gt;;
+  }
+
+  // These next lines are not necessary,
+  // But they do give the component a better display name in DevTools,
+  // e.g. &quot;ForwardRef(logProps(MyComponent))&quot;
+  const name = Component.displayName || Component.name;
+  forwardRef.displayName = `logProps(${name})`;
+
+  return React.forwardRef(forwardRef);
+}</code></pre>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

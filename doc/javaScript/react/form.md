@@ -2,7 +2,7 @@
 
 HTML表单元素与React中的其他DOM元素有所不同,因为表单元素生来就保留一些内部状态。例如，下面这个表单只接受一个唯一的name。
 
-```javascript
+```html
 
 <form>
   <label>
@@ -134,7 +134,7 @@ class EssayForm extends React.Component {
 
 在HTML当中，\<select\>会创建一个下拉列表。例如这个HTML就创建了一个下拉列表的原型。
 
-```javascript
+```html
 
 <select>
   <option value="grapefruit">Grapefruit</option>

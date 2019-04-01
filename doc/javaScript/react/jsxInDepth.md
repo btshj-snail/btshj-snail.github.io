@@ -2,7 +2,7 @@
 
 本质上来讲，JSX 只是为 React.createElement(component, props, ...children) 方法提供的语法糖。比如下面的代码：
 
-```javascript
+```html
 
 <MyButton color="blue" shadowSize={2}>
   Click Me
@@ -12,7 +12,7 @@
 
 编译为：
 
-```javascript
+```javaScript
 
 React.createElement(
   MyButton,
@@ -24,7 +24,7 @@ React.createElement(
 
 如果没有子代，你还可以使用自闭合标签，比如：
 
-```javascript
+```javaScript
 
 <div className="sidebar" />
 
@@ -32,7 +32,7 @@ React.createElement(
 
 编译为：
 
-```javascript
+```javaScript
 
 React.createElement(
   'div',
@@ -49,7 +49,7 @@ React.createElement(
 JSX 的标签名决定了 React 元素的类型。
 
 大写开头的 JSX 标签表示一个 React 组件。
-这些标签将会被编译为同名变量并被引用，所以如果你使用了 <Foo /> 表达式，则必须在作用域中先声明 Foo 变量。
+这些标签将会被编译为同名变量并被引用，所以如果你使用了 \<Foo /> 表达式，则必须在作用域中先声明 Foo 变量。
 
 ## React 必须声明
 
@@ -57,7 +57,7 @@ JSX 的标签名决定了 React 元素的类型。
 
 比如，下面两个导入都是必须的，尽管 React 和 CustomButton 都没有在代码中被直接调用。
 
-```javascript
+```javaScript
 
 import React from 'react';
 import CustomButton from './CustomButton';
@@ -69,14 +69,14 @@ function WarningButton() {
 
 ```
 
-如果你使用 <script> 加载 React，它将作用于全局。
+如果你使用 \<script> 加载 React，它将作用于全局。
 
 ## 点表示法
 
 你还可以使用 JSX 中的点表示法来引用 React 组件。
 你可以方便地从一个模块中导出许多 React 组件。例如，有一个名为 MyComponents.DataPicker 的组件，你可以直接在 JSX 中使用它：
 
-```javascript
+```javaScript
 
 import React from 'react';
 
@@ -94,15 +94,15 @@ function BlueDatePicker() {
 
 ## 首字母大写
 
-当元素类型以小写字母开头时，它表示一个内置的组件，如 <div> 或 <span>，
+当元素类型以小写字母开头时，它表示一个内置的组件，如 \<div> 或 \<span>，
 并将字符串 ‘div’ 或 ‘span’ 传 递给 React.createElement。
-以大写字母开头的类型，如 <Foo /> 编译为 React.createElement(Foo)，并它正对应于你在 JavaScript 文件中定义或导入的组件。
+以大写字母开头的类型，如 \<Foo /> 编译为 React.createElement(Foo)，并它正对应于你在 JavaScript 文件中定义或导入的组件。
 
 我们建议用大写开头命名组件。如果你的组件以小写字母开头，请在 JSX 中使用之前其赋值给大写开头的变量。
 
 例如，下面的代码将无法按预期运行：
 
-```javascript
+```javaScript
 
 import React from 'react';
 
@@ -122,7 +122,7 @@ function HelloWorld() {
 为了解决这个问题，我们将 hello 重命名为 Hello，然后使用 &lt;Hello /&gt; 引用：
 
 
-```javascript
+```javaScript
 
 import React from 'react';
 
@@ -145,7 +145,7 @@ function HelloWorld() {
 如果你的确想通过表达式来确定 React 元素的类型，请先将其赋值给大写开头的变量。
 这种情况一般会在你想通过属性值条件渲染组件时出现：
 
-```javascript
+```javaScript
 
 import React from 'react';
 import { PhotoStory, VideoStory } from './stories';
@@ -163,7 +163,7 @@ function Story(props) {
 ```
 要解决这个问题，我们需要先将类型赋值给大写开头的变量。
 
-```javascript
+```javaScript
 
 import React from 'react';
 import { PhotoStory, VideoStory } from './stories';
@@ -181,7 +181,7 @@ function Story(props) {
 
 ```
 
-## 属性
+## JSX的属性(Props)
 
 在 JSX 中有几种不同的方式来指定属性。
 
@@ -189,7 +189,7 @@ function Story(props) {
 
 你可以传递任何 {} 包裹的 JavaScript 表达式作为一个属性值。例如，在这个 JSX 中：
 
-```javascript
+```javaScript
 
 <MyComponent foo={1 + 2 + 3 + 4} />
 
@@ -199,7 +199,7 @@ function Story(props) {
 
 if 语句和 for 循环在 JavaScript 中不是表达式，因此它们不能直接在 JSX 中使用，所以你可以将它们放在周围的代码中。
 
-```javascript
+```javaScript
 
 function NumberDescriber(props) {
   let description;
@@ -217,7 +217,7 @@ function NumberDescriber(props) {
 
 你可以将字符串常量作为属性值传递。下面这两个 JSX 表达式是等价的：
 
-```javascript
+```javaScript
 
 <MyComponent message="hello world" />
 
@@ -226,7 +226,7 @@ function NumberDescriber(props) {
 ```
 当你传递一个字符串常量时，它不会对其进行 HTML 转义，所以下面两个 JSX 表达式是相同的：
 
-```javascript
+```javaScript
 
 <MyComponent message="&lt;3" />
 
@@ -239,7 +239,7 @@ function NumberDescriber(props) {
 
 如果你没有给属性传值，它默认为 true。因此下面两个 JSX 是等价的：
 
-```javascript
+```javaScript
 
 <MyTextBox autocomplete />
 
@@ -254,7 +254,7 @@ function NumberDescriber(props) {
 
 如果你已经有了个 props 对象，并且想在 JSX 中传递它，你可以使用 ... 作为扩展操作符来传递整个属性对象。下面两个组件是等效的：
 
-```javascript
+```javaScript
 
 function App1() {
   return <Greeting firstName="Ben" lastName="Hector" />;
@@ -268,7 +268,7 @@ function App2() {
 ```
 当你构建通用容器时，扩展属性会非常有用。然而，这样做也可能让很多不相关的属性，传递到不需要它们的组件中使代码变得混乱。我们建议你谨慎使用此语法。
 
-## 子代
+## JSX中的子代
 
 在包含开始和结束标签的 JSX 表达式中，标记之间的内容作为特殊的参数传递：props.children。有几种不同的方法来传递子代：
 
@@ -276,7 +276,7 @@ function App2() {
 
 你可以在开始和结束标签之间放入一个字符串，则 props.children 就是那个字符串。这对于许多内置 HTML 元素很有用。例如：
 
-```javascript
+```html
 
 <MyComponent>Hello world!</MyComponent>
 
@@ -309,7 +309,7 @@ JSX 会移除行空行和开始和结尾处的空格。标签邻近的新行也�
 
 你可以通过子代嵌入更多的 JSX 元素，这对于嵌套显示组件非常有用：
 
-```javascript
+```html
 
 <MyContainer>
   <MyFirstComponent />
@@ -327,13 +327,13 @@ JSX 会移除行空行和开始和结尾处的空格。标签邻近的新行也�
       </ul>
     </div>
     
-一个 React 组件不能返回多个 React 元素，但是单个 JSX 表达式可以有多个子元素，因此，如果你希望一个组件渲染多个元素，你可以用 <div> 将其包起来。
+一个 React 组件不能返回多个 React 元素，但是单个 JSX 表达式可以有多个子元素，因此，如果你希望一个组件渲染多个元素，你可以用 \<div> 将其包起来。
 
 ### JavsScript 表达式
 
 你可以将任何 {} 包裹的 JavaScript 表达式作为子代传递。例如，下面这些表达式是等价的：
 
-```javascript
+```javaScript
 
 <MyComponent>foo</MyComponent>
 
@@ -343,7 +343,7 @@ JSX 会移除行空行和开始和结尾处的空格。标签邻近的新行也�
 
 这对于渲染任意长度的 JSX 表达式的列表很有用。例如，下面将会渲染一个 HTML 列表：
 
-```javascript
+```javaScript
 
 function Item(props) {
   return <li>{props.message}</li>;
@@ -376,7 +376,7 @@ function Hello(props) {
 然而，props.children 可以像其它属性一样传递任何数据，而不仅仅是 React 元素。
 例如，如果你使用自定义组件，则可以将调用 props.children 来获得传递的子代：
 
-```javascript
+```javaScript
 
 // Calls the children callback numTimes to produce a repeated component
 function Repeat(props) {
@@ -417,7 +417,7 @@ false、null、undefined 和 true 都是有效的子代，但它们不会直接�
     
     <div>{true}</div>
 
-这在根据条件来确定是否渲染React元素时非常有用。以下的JSX只会在showHeader为true时渲染<Header />组件。
+这在根据条件来确定是否渲染React元素时非常有用。以下的JSX只会在showHeader为true时渲染\<Header />组件。
 
 ```javascript
 
@@ -431,7 +431,7 @@ false、null、undefined 和 true 都是有效的子代，但它们不会直接�
 值得注意的是，React 提供了一些 “falsy” 值 （即， 除了false 外，0，“”，null，undefined 和 NaN），
 它们依然会被渲染。例如，下面的代码不会像你预期的那样运行，因为当 props.message 为空数组时，它会打印 0：
 
-```javascript
+```javaScript
 
 <div>
   {props.messages.length &&
@@ -443,7 +443,7 @@ false、null、undefined 和 true 都是有效的子代，但它们不会直接�
 
 要解决这个问题，请确保 && 前面的表达式始终为布尔值：
 
-```javascript
+```javaScript
 
 <div>
   {props.messages.length > 0 &&
@@ -455,7 +455,7 @@ false、null、undefined 和 true 都是有效的子代，但它们不会直接�
 
 相反，如果你想让类似 false、true、null 或 undefined 出现在输出中，你必须先把它转换成字符串 :
 
-```javascript
+```javaScript
 
 <div>
   My JavaScript variable is {String(myVariable)}.

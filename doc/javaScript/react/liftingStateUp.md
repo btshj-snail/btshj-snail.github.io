@@ -19,7 +19,7 @@ function BoilingVerdict(props) {
 
 ```
 
-接下来，我们写一个名为 Calculator 的组件。它会渲染一个 <input> 来接受用户输入，然后将输入的温度值保存在 this.state.temperature 当中。
+接下来，我们写一个名为 Calculator 的组件。它会渲染一个 \<input> 来接受用户输入，然后将输入的温度值保存在 this.state.temperature 当中。
 
 之后呢，它会根据输入的值渲染出 BoilingVerdict 组件。
 
@@ -202,7 +202,7 @@ render() {
 但现在，temperature 是作为 prop 从父组件传递下来的，TemperatureInput 组件是没有控制权的。
 
 在React中，这个问题通常是通过让组件“受控”来解决。
-就像 <input> 能够接受 value 和 onChange 这两个prop属性值，自定义组件 TemperatureInput 也能接受来自 Calculator 父组件的 temperature 变量和 onTemperatureChange 方法作为props属性值。
+就像 \<input> 能够接受 value 和 onChange 这两个prop属性值，自定义组件 TemperatureInput 也能接受来自 Calculator 父组件的 temperature 变量和 onTemperatureChange 方法作为props属性值。
 
 做完这些，当 TemperatureInput 组件更新它的温度数值时，就会调用 this.props.onTemperatureChange 方法。
 
@@ -323,7 +323,7 @@ class TemperatureInput extends React.Component {
 
 让我们梳理下编辑输入框时所发生的一系列活动：
 
-+ React在DOM原生组件<input>上调用指定的onChange函数。在本例中，指的是TemperatureInput组件上的handleChange函数。
++ React在DOM原生组件\<input>上调用指定的onChange函数。在本例中，指的是TemperatureInput组件上的handleChange函数。
 
 + TemperatureInput组件的handleChange函数会在值发生变化时调用this.props.onTemperatureChange()函数。这些props属性，像onTemperatureChange都是由父组件Calculator提供的。
 
