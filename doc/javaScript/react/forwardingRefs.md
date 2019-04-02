@@ -23,8 +23,6 @@ function logProps(WrappedComponent) {
 
 ```
 
-The “logProps” HOC passes all props through to the component it wraps, so the rendered output will be the same. For example, we can use this HOC to log all props that get passed to our “fancy button” component:
-
 高阶组件`logProps`传递所有 `prop` 到包裹的组件,所以这样渲染输出是一样的.比如,我们可以使用高阶组件记录传递`FancyButton`组件的到所有`props`
 
 ```javaScript
