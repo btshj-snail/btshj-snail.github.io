@@ -644,3 +644,14 @@ ES6 也叫ES2015,是2015年出的新标准.ES6进一步简化了代码的书写,
 将promise纳入原生实现,基本终结了异步的金字塔形态.实现了模块化管理.
 
 
+## 22. 数组和对象有哪些原生方法，列举一下
+
+array:
+`[].push`,`[].pull`,`[].shift`,`[].unshit`,`[].join`,`[].slice()`,`[].splice()`,`[].indexOf()`,`[].lastIndexOf()`
+`[].sort()`,`[].reverse()`,`[].map()`,`[].filter()`,`[].forEach()`,`[].every()`,`[].some()`,`[].reduce()`,`[].reduceRight()`,`[].contact()`,`Array.isArray()`,`[].flat()`,`[].flatMap()`,`Array.from()`,`Array.of()`,`[].includes()`,`[].find()`,`[].findIndex()`
+
+Object:
+
+`Object.getOwnPropertyDescriptor()`,`Object.getOwnPropertyDescriptors()`,`Object.getOwnPropertyNames()`,`Object.getOwnPropertySymbols()`,`Object.defineProperty()`,`Object.defineProperties()`,`Object.assign()`,`Object.freeze()`,`Object.isFrozen()`,`Object.preventExtensions()`,`Object.isExtensible()`,`Object.getPrototypeOf()`,
+`Object.setPrototyeOf()`,`Object.create()`,`Object.seal()`
+

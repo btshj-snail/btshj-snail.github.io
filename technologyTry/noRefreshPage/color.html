@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<!-- saved from url=(0014)about:internet -->
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title></title>
+
+</head>
+
+<body>
+
+    <a href="">change color</a>
+
+    <p style="cursor:pointer;text-decoration:underline;">other color</p>
+
+    <div style="height: 100px;background-color: red;"></div>
+
+    <script>
+        history.replaceState({
+
+            color: 'red'
+
+        }, '红色', 'red');
+
+        window.onpopstate = function (event) {
+
+            setBackgroundColor(event.state.color);
+
+        };
+
+        document.getElementsByTagName('a')[0].onclick = function (event) {
+
+            event.preventDefault();
+
+            if (history.state.color === 'red') { //上一次为红色
+
+                setBackgroundColor('green');
+
+                history.pushState({
+
+                    color: 'green'
+
+                }, '绿色', 'green.html');
+
+            } else if (history.state.color === 'green' || history.state.color === 'yellow') { //上一次为绿色或黄色
+
+                setBackgroundColor('blue');
+
+                history.pushState({
+
+                    color: 'blue'
+
+                }, '蓝色', 'blue');
+
+            }
+
+        };
+
+        document.getElementsByTagName('p')[0].onclick = function (event) {
+
+            if (history.state.color !== 'yellow') { //如果当前页不是黄色
+
+                setBackgroundColor('yellow');
+
+                history.pushState({
+
+                    color: 'yellow'
+
+                }, '黄色', 'yellow');
+
+            }
+
+        }
+
+        function setBackgroundColor(color) {
+
+            document.getElementsByTagName('div')[0].style.backgroundColor = color;
+
+        }
+    </script>
+
+</body>
+
+</html>

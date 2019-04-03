@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>history 测试</title>
+
+</head>
+
+<body>
+
+
+
+    <p><input type="text" value="0" id="oTxt" /></p>
+
+    <p><input type="button" value="+" id="oBtn" /></p>
+
+
+
+    <script>
+        var otxt = document.getElementById("oTxt");
+
+        var oBtn = document.getElementById("oBtn");
+
+        var n = 0;
+
+
+
+        oBtn.addEventListener("click", function () {
+
+            n++;
+
+            add();
+
+        }, false)
+
+        get();
+
+
+
+        function add() {
+
+            if ("pushState" in history) {
+
+                otxt.value = n;
+
+                history.pushState({
+                    num: n
+                }, null, location.href.split("?")[0] + "?num=" + n);
+
+            }
+
+        }
+
+        function get() {
+
+            if ("onpopstate" in window) {
+
+                window.addEventListener("popstate", function (e) {
+
+                    alert('popstate事件');
+
+                    if (e.state && e.state.num) {
+
+                        n = e.state.num;
+
+                    } else {
+
+                        n = 0;
+
+                    }
+
+                    otxt.value = n;
+
+                }, false);
+
+            }
+
+        }
+    </script>
+
+</body>
+
+</html>
