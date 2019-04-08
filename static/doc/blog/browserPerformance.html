@@ -141,7 +141,7 @@ document.querySelector(&quot;#content&quot;).innerHTML = &quot;请注意,请注�
 <p>OK,我们依然用上面的例子来验证.上面的列子中我们引用<code>main.js</code>文件的<code>script</code>标签是放在<code>bootstrap.min.js</code>的<code>script</code>标签之后的,并且在后台,会延迟<code>2s</code>才返回<code>bootstrap.min.js</code>,那么此时<code>main.js</code>上面时候返回,浏览器什么时候开始解析执行<code>main.js</code>?</p>
 <p><img src="./img/first_painting.png" alt=""></p>
 <p>从上图我们可以得知,其实第一次paint时,其实是没有渲染出美女图片下方的文字的.那么也就是说,其实第一次<code>paint</code>时,浏览器是没有执行<code>main.js</code>.那么有可能你会说,也许接收到<code>main.js</code>文件,实在<code>paint</code>之后呢.其实这个说法,也是完全有可能的,但是呢,结论先不说,嘿嘿..我们先来看看<code>chrome</code>的<code>performance</code>的渲染过程,用事实说话,嘿嘿.</p>
-<p><img src="./img/painting.png" alt=""></p>
+<p><img src="./img/painting_2.png" alt=""></p>
 <p>上面按照时间顺序标了4条记录.</p>
 <p>第一条,是浏览器接收到<code>main.js</code>数据;</p>
 <p>第二条,是浏览器第一次开始<code>paint</code></p>
