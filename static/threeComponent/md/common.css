@@ -138,3 +138,8 @@ body {
 .vertical-menu>ul>li>ul>li.active {
     color: var(--theme-main-color);
 }
+
+.article-desc{
+    color:#999;
+    text-align:right;
+}

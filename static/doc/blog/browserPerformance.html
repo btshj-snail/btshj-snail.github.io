@@ -31,9 +31,9 @@
         <div class="right-area">
             <div class="md-content-null-right" id="mdContent">
 <h1 id="浏览器加载及渲染机制">浏览器加载及渲染机制</h1>
-<blockquote>
-<p>2019.4.7</p>
-</blockquote>
+ <p class="article-desc">日期:2019.4.7</p>
+
+<hr>
 <p>最近看了一篇文章<a href="./http://delai.me/code/js-and-performance/">《JS一定要放在Body的最底部么？聊聊浏览器的渲染机制》</a>.从一道面试题说起,然后剖析了浏览器的加载和渲染机制.</p>
 <blockquote>
 <p>为什么大家普遍把<script src=""></script>这样的代码放在body最底部？（为了沟通效率，我会提前和对方约定所有的讨论都以chrome为例）</p>
@@ -147,7 +147,13 @@ document.querySelector(&quot;#content&quot;).innerHTML = &quot;请注意,请注�
 <p>第二条,是浏览器第一次开始<code>paint</code></p>
 <p>第三条,执行<code>bootstrap.min.js</code>文件.</p>
 <p>第四条,执行<code>main.js</code>文件.</p>
-<p>那么完全可以看出,下载js文件是<code>并发</code>的.而执行<code>js</code>文件,则是上一个文件执行完后,才执行下一个的.那么为了加快最终渲染效果,可以将不重要或者是第一次无需使用的<code>js</code>文件,放在所有<code>script</code>的后面加载.也可以给这些<code>script</code>标签加上<code>defer</code>或<code>async</code></p>
+<p>那么完全可以看出,下载js文件是&quot;并发&quot;的.而执行<code>js</code>文件,则是上一个文件执行完后,才执行下一个的.那么为了加快最终渲染效果,可以将不重要或者是第一次无需使用的<code>js</code>文件,放在所有<code>script</code>的后面加载.也可以给这些<code>script</code>标签加上<code>defer</code>或<code>async</code></p>
+<h2 id="参考文献">参考文献</h2>
+<p>1、《JS一定要放在Body的最底部么？聊聊浏览器的渲染机制》<a href="http://delai.me/code/js-and-performance/">http://delai.me/code/js-and-performance/</a></p>
+<hr>
+<blockquote>
+<p>个人技术博客：<a href="https://vsnail.cn/static/doc/blog/browserPerformance.html">https://vsnail.cn/static/doc/blog/browserPerformance.html</a> 转载请注明出处</p>
+</blockquote>
 
 </div>
         </div>
