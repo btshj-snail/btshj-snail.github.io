@@ -1,4 +1,5 @@
 
+
 var menuOper = {
     getMenuData : function(){
         var dom_container = document.getElementById('mdContent');
@@ -49,7 +50,6 @@ var menuOper = {
     
         var dom_ul = document.createElement('ul');
         dom_ul.className = "vertical-menu-out";
-        console.log('---------',menu)
         menu.forEach(function(item){
             var dom_li = document.createElement("li");
     
@@ -64,7 +64,6 @@ var menuOper = {
                     var dom_sub_li = document.createElement("li");
                     dom_sub_li.innerText = sub.name;
                     dom_sub_li.dataset.id = sub.id;
-                    console.log(sub.id)
                     dom_sub_ul.appendChild(dom_sub_li);
                 })
                 dom_li.appendChild(dom_sub_ul);
@@ -138,12 +137,29 @@ var initStyle = function(){
    
 }
 
+function initPageBottom(){
+    var rightAreaDom = document.querySelector('.right-area');
+    var dom = document.createElement('p');
+    var aDom = document.createElement('a');
+    aDom.href = "https://vsnail.cn/static/doc/blog/index.html"
+    aDom.innerText = "https://vsnail.cn/static/doc/blog/index.html"
+
+    prefixDom = document.createTextNode("个人技术博客： ")
+    suffixDom = document.createTextNode(" 转载请注明出处")
+
+    dom.style.margin = "20px"
+    dom.appendChild(prefixDom)
+    dom.appendChild(aDom)
+    dom.appendChild(suffixDom)
+
+    rightAreaDom.appendChild(dom);
+
+}
+
 
 window.onload = function(){
     var menuData = menuOper.getMenuData();
     var bool = menuOper.isContentOverView();
-    console.log(bool)
-    console.log(menuData.length)
     if(!bool || menuData.length===0){
        menuOper.hideMenu(true)
     }else{
@@ -153,4 +169,6 @@ window.onload = function(){
     }
     
     initStyle();
+
+    initPageBottom();
 }

@@ -163,13 +163,9 @@ OK,我们依然用上面的例子来验证.上面的列子中我们引用`main.j
 
 1、《JS一定要放在Body的最底部么？聊聊浏览器的渲染机制》<http://delai.me/code/js-and-performance/>
 
+2、案例工程(exp-browserPainting) <https://github.com/btshj-snail/exp-browserPainting>
+
 ---
-
-> 个人技术博客：https://vsnail.cn/static/doc/blog/browserPerformance.html 转载请注明出处
-
-
-
-
 
 
 
