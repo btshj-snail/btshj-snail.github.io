@@ -4,29 +4,35 @@ html{
     margin:0;
 }
 body {
+    height:100%;
     padding: 0px;
+    overflow: hidden;
 }
 
-/* .page-container {
-    
-} */
+.page-container {
+    height:100%;   
+}
 
 .page-container .left-area {
     width: 300px;
-    height: 100vh;
     float: left;
     border-right: dashed 1px #bbb;
+    height:100%;
 }
 
 .page-container .right-area {
     margin-left: 300px;
-    padding: 0 20px;
+    padding-left: 20px;
     border-top: solid 1px transparent;
+    overflow-y: auto;
+    height:100%;
 }
 
 .vertical-menu{
-    position: fixed;
+    /* position: fixed; */
     width:300px;
+    height:100%;
+
 }
 
 .vertical-menu .vertical-menu-header{
@@ -48,6 +54,10 @@ body {
 .vertical-menu>ul {
     list-style: none;
     padding:0 1em;
+
+    height:-moz-calc(100% - 75px);
+    height:-webkit-calc(100% - 75px);
+    height:calc(100% - 75px);
     overflow-y:auto;
 }
 

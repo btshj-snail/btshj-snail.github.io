@@ -77,10 +77,10 @@ var menuOper = {
         $("#verticalMenu").find('[data-id]').click(function(){
             var id = $(this).data('id');
             var offset = $("#"+id).offset();
-            $(document.documentElement).animate({scrollTop:offset.top}, 400);
+            $(".right-area").animate({scrollTop:offset.top}, 400);
         })
 
-        $(document).scroll(function(){
+        $(".right-area").scroll(function(){
             timer && clearTimeout(timer);
             timer = setTimeout(function(){
                 var $el = $('h2,h3','#mdContent');
@@ -130,7 +130,7 @@ var initStyle = function(){
     if(!!leftArea && !!rightArea ) {
     
         var sy = window.getComputedStyle(rightArea);
-        leftArea.style.height = sy.height;
+        // leftArea.style.height = sy.height;
         var mh = window.getComputedStyle(menuHeader);
         menuOut.style.height = document.documentElement.clientHeight-((mh.height.replace('px','')-0)+(mh.marginTop.replace('px','')-0)+(mh.marginBottom.replace('px','')-0)+(mh.paddingTop.replace('px','')-0)+(mh.paddingBottom.replace('px','')-0)+1)+'px';
     }
@@ -168,7 +168,7 @@ window.onload = function(){
         menuOper.menuEvent();
     }
     
-    initStyle();
+    // initStyle();
 
     initPageBottom();
 }
