@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>snail的技术笔记</title>
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="Shortcut Icon" href="/favicon.ico"  type="image/x-icon" /> 
+    <link rel="Bookmark" href="/favicon.ico" type="image/x-icon" /> 
+
+
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="浏览器加载及渲染机制">浏览器加载及渲染机制</h1>
+<blockquote>
+<p>2019.4.7</p>
+</blockquote>
+<p>最近看了一篇文章<a href="./http://delai.me/code/js-and-performance/">《JS一定要放在Body的最底部么？聊聊浏览器的渲染机制》</a>.从一道面试题说起,然后剖析了浏览器的加载和渲染机制.</p>
+<blockquote>
+<p>为什么大家普遍把<script src=""></script>这样的代码放在body最底部？（为了沟通效率，我会提前和对方约定所有的讨论都以chrome为例）</p>
+</blockquote>
+<p>在没有看过文章之前,估计我会回答为了是加快浏览器对页面的渲染.但是是哪个步骤,哪个时刻加速了就不得而知了.看过了这篇文章,大致了解了浏览器的加载和渲染机制.但是对于文中的有些说法百思不得其解,因此在某些问题上以实验的形式加以验证,故而对实验结果的总结对错与否估计也不能下个定论,只能权当参考.</p>
+<h2 id="浏览器的渲染机制">浏览器的渲染机制</h2>
+<h3 id="几个概念">几个概念</h3>
+<ul>
+<li><p>1、DOM：Document Object Model，浏览器将HTML解析成树形的数据结构，简称DOM。</p>
+</li>
+<li><p>2、CSSOM：CSS Object Model，浏览器将CSS代码解析成树形的数据结构。</p>
+</li>
+<li><p>3、DOM 和 CSSOM 都是以 Bytes → characters → tokens → nodes → object model. 这样的方式生成最终的数据。如下图所示： </p>
+</li>
+</ul>
+<p><img src="./img/full-process.png" alt=""></p>
+<p><strong>DOM树的构建过程是一个深度遍历过程：当前节点的所有子节点都构建好后才会去构建当前节点的下一个兄弟节点。</strong></p>
+<ul>
+<li>4、Render Tree：DOM 和 CSSOM 合并后生成 Render Tree，如下图： </li>
+</ul>
+<p><img src="./img/render-tree-construction.png" alt=""></p>
+<p><code>Render Tree</code> 和<code>DOM</code>一样，以多叉树的形式保存了每个节点的<code>css</code>属性、节点本身属性、以及节点的孩子节点。</p>
+<p>注意：<code>display:none</code> 的节点不会被加入<code>Render Tree</code>，而<code>visibility: hidden</code> 则会，所以，如果某个节点最开始是不显示的，设为<code>display:none</code>是更优的。具体可以看这里</p>
+<h3 id="浏览器的渲染过程">浏览器的渲染过程</h3>
+<ul>
+<li>1、Create/Update DOM And request css/image/js：</li>
+</ul>
+<p>浏览器请求到<code>HTML</code>代码后，在生成<code>DOM</code>的最开始阶段（应该是 <code>Bytes</code> → <code>characters</code> 后），并行发起<code>css</code>、图片、<code>js</code>的请求，无论他们是否在<code>HEAD</code>里。</p>
+<p>注意：发起<code>js</code>文件的下载<code>request</code>并不需要<code>DOM</code>处理到那个<code>script</code>节点，比如：简单的正则匹配就能做到这一点，虽然实际上并不一定是通过正则。这是很多人在理解渲染机制的时候存在的误区</p>
+<ul>
+<li>2、<code>Create/Update Render CSSOM</code>：</li>
+</ul>
+<p><code>CSS</code>文件下载完成，开始构建<code>CSSOM</code></p>
+<ul>
+<li>3、<code>Create/Update Render Tree</code>：</li>
+</ul>
+<p>所有<code>CSS</code>文件下载完成，<code>CSSOM</code>构建结束后，和 <code>DOM</code> 一起生成 <code>Render Tree</code>。</p>
+<ul>
+<li>4、Layout：</li>
+</ul>
+<p>有了<code>Render Tree</code>，浏览器已经能知道网页中有哪些节点、各个节点的CSS定义以及他们的从属关系。下一步操作称之为<code>Layout</code>，顾名思义就是计算出每个节点在屏幕中的位置。</p>
+<ul>
+<li>5、Painting：</li>
+</ul>
+<p><code>Layout</code>后，浏览器已经知道了哪些节点要显示（which nodes are visible）、每个节点的CSS属性是什么（their computed styles）、每个节点在屏幕中的位置是哪里（geometry）。就进入了最后一步：Painting，按照算出来的规则，通过显卡，把内容画到屏幕上。</p>
+<p>以上五个步骤前3个步骤之所有使用 “<code>Create/Update</code>” 是因为<code>DOM</code>、<code>CSSOM</code>、<code>Render Tree</code>都可能在第一次<code>Painting</code>后又被更新多次，比如<code>JS</code>修改了<code>DOM</code>或者<code>CSS</code>属性。</p>
+<p><code>Layout</code> 和 <code>Painting</code> 也会被重复执行，除了<code>DOM</code>、<code>CSSOM</code>更新的原因外，图片下载完成后也需要调用<code>Layout</code> 和 <code>Painting</code>来更新网页。</p>
+<p>以上都是《JS一定要放在Body的最底部么？聊聊浏览器的渲染机制》归纳总结出来的,并且文中一直都有提到&quot;首屏&quot;这个词,为了一致,本文中的&quot;首屏&quot;也是同一个意思,即,“没有图片的首屏”.</p>
+<p>再来回到之前的面试问题,&quot;script标签的位置会影响首屏时间么？&quot;</p>
+<p>其实通过上面的浏览器渲染过程的描述可以得知,其实<code>script</code>的位置不会影响首屏的时间,但有可能截断首屏的内容，使其只显示上面一部分。</p>
+<p>并且《JS一定要放在Body的最底部么？聊聊浏览器的渲染机制》文中也总结了以下几点:</p>
+<ul>
+<li>如果script标签的位置不在首屏范围内，不影响首屏时间</li>
+<li>所有的script标签应该放在body底部是很有道理的</li>
+<li>但从性能最优的角度考虑，即使在body底部的script标签也会拖慢首屏出来的速度，因为浏览器在最一开始就会请求它对应的js文件，而这，占用了有限的TCP链接数、带宽甚至运行它所需要的CPU。这也是为什么script标签会有async或defer属性的原因之一。</li>
+</ul>
+<h2 id="疑惑和注意点">疑惑和注意点</h2>
+<p>对于浏览器渲染过程有一定的了解了,但是还是有些疑惑以及注意点.</p>
+<h3 id="1-第一次渲染耗时与script位置是无关的">1. 第一次渲染耗时与script位置是无关的</h3>
+<p>通过对浏览器渲染过程的了解,我们可以发现其实浏览器第一次做<code>Painting</code>,是在<code>Render tree</code>构建完成后,<code>layout</code>计算完成以后进行的.那么可以理解为,如果(我是说如果,当然估计这种情况会很少)您要加载的<code>js</code>不会去改变<code>dom</code>的结构或样式.那么其实<code>script</code>标签放在什么位置并不会影响到浏览器的渲染耗时.</p>
+<p>我们可以看看下面的例子.我们写了一个简单的<code>web</code>服务,使用<code>node.js</code>做后台,实际上后台仅仅只是一个静态资源服务器而已.我们在这个服务上面动了一点点的手脚,即,如果是请求<code>bootstrap.min.js</code>,那么我们将等待2秒后才返回,其他资源正常返回.</p>
+<blockquote>
+<p>例子工程地址:<a href="https://github.com/btshj-snail/exp-browserPainting">https://github.com/btshj-snail/exp-browserPainting</a></p>
+</blockquote>
+<p>同时,我们建立一个简单的html界面,这个界面引入了三个css,三个js.这个界面代码如下:</p>
+<pre><code class="language-html">
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot; /&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot; /&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;./style/bootstrap.min.css&quot; /&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;./style/bootstrap-theme.min.css&quot; /&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;./style/main.css&quot; /&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div&gt;
+      &lt;p id=&quot;first&quot; class=&quot;beautiful&quot;&gt;&lt;/p&gt;
+      &lt;p&gt;人之初 性本善 性相近 习相远&lt;/p&gt;
+      &lt;p&gt;苟不教 性乃迁 教之道 贵以专&lt;/p&gt;
+      昔孟母 择邻处 子不学 断机杼&lt;br /&gt;
+      &lt;img src=&quot;./img/1000.jpeg&quot; alt=&quot;&quot; style=&quot;width:200px;height:200px;margin:20px;&quot;/&gt;
+      &lt;p id=&quot;content&quot;&gt;&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;script src=&quot;./js/jquery-2.1.1.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;./js/bootstrap.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;./js/main.js&quot;&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>main.js文件中仅有一个简单的逻辑处理,即在id为content的元素中插入一些话而已.</p>
+<pre><code class="language-javaScript">//main.js
+document.querySelector(&quot;#content&quot;).innerHTML = &quot;请注意,请注意,重点不是美女....重点是你看到这串文字..这才是老夫的真实用意..这句话是通过js动态追加的.当你看到这句话的时候,表明这个js文件已经运行了...其实在你不知道的时候,我偷偷的将另外一个js延迟加载了...&quot;
+
+</code></pre>
+<p>OK,一切都准备就绪了,那么我们来看看当我们延迟2秒返回<code>bootstrap.min.js</code>文件,会对<code>main.js</code>造成什么样的影响.</p>
+<p>从<code>github</code>上<code>clone</code>下来工程,然后进入工程目录,输入命令<code>node ./server/app.js</code> ,然后使用chrome访问<code>http://localhost:9001/static/index.html</code>.我们接着使用<code>F12</code>,打开<code>chrome</code>的开发者工具,点击<code>performance</code>,我们可以轻松的获取浏览器对该界面的渲染过程.</p>
+<p><img src="./img/first_painting.png" alt=""></p>
+<p>我们可以从图中可以看出,在<code>93.6ms</code>的时候,浏览器就已经开始<code>paint</code>了.而在<code>2048ms</code>时,才接受到<code>bootstrap.min.js</code>的数据.因此<strong>第一次渲染耗时与<code>script</code>位置是无关的</strong>.</p>
+<h3 id="2-浏览器是严格按照script标签的顺序来加载的吗">2. 浏览器是严格按照script标签的顺序来加载的吗?</h3>
+<p>其实这个答案在不了解浏览器渲染过程的情况下,也知道这是肯定的.否则无法保证代码的依赖性.在很早以前,我们开发的时候,通常会将<code>jquery</code>的文件放在第一个引用,其他依赖<code>jquery</code>库的<code>js</code>文件放在其后面,这就是为了保证后面<code>js</code>文件使用<code>jquery</code>时,<code>jquery</code>已经被加载.通过这个,我们也可以得知浏览器是严格按照<code>script</code>标签的顺序来加载<code>js</code>文件的.</p>
+<p>OK,我们依然用上面的例子来验证.上面的列子中我们引用<code>main.js</code>文件的<code>script</code>标签是放在<code>bootstrap.min.js</code>的<code>script</code>标签之后的,并且在后台,会延迟<code>2s</code>才返回<code>bootstrap.min.js</code>,那么此时<code>main.js</code>上面时候返回,浏览器什么时候开始解析执行<code>main.js</code>?</p>
+<p><img src="./img/first_painting.png" alt=""></p>
+<p>从上图我们可以得知,其实第一次paint时,其实是没有渲染出美女图片下方的文字的.那么也就是说,其实第一次<code>paint</code>时,浏览器是没有执行<code>main.js</code>.那么有可能你会说,也许接收到<code>main.js</code>文件,实在<code>paint</code>之后呢.其实这个说法,也是完全有可能的,但是呢,结论先不说,嘿嘿..我们先来看看<code>chrome</code>的<code>performance</code>的渲染过程,用事实说话,嘿嘿.</p>
+<p><img src="./img/painting.png" alt=""></p>
+<p>上面按照时间顺序标了4条记录.</p>
+<p>第一条,是浏览器接收到<code>main.js</code>数据;</p>
+<p>第二条,是浏览器第一次开始<code>paint</code></p>
+<p>第三条,执行<code>bootstrap.min.js</code>文件.</p>
+<p>第四条,执行<code>main.js</code>文件.</p>
+<p>那么完全可以看出,下载js文件是<code>并发</code>的.而执行<code>js</code>文件,则是上一个文件执行完后,才执行下一个的.那么为了加快最终渲染效果,可以将不重要或者是第一次无需使用的<code>js</code>文件,放在所有<code>script</code>的后面加载.也可以给这些<code>script</code>标签加上<code>defer</code>或<code>async</code></p>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>
