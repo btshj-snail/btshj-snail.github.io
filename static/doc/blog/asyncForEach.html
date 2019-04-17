@@ -282,7 +282,54 @@ function fetch(x) {
 test()
 </code></pre>
 <p>看了文章，大概了解这段代码其实是想做一个事情，虽然异步了，但是想按照数组排序顺序显示数组中的元素。使用forEach遍历，没有实现这个需求。所以才有了文章的标题。但是女一号表示这个锅，我不背。不是我不行，而是你没把我安排到好的剧本中。</p>
-<p>首先我们来看看为什么达不到预期的目的。很简单，<code>async</code>函数返回的是什么，返回的是<code>promise</code>，是一个异步对象。而<code>forEach</code>是一个个的回调函数，也就是说这些回调函数执行完以后，得到的是一堆的<code>promise</code>对象，而不是<code>async</code>函数内部的执行结果。</p>
+<p>来，我们换个剧本，依然在<code>forEach</code>里面，但是呢，在里面的回调函数中做点文章。</p>
+<pre><code class="language-javaScript">
+function test() {
+    let arr = [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]
+    arr.forEach(async (item,index) =&gt; {
+      console.log(&#39;循环第&#39;+index+&#39;次&#39;)
+      const res = await fetch(item)
+      console.log(&#39;res&#39;,res)
+      const res1 = await fetch1(res);
+      console.log(&#39;res1&#39;,res1)
+    })
+    console.log(&#39;end&#39;)
+  }
+
+  function fetch(x,index) {
+    return new Promise((resolve, reject) =&gt; {
+      setTimeout(() =&gt; {
+        resolve(x+&quot;经过fetch处理&quot;)
+      }, 500)
+    })
+  }
+
+  function fetch1(x) {
+    return new Promise((resolve, reject) =&gt; {
+      setTimeout(() =&gt; {
+        resolve(x+&quot; 经过fetch1处理&quot;)
+      }, 100)
+    })
+  }
+
+  test()
+</code></pre>
+<p>这个剧本，<code>async</code>函数里面对两个异步表达式设置了<code>await</code>。并且都是后一个<code>await</code>的异步表达式使用了前一个<code>await</code>异步表达式的返回值作为参数。也就是说如果<code>async</code>在<code>forEach</code>中有作用，那么后一个异步表达式肯定会用前一个异步表达式的返回值做参数。也就是说我们期望的输出效果应该是：</p>
+<blockquote>
+<p>循环第0次<br>
+循环第1次<br>
+循环第2次<br>
+end<br>
+undefined<br>
+res a经过fetch处理<br>
+res b经过fetch处理<br>
+res c经过fetch处理<br>
+res1 a经过fetch处理 经过fetch1处理<br>
+res1 b经过fetch处理 经过fetch1处理<br>
+res1 c经过fetch处理 经过fetch1处理<br></p>
+</blockquote>
+<p>亲们，你们可以试试，是不是这样子的输出。嘿嘿，我已经试了，确实是这样子输出的。</p>
+<p>我们来看看为什么剧本一达不到预期的目的，而剧本二达到了预期的目的？很简单，<code>async</code>函数返回的是什么，返回的是<code>promise</code>，是一个异步对象。而<code>forEach</code>是一个个的回调函数，也就是说这些回调函数会<strong>立即执行</strong>，当执行到一个<code>await</code>关键字附近的时候，就会返回一个<code>promise</code>对象，<code>async</code>函数内部被冻结，等待<code>await</code>后面的异步表达式执行完后，再执行<code>async</code>函数内部的剩余代码。因此剧本一forEach时得到的是一堆的<code>promise</code>对象，而不是<code>async</code>函数内部的执行结果。<code>async</code>函数保证的是函数内部的<code>await</code>的顺序执行。那么也就能说明<code>async</code>在<code>forEach</code>中是有作用的，只是场景不对罢了。</p>
 <h2 id="总结">总结</h2>
 <p>其实无论<code>async</code>还是<code>generator</code>都还有很多点没有扒到。<code>async</code>和<code>generator</code>的出现对于异步函数的处理真的是一个质的飞跃，较于原来的回调函数的金字塔，<code>promise</code>的非语义化来说，<code>async</code>完全可以胜任女一号的。</p>
 <h2 id="参考文献">参考文献</h2>
