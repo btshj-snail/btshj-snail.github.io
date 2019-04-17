@@ -340,7 +340,60 @@ test()
 
 看了文章，大概了解这段代码其实是想做一个事情，虽然异步了，但是想按照数组排序顺序显示数组中的元素。使用forEach遍历，没有实现这个需求。所以才有了文章的标题。但是女一号表示这个锅，我不背。不是我不行，而是你没把我安排到好的剧本中。
 
-首先我们来看看为什么达不到预期的目的。很简单，`async`函数返回的是什么，返回的是`promise`，是一个异步对象。而`forEach`是一个个的回调函数，也就是说这些回调函数执行完以后，得到的是一堆的`promise`对象，而不是`async`函数内部的执行结果。
+来，我们换个剧本，依然在`forEach`里面，但是呢，在里面的回调函数中做点文章。
+
+```javaScript
+
+function test() {
+    let arr = ["a", "b", "c"]
+    arr.forEach(async (item,index) => {
+      console.log('循环第'+index+'次')
+      const res = await fetch(item)
+      console.log('res',res)
+      const res1 = await fetch1(res);
+      console.log('res1',res1)
+    })
+    console.log('end')
+  }
+  
+  function fetch(x,index) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(x+"经过fetch处理")
+      }, 500)
+    })
+  }
+  
+  function fetch1(x) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(x+" 经过fetch1处理")
+      }, 100)
+    })
+  }
+  
+  test()
+
+```
+
+这个剧本，`async`函数里面对两个异步表达式设置了`await`。并且都是后一个`await`的异步表达式使用了前一个`await`异步表达式的返回值作为参数。也就是说如果`async`在`forEach`中有作用，那么后一个异步表达式肯定会用前一个异步表达式的返回值做参数。也就是说我们期望的输出效果应该是：
+
+> 循环第0次<br>
+循环第1次<br>
+循环第2次<br>
+end<br>
+undefined<br>
+res a经过fetch处理<br>
+res b经过fetch处理<br>
+res c经过fetch处理<br>
+res1 a经过fetch处理 经过fetch1处理<br>
+res1 b经过fetch处理 经过fetch1处理<br>
+res1 c经过fetch处理 经过fetch1处理<br>
+
+亲们，你们可以试试，是不是这样子的输出。嘿嘿，我已经试了，确实是这样子输出的。
+
+
+我们来看看为什么剧本一达不到预期的目的，而剧本二达到了预期的目的？很简单，`async`函数返回的是什么，返回的是`promise`，是一个异步对象。而`forEach`是一个个的回调函数，也就是说这些回调函数会**立即执行**，当执行到一个`await`关键字附近的时候，就会返回一个`promise`对象，`async`函数内部被冻结，等待`await`后面的异步表达式执行完后，再执行`async`函数内部的剩余代码。因此剧本一forEach时得到的是一堆的`promise`对象，而不是`async`函数内部的执行结果。`async`函数保证的是函数内部的`await`的顺序执行。那么也就能说明`async`在`forEach`中是有作用的，只是场景不对罢了。
 
 ## 总结
 
