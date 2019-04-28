@@ -143,12 +143,7 @@ for(let i=0,l=10000000000;i&lt;l;i++){
 <p>个人推测，每当调用<code>setTimeout</code>方法，实际上是向一个缓存对象写入一个键值对（以数字为键，以回调函数为值）。当到达指定延迟时间后，才将回调函数放入到<code>task queue</code>中，等待进入执行栈。</p>
 <h2 id="独特例子分析">独特例子分析</h2>
 <p>在回手掏完之后，基本上<code>setTimeout</code>以及<code>js</code>运行机制应该大概明白了。通过以上的原理及机制，我们来分析一下下面的几个例子（包含之前没有说道的<code>setTimeout</code>的注意项）：</p>
-<ul>
-<li><ol>
-<li>开篇代码解析</li>
-</ol>
-</li>
-</ul>
+<h3 id="开篇代码解析">开篇代码解析</h3>
 <pre><code class="language-javaScript">
 setTimeout(function(){console.log(1)},30)
 
@@ -188,9 +183,7 @@ console.log(0);
 <li>执行栈空闲，从<code>task queue</code>中提取第一个任务（func1）。执行完func1后，再从task queue 中提取一个任务（func2）。执行完func2后，再从task queue 中提取一个任务（func3）.</li>
 </ol>
 <p>以上就是整个代码的大概执行流程。因此，我们得到的打印顺序为 0&gt;3&gt;2&gt;1。这个里面主要是要理解，<strong>调用setTimeout方法并不是直接将回调函数放入<code>task queue</code>中，而是等到到达指定延时后，才将回调函数放入<code>task queue</code>中</strong>。</p>
-<ul>
-<li>2.最大延迟时长</li>
-</ul>
+<h3 id="最大延迟时长">最大延迟时长</h3>
 <p>也许你经常用几秒或者几十秒做延迟时间，估计你很少会想到<code>setTimeout</code>能设置的最大的延迟时间是多少呢？或者如果超出<code>setTimeout</code>的最大延迟时长，又会怎么样？</p>
 <p>在一篇文章上看到过，<code>setTimout</code>最大延迟时长是用32位有符号数存储的，因此他的最大值应该是<code>Math.pow(2,31)-1=2147483647</code>,那么换算成天，大约就是<code>24.8</code>天。如果设置的时长大于<code>2147483647</code>，那么<code>setTimeout</code>的延时时长将会自动设置为<code>0</code>；</p>
 <pre><code class="language-javaScript">
@@ -199,12 +192,7 @@ setTimeout(function(){console.log(1)},2147483648)
 setTimeout(function(){console.log(2)},2147483647)
 </code></pre>
 <p>你会看到，控制台会立即输出<code>1</code>，而<code>2</code>却没有输出，如果上面的结论是正确的，要想看到<code>2</code>，估计要等<code>24.8</code>天了。嘿嘿，反正我是不准备等的了。。。又想尝试的兄弟，可以试了以后告知下。</p>
-<ul>
-<li><ol start="3">
-<li>延时时长0</li>
-</ol>
-</li>
-</ul>
+<h3 id="延时时长0">延时时长0</h3>
 <p>在MDN上看到这么一句话，“<code>delay</code>取默认值<code>0</code>，意味着“马上”执行，或者尽快执行。”</p>
 <p>也就是说将延时时长设置为<code>0</code>，是在有条件的情况下尽快执行。但真的是<code>0</code>毫秒就放入<code>task queue</code>中吗？</p>
 <p>我们来看段代码：</p>
@@ -232,12 +220,7 @@ setTimeout(function(){
 <p>这样的一段代码，可能会有些人认为他的输出结果是：<code>0&gt;1&gt;2&gt;3&gt;6</code>.实际情况却不是这样的，实际输出确是<code>1&gt;0&gt;2&gt;3&gt;6</code>.</p>
 <p>有人解释说，这是因为从执行延时1ms的延时函数，到执行<code>0ms</code>的延时函数，中间超过了<code>1ms</code>，导致延时<code>1ms</code>的回调函数先于延时<code>0ms</code>的回调函数进入<code>task queue</code>中。但是这种说法真不能苟同，如果这样都需要<code>1ms</code>那么<code>js</code>的运行效率也太低了。而且可以在<code>1ms</code>的延时函数 和<code>0ms</code>的延时函数打印时间戳，可以发现，根本不可能是运行超过<code>1ms</code>导致的结果。</p>
 <p>那么我们将<code>1ms</code>的延时函数和<code>0ms</code>的延时函数任意交换位置可以发现，谁在前面谁先进入<code>task queue</code>。那么可以大胆推论，其实延时<code>0ms</code>与延时<code>1ms</code>是等价的（这个结论是自我推导的，不一定正确）。因此才有了<code>1&gt;0&gt;2&gt;3&gt;6</code>输出顺序。</p>
-<ul>
-<li><ol start="4">
-<li>最小间隔时长</li>
-</ol>
-</li>
-</ul>
+<h3 id="最小间隔时长">最小间隔时长</h3>
 <p>有人会说上面例子输出结果是因为<code>setTimeout</code>的最小间隔时长导致的。最小间隔时长，是个很恶心的概念，最初接触的时候没有正确理解，导致一度认为这个最小间隔时长有问题。</p>
 <p>我们来看看最小间隔时长在<code>MDN</code>上面的解释。在<code>MDN</code>上面它不叫“最小间隔时长”，而是叫做“最小延迟时间”。在以前，最小间隔时长通常为<code>10ms</code>，现在的现代浏览器通常为<code>4ms</code>（根据各个浏览器的不同会有些差异）。一直以来，都被“最小延迟时间”这个名词所误导，总认为延时时长必须大于等于最小延迟时间。但是，各种测试总是实现不了或者验证不了这个“最小延迟时间”。在读<code>MDN</code>的时候，发现它有这么一句话&quot;这通常是由于函数嵌套导致（嵌套层级达到一定深度），或者是由于已经执行的<code>setInterval</code>的回调函数阻塞导致&quot;.</p>
 <blockquote>
