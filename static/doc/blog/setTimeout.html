@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>snail的技术笔记</title>
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="Shortcut Icon" href="/favicon.ico"  type="image/x-icon" /> 
+    <link rel="Bookmark" href="/favicon.ico" type="image/x-icon" /> 
+
+
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="走位settimeout，回手掏event-loop">走位setTimeout，回手掏Event Loop</h1>
+ <p class="article-desc">日期:2019.4.27</p>
+
+<hr>
+<blockquote>
+<p>本文仅是技术验证，记录，交流，不针对任何人。有冒犯的地方，请谅解。</p>
+</blockquote>
+<p> 本想喝着<code>coffee</code>,看着娃,过一个恬静的周六。<code>occasionally</code>,浏览到一段代码，觉的蛮有趣。</p>
+<pre><code class="language-javaScript">
+setTimeout(function(){console.log(1)},30)
+
+setTimeout(function(){console.log(2)},10)
+
+setTimeout(function(){console.log(3)},0)
+
+let now = new Date();
+
+while(new Date() - now&lt;100){
+
+}
+
+console.log(0);
+</code></pre>
+<p>估计大部分人都会知道第一个输出会是<code>0</code>（如果还不知道为什么<code>0</code>会先输出，也没有关系，看完整篇文章你就会知道了）.
+但是后面输出的顺序到底是<code>3&gt;2&gt;1</code>还是<code>1&gt;2&gt;3</code>，估计就有争议了。</p>
+<blockquote>
+<p>回手掏，鬼刀一开看不见，走位走位，手里干</p>
+</blockquote>
+<h2 id="走位，走位（简单使用settimeout）">走位，走位（简单使用setTimeout）</h2>
+<p>想知道上面的答案？等着，让我们先来看看<code>setTimeout</code>相关基础。</p>
+<p><code>setTimeout()</code> 方法可以设置一个定时器，该定时器在定时器到期后执行一个函数或指定的一段代码。</p>
+<p>最简单的示例：</p>
+<p><code>100ms</code>后弹出系统对话框。（非严谨的，用俚语表述的需求。。。莫怪）</p>
+<pre><code class="language-javaScript">
+    setTimeout(function(){
+        alert(&#39;走位，走位&#39;)
+    }，100)
+</code></pre>
+<p>好简单的，是不？地球人都知道的东西，再写就没意思了。接下来写点可能会不知道的东东。</p>
+<ul>
+<li><p>1.函数参数个数</p>
+<p>  let timer = window.setTimeout(fun[,delay,param1,param2,...]);</p>
+</li>
+</ul>
+<p>我们常用的就两个参数，估计一个参数，或者多于两个参数的情况用的比较少。只有一个参数时，延迟时间默认为0；有多于两个参数时，除开第一和第二参数的其他参数，我们称之为“附加参数”。附加参数都会做为回调函数的参数传递。</p>
+<pre><code class="language-javaScript">
+let func = function(a,b){
+    console.log(a+b); 
+}
+
+setTimeout(func,100,10,20); //30
+</code></pre>
+<ul>
+<li>2.用于防抖</li>
+</ul>
+<p>防抖:在事件被触发n秒后再执行回调，如果在这n秒内又被触发，则重新计时。</p>
+<pre><code class="language-javaScript">
+function debounce(fn, wait) {
+  var timer = null;
+  return function () {
+      var context = this
+      var args = arguments
+      if (timer) {
+          clearTimeout(timer);
+          timer = null;
+      }
+      timer = setTimeout(function () {
+          fn.apply(context, args)
+      }, wait)
+  }
+}
+</code></pre>
+<ul>
+<li><p>3.轮循任务（setInterval）
+<code>js</code>中可以使用<code>setInterval</code>开启轮询，但是这种存在一个问题就是执行间隔往往就不是你希望的间隔时间。使用<code>setTimeout</code>构造轮询能保证每次轮询的间隔。</p>
+</li>
+<li><p>4.程序切片
+我们都清楚<code>js</code>是单线程的，意味着js处理大数据的时候，容易处于‘假死’状态。那么这个时候，我们可以利用<code>setTimeout</code>进行切片，来避免‘假死’状态的出现。</p>
+</li>
+</ul>
+<pre><code class="language-javaScript">let func = function(index){
+    ....
+}
+
+for(let i=0,l=10000000000;i&lt;l;i++){
+    (function(index){
+        setTimeout(function(){func(index)},0)
+    })(i)
+}
+</code></pre>
+<p>基本<code>setTimeout</code>常用的用法就是这些。</p>
+<h2 id="回手掏（settimeout原理及javascript运行机制之event-loop）">回手掏（setTimeout原理及javaScript运行机制之event loop）</h2>
+<p>走位完了，让我们一起回手掏掏他们的原理和机制。</p>
+<h3 id="js-单线程">js 单线程</h3>
+<p>我们都知道，现代浏览器每个标签页就是一个进程，每个进程下面又包含了各种线程，比如<code>javaScript</code>线程，渲染线程，请求线程等等。也就是说<code>js</code>是单线程的。估计有人要问了为什么<code>js</code>是单线程呢，为什么不是多线程呢？其实这和<code>js</code>的用途有关系。作为浏览器脚本语言，<code>JavaScript</code>的主要用途是与用户互动，以及操作<code>DOM</code>。这决定了它只能是单线程，否则会带来很复杂的同步问题。比如，假定<code>JavaScript</code>同时有两个线程，一个线程在某个<code>DOM</code>节点上添加内容，另一个线程删除了这个节点，这时浏览器应该以哪个线程为准？所以，为了避免复杂性，从一诞生，<code>JavaScript</code>就是单线程，这已经成了这门语言的核心特征，将来也不会改变。为了利用多核<code>CPU</code>的计算能力，<code>HTML5</code>提出<code>Web Worker</code>标准，允许<code>JavaScript</code>脚本创建多个线程，但是子线程完全受主线程控制，且不得操作<code>DOM</code>。所以，这个新标准并没有改变<code>JavaScript</code>单线程的本质。</p>
+<p>OK，<code>js</code>是单线程，那么我们可以得出<code>setTimeout</code>绝对不是开启另一个线程来实现异步的。那<code>setTimeout</code>是如何达到异步效果的呢？</p>
+<h3 id="任务队列">任务队列</h3>
+<p>在<code>js</code>中，所有任务都分为同步任务和异步任务两大类。同步任务指的是，在主线程上排队执行的任务，只有前一个任务执行完毕，才能执行后一个任务；异步任务指的是，不进入主线程、而进入&quot;任务队列&quot;（<code>task queue</code>）的任务，只有&quot;任务队列&quot;通知主线程，某个异步任务可以执行了，该任务才会进入主线程执行。</p>
+<blockquote>
+<p>（1）所有同步任务都在主线程上执行，形成一个执行栈（<code>execution context stack</code>）。<br>
+（2）主线程之外，还存在一个&quot;任务队列&quot;（<code>task queue</code>）。只要异步任务有了运行结果，就在&quot;任务队列&quot;之中放置一个事件。<br>
+（3）一旦&quot;执行栈&quot;中的所有同步任务执行完毕，系统就会读取&quot;任务队列&quot;，看看里面有哪些事件。那些对应的异步任务，于是结束等待状态，进入执行栈，开始执行。<br>
+（4）主线程不断重复上面的第三步。<br></p>
+</blockquote>
+<p>只要主线程空了，就会去读取&quot;任务队列&quot;，这就是<code>JavaScript</code>的运行机制。这个过程会不断重复。</p>
+<p>&quot;任务队列&quot;是一个先进先出的数据结构，排在前面的事件，优先被主线程读取。主线程的读取过程基本上是自动的，只要执行栈一清空，&quot;任务队列&quot;上第一位的事件就自动进入主线程。</p>
+<h3 id="event-loop">Event loop</h3>
+<p>主线程从&quot;任务队列&quot;中读取事件，这个过程是循环不断的，所以整个的这种运行机制又称为<code>Event Loop</code>（事件循环）。</p>
+<p>这里一定要分清楚<code>task queue</code> 和<code>Event loop</code>概念。之前，发现很多人总是分不清楚<code>task queue</code> 和 <code>Event loop</code>概念。说<code>setTimeout</code>原理时，每每有人说到是将回调函数放入到事件队列里面，然后。。。。。。；真觉的这样的说法不太好。</p>
+<h3 id="settimeout理解">setTimeout理解</h3>
+<p>个人推测，每当调用<code>setTimeout</code>方法，实际上是向一个缓存对象写入一个键值对（以数字为键，以回调函数为值）。当到达指定延迟时间后，才将回调函数放入到<code>task queue</code>中，等待进入执行栈。</p>
+<h2 id="独特例子分析">独特例子分析</h2>
+<p>在回手掏完之后，基本上<code>setTimeout</code>以及<code>js</code>运行机制应该大概明白了。通过以上的原理及机制，我们来分析一下下面的几个例子（包含之前没有说道的<code>setTimeout</code>的注意项）：</p>
+<ul>
+<li><ol>
+<li>开篇代码解析</li>
+</ol>
+</li>
+</ul>
+<pre><code class="language-javaScript">
+setTimeout(function(){console.log(1)},30)
+
+setTimeout(function(){console.log(2)},10)
+
+setTimeout(function(){console.log(3)},0)
+
+let now = new Date();
+
+while(new Date() - now&lt;100){
+
+}
+
+console.log(0);
+</code></pre>
+<p>这段代码在执行栈中执行顺序为：</p>
+<ol>
+<li>声明变量<code>now</code>；</li>
+<li>向setTimeout缓存对象中放入延迟30毫秒执行的回调函数（这个回调函数我们标记为func3）；</li>
+<li>向setTimeout缓存对象中放入延迟10毫秒执行的回调函数（这个回调函数我们标记为func2）；</li>
+<li>向setTimeout缓存对象中放入延迟0毫秒执行的回调函数（这个回调函数我们标记为func1）；</li>
+<li>向变量now赋值当前时间；</li>
+<li>一直循环100ms；</li>
+<li><ol>
+<li>在0ms时，将回调函数func1放入task queue中。</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>在10ms时，将回调函数func2放入task queue中。</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>在30ms时，将回调函数func3放入task queue中。</li>
+</ol>
+</li>
+<li>向控制台打印0；</li>
+<li>执行栈空闲，从<code>task queue</code>中提取第一个任务（func1）。执行完func1后，再从task queue 中提取一个任务（func2）。执行完func2后，再从task queue 中提取一个任务（func3）.</li>
+</ol>
+<p>以上就是整个代码的大概执行流程。因此，我们得到的打印顺序为 0&gt;3&gt;2&gt;1。这个里面主要是要理解，<strong>调用setTimeout方法并不是直接将回调函数放入<code>task queue</code>中，而是等到到达指定延时后，才将回调函数放入<code>task queue</code>中</strong>。</p>
+<ul>
+<li>2.最大延迟时长</li>
+</ul>
+<p>也许你经常用几秒或者几十秒做延迟时间，估计你很少会想到<code>setTimeout</code>能设置的最大的延迟时间是多少呢？或者如果超出<code>setTimeout</code>的最大延迟时长，又会怎么样？</p>
+<p>在一篇文章上看到过，<code>setTimout</code>最大延迟时长是用32位有符号数存储的，因此他的最大值应该是<code>Math.pow(2,31)-1=2147483647</code>,那么换算成天，大约就是<code>24.8</code>天。如果设置的时长大于<code>2147483647</code>，那么<code>setTimeout</code>的延时时长将会自动设置为<code>0</code>；</p>
+<pre><code class="language-javaScript">
+setTimeout(function(){console.log(1)},2147483648)
+
+setTimeout(function(){console.log(2)},2147483647)
+</code></pre>
+<p>你会看到，控制台会立即输出<code>1</code>，而<code>2</code>却没有输出，如果上面的结论是正确的，要想看到<code>2</code>，估计要等<code>24.8</code>天了。嘿嘿，反正我是不准备等的了。。。又想尝试的兄弟，可以试了以后告知下。</p>
+<ul>
+<li><ol start="3">
+<li>延时时长0</li>
+</ol>
+</li>
+</ul>
+<p>在MDN上看到这么一句话，“<code>delay</code>取默认值<code>0</code>，意味着“马上”执行，或者尽快执行。”</p>
+<p>也就是说将延时时长设置为<code>0</code>，是在有条件的情况下尽快执行。但真的是<code>0</code>毫秒就放入<code>task queue</code>中吗？</p>
+<p>我们来看段代码：</p>
+<pre><code class="language-javaScript">
+setTimeout(function(){
+    console.log(2)
+},2)
+
+setTimeout(function(){
+    console.log(6)
+},6)
+
+setTimeout(function(){
+    console.log(1)
+},1)
+
+setTimeout(function(){
+    console.log(3)
+},3)
+
+setTimeout(function(){
+    console.log(0)
+},0)
+</code></pre>
+<p>这样的一段代码，可能会有些人认为他的输出结果是：<code>0&gt;1&gt;2&gt;3&gt;6</code>.实际情况却不是这样的，实际输出确是<code>1&gt;0&gt;2&gt;3&gt;6</code>.</p>
+<p>有人解释说，这是因为从执行延时1ms的延时函数，到执行<code>0ms</code>的延时函数，中间超过了<code>1ms</code>，导致延时<code>1ms</code>的回调函数先于延时<code>0ms</code>的回调函数进入<code>task queue</code>中。但是这种说法真不能苟同，如果这样都需要<code>1ms</code>那么<code>js</code>的运行效率也太低了。而且可以在<code>1ms</code>的延时函数 和<code>0ms</code>的延时函数打印时间戳，可以发现，根本不可能是运行超过<code>1ms</code>导致的结果。</p>
+<p>那么我们将<code>1ms</code>的延时函数和<code>0ms</code>的延时函数任意交换位置可以发现，谁在前面谁先进入<code>task queue</code>。那么可以大胆推论，其实延时<code>0ms</code>与延时<code>1ms</code>是等价的（这个结论是自我推导的，不一定正确）。因此才有了<code>1&gt;0&gt;2&gt;3&gt;6</code>输出顺序。</p>
+<ul>
+<li><ol start="4">
+<li>最小间隔时长</li>
+</ol>
+</li>
+</ul>
+<p>有人会说上面例子输出结果是因为<code>setTimeout</code>的最小间隔时长导致的。最小间隔时长，是个很恶心的概念，最初接触的时候没有正确理解，导致一度认为这个最小间隔时长有问题。</p>
+<p>我们来看看最小间隔时长在<code>MDN</code>上面的解释。在<code>MDN</code>上面它不叫“最小间隔时长”，而是叫做“最小延迟时间”。在以前，最小间隔时长通常为<code>10ms</code>，现在的现代浏览器通常为<code>4ms</code>（根据各个浏览器的不同会有些差异）。一直以来，都被“最小延迟时间”这个名词所误导，总认为延时时长必须大于等于最小延迟时间。但是，各种测试总是实现不了或者验证不了这个“最小延迟时间”。在读<code>MDN</code>的时候，发现它有这么一句话&quot;这通常是由于函数嵌套导致（嵌套层级达到一定深度），或者是由于已经执行的<code>setInterval</code>的回调函数阻塞导致&quot;.</p>
+<blockquote>
+<p>在浏览器中，setTimeout()/setInterval() 的每调用一次定时器的最小间隔是4ms，这通常是由于函数嵌套导致（嵌套层级达到一定深度），或者是由于已经执行的setInterval的回调函数阻塞导致的</p>
+</blockquote>
+<p>这才焕然大悟，原来“最小延迟时间”是有限制条件的，他的限制条件就是函数嵌套到达一定深度，或者setInterval回调阻塞。</p>
+<p>那么接下来我们就用一段代码验证下：</p>
+<pre><code class="language-javaScript">
+function doFunc(count){
+    console.time(&#39;time total:&#39;)
+    let timeFunc = function(){
+        if(count&gt;=0){
+            setTimeout(timeFunc,0)
+            count --;
+        }else{
+            console.timeEnd(&#39;time total:&#39;)
+        }
+    }
+    timeFunc()
+}
+doFunc(10)
+</code></pre>
+<p>如果没有最小延迟时间的限制，那么在只有这段代码的环境下运行，那么应该会很快运行完。但是在chrome中实际输出确是<code>33.2451171875ms</code>。这就直接证明了最小延迟时间的存在，并且触发他的条件是函数嵌套到达了一定深度。</p>
+<p>好吧，个人觉的<code>setTimeout</code>的小九九也就这些了，没有再写下去的必要了。比如<code>setTimeout</code>回调函数中的<code>this</code>，怎么清除当前建立的所有<code>setTimeout</code>等等。类似这些地球人都知道的事情，估计也不是您看这篇文章的目的了。</p>
+<p>走吧，客官们，嗨把刺激战场喽。。。。</p>
+<h2 id="参考文献">参考文献</h2>
+<p>1、《window​.set​Timeout》<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/setTimeout">https://developer.mozilla.org/zh-CN/docs/Web/API/Window/setTimeout</a></p>
+<p>2、《JavaScript 运行机制详解：再谈Event Loop》<a href="http://www.ruanyifeng.com/blog/2014/10/event-loop.html">http://www.ruanyifeng.com/blog/2014/10/event-loop.html</a></p>
+<p>3、《setTimeout最小间隔4ms的问题》<a href="https://segmentfault.com/q/1010000014975261">https://segmentfault.com/q/1010000014975261</a></p>
+<p>4、《setTimeout初探(一)：4ms的真伪》 <a href="https://blog.csdn.net/yiifaa/article/details/52046333?utm_source=blogxgwz6">https://blog.csdn.net/yiifaa/article/details/52046333?utm_source=blogxgwz6</a></p>
+<p>5、 《setTimeout的那些事》<a href="https://imweb.io/topic/56ac67fbe39ca21162ae6c78">https://imweb.io/topic/56ac67fbe39ca21162ae6c78</a></p>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>
