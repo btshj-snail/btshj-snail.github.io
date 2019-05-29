@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>snail的技术笔记</title>
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="Shortcut Icon" href="/favicon.ico"  type="image/x-icon" /> 
+    <link rel="Bookmark" href="/favicon.ico" type="image/x-icon" /> 
+
+
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="cp">CP</h1>
+<p>cp 命令，主要用来复制文件和目录，同时借助某些选项，还可以实现复制整个目录，以及比对两文件的新旧而予以升级等功能。</p>
+<p>cp 命令的基本格式如下：</p>
+<pre><code class="language-shell">
+cp [选项] 源文件 目标文件
+</code></pre>
+<p>选项：</p>
+<ul>
+<li>-a:相当于 -d、-p、-r 选项的集合，这几个选项我们一一介绍；</li>
+<li>-d:如果源文件为软链接（对硬链接无效），则复制出的目标文件也为软链接；</li>
+<li>-i:询问，如果目标文件已经存在，则会询问是否覆盖；</li>
+<li>-l:把目标文件建立为源文件的硬链接文件，而不是复制源文件；</li>
+<li>-s:把目标文件建立为源文件的软链接文件，而不是复制源文件；</li>
+<li>-p:复制后目标文件保留源文件的属性（包括所有者、所属组、权限和时间）；</li>
+<li>-r：递归复制，用于复制目录；</li>
+<li>-u：若目标文件比源文件有差异，则使用该选项可以更新目标文件，此选项可用于对文件的升级和备用。</li>
+</ul>
+<blockquote>
+<p>需要注意的是，源文件可以有多个，但这种情况下，目标文件必须是目录才可以。</p>
+</blockquote>
+<h2 id="实例">实例</h2>
+<p><code>cp</code> 命令既可以复制文件，也可以复制目录。我们先来看看如何复制文件</p>
+<pre><code class="language-shell">
+cp cangls.text /tmp/
+#把源文件不改名复制到 /tmp/ 目录下
+
+cp cangls.text /tmp/bols.text
+#改名复制
+</code></pre>
+<h3 id="-l-和--s-选项">&quot;-l&quot; 和 &quot;-s&quot; 选项</h3>
+<p>我们如果使用 &quot;-l&quot; 选项，则目标文件会被建立为源文件的硬链接；而如果使用了 &quot;-s&quot; 选项，则目标文件会被建立为源文件的软链接。</p>
+<p>这两个选项和 &quot;-d&quot; 选项是不同的，&quot;d&quot; 选项要求源文件必须是软链接，目标文件才会复制为软链接；而 &quot;-l&quot; 和 &quot;-s&quot; 选项的源文件只需是普通文件，目标文件就可以直接复制为硬链接和软链接。例如：</p>
+<pre><code class="language-shell">
+# touch bols
+#建立测试文件
+ll -i bols
+262154-rw-r--r-- 1 root root 0 6月 14 06:26 bols
+#源文件只是一个普通文件，而不是软链接文件
+cp -l /root/bols /tmp/bols_h
+cp -s /root/bols /tmp/bols_s
+#使用&quot;-l&quot; 和&quot;-s&quot;选项复制
+ll -i /tmp/bols_h /tmp/bols_s
+262154-rw-r--r-- 2root root 0 6 月 14 06:26/tmp/bols_h
+#目标文件 /tmp/bols_h 为源文件的硬链接文件
+932113 lrwxrwxrwx 1 root root 10 6 月 14 06:27/tmp/bols_s -&gt; /root/bols
+#目标文件 /tmp/bols_s 为源文件的软链接文件
+</code></pre>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>
