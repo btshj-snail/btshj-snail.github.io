@@ -30,11 +30,20 @@
         </div>
         <div class="right-area">
             <div class="md-content-null-right" id="mdContent">
-<h1 id="linux-每日一令">linux 每日一令</h1>
-<h2 id="1-netstat"><a href="./netstat.html">1. netstat</a></h2>
-<h2 id="2-rm"><a href="./rm.html">2. rm</a></h2>
-<h2 id="3-cp"><a href="./cp.html">3. cp</a></h2>
-<h2 id="4-pwd"><a href="./pwd.html">4. pwd</a></h2>
+<h1 id="pwd">pwd</h1>
+<h2 id="详解">详解</h2>
+<p>由于 <code>Linux</code> 文件系统中有许多目录，当用户执行一条 <code>Linux</code> 命令又没有指定该命令或参数所在的目录时，Linux 系统就会首先在当前目录（目前的工作目录）搜寻这个命令或它的参数。因此，用户在执行命令之前，常常需要确定目前所在的工作目录，即当前目录。</p>
+<p>当用户登陆 <code>Linux</code> 系统之后，其当前目录就是它的主目录。那么，如何确定当前目录呢？可以使用 <code>Linux</code> 系统的 <code>pwd</code> 命令来显示当前目录的绝对路径。</p>
+<p><code>pwd</code> 命令，是 <code>Print Working Directory</code> （打印工作目录）的缩写，功能是显示用户当前所处的工作目录。该命令的基本格式为：</p>
+<pre><code class="language-shell">[root@localhost ~]# pwd</code></pre>
+<h3 id="实例">实例</h3>
+<pre><code class="language-shell">
+[root@localhost ~]# whoami
+root
+[root@localhost ~]# pwd
+/root
+</code></pre>
+<p><code>whoami</code> 命令用于确定当前登陆的用户，后续会做详细介绍。可以看到，root 用户当前所在目录是它的主目录 /root。</p>
 
 </div>
         </div>
