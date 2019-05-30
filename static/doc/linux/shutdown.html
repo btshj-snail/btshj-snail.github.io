@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>snail的技术笔记</title>
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="Shortcut Icon" href="/favicon.ico"  type="image/x-icon" /> 
+    <link rel="Bookmark" href="/favicon.ico" type="image/x-icon" /> 
+
+
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="shutdown">shutdown</h1>
+<p>常用的关机命令；如果是图形界面来登录系统，那么任何身份都能关机。若是使用远程管理工具，那么关机只能用 root 账户了。</p>
+<p>shutdown 可以达成如下工作：</p>
+<ul>
+<li><ol>
+<li>可以自由选择关机模式：是关机，重启或是进入单用户操作模式；</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>可以设置关机时间;</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>可以自定义关机消息。在关机之前，可以将自己设置的消息传送给在线用户。</li>
+</ol>
+</li>
+<li><ol start="4">
+<li>可以仅发出警告，而不是真的要关机</li>
+</ol>
+</li>
+<li><ol start="5">
+<li>可以选择是否要用 fsck 检查文件系统。</li>
+</ol>
+</li>
+</ul>
+<h2 id="命令选项">命令选项</h2>
+<ul>
+<li>-t sec : -t 后面加秒数，表示多少秒后关机。</li>
+<li>-r ：在系统的服务停掉之后就重启。</li>
+<li>-h ：将系统的服务停掉之后就关机</li>
+<li>-k ：不要真的关机，只是发送警告消息出去，</li>
+<li>-n ：不经过 init 程序，直接以 shutdown 的功能来关机</li>
+<li>-f ：关机并开机之后，强制略过 fsck 的磁盘检查</li>
+<li>-F ：系统重启之后，强制进行 fsck 的磁盘检查</li>
+<li>-c ：取消已经在进行的 shutdown 命令内容；<blockquote>
+<p>需要注意的是，时间参数请务必加入命令中，否则 shutdown 会自动跳到 run-level 1 （就是单用户维护的登录情况），下面提供几个时间参数的例子：</p>
+</blockquote>
+</li>
+</ul>
+<pre><code class="language-shell">#立刻关机，其中now相当于时间为0的状态
+shutdown -h now
+
+#系统咋今天的20:25分会关机，若在21:25才执行命令，则隔天关机
+shutdown -h 20:25
+
+#系统再过十分钟就自动关机
+shutdown -h +10
+
+#系统立即重启
+shutdown -r now
+
+#再过30分钟系统重启
+
+shutdown -r +30 &quot;the system will reboot&quot;
+
+#仅发出警告信件的参数，系统并不会关机。
+shutdown -k now &#39;this system will reboot&#39;
+
+
+</code></pre>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

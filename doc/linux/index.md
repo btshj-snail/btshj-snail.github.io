@@ -7,3 +7,5 @@
 ## [3. cp](./cp.md)
 
 ## [4. pwd](./pwd.md)
+
+## [5. shutdown](./shutdown.md)
