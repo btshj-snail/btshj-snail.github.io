@@ -30,13 +30,32 @@
         </div>
         <div class="right-area">
             <div class="md-content-null-right" id="mdContent">
-<h1 id="linux-每日一令">linux 每日一令</h1>
-<h2 id="1-netstat"><a href="./netstat.html">1. netstat</a></h2>
-<h2 id="2-rm"><a href="./rm.html">2. rm</a></h2>
-<h2 id="3-cp"><a href="./cp.html">3. cp</a></h2>
-<h2 id="4-pwd"><a href="./pwd.html">4. pwd</a></h2>
-<h2 id="5-shutdown"><a href="./shutdown.html">5. shutdown</a></h2>
-<h2 id="6-mkdir"><a href="./mkdir.html">6. mkdir</a></h2>
+<h1 id="mkdir">mkdir</h1>
+<p>新建文件夹。</p>
+<h2 id="命令选项">命令选项</h2>
+<ul>
+<li>-m : 配置文件夹的权限，直接设置，不需要默认权限。</li>
+<li>-p : 帮助你直接将所需要的目录（包含上层目录）递归创建起来。</li>
+</ul>
+<h2 id="案例">案例</h2>
+<ul>
+<li><ol>
+<li>创建多层目录</li>
+</ol>
+</li>
+</ul>
+<pre><code class="language-shell">
+mkdir -p test1/test2/test3
+</code></pre>
+<ul>
+<li><ol start="2">
+<li>新建权限为 rwx--x--x 的叫做 <code>test2</code> 的目录</li>
+</ol>
+</li>
+</ul>
+<pre><code class="language-shell">
+mkdir -m 711 test2
+</code></pre>
 
 </div>
         </div>

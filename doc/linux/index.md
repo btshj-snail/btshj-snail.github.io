@@ -9,3 +9,5 @@
 ## [4. pwd](./pwd.md)
 
 ## [5. shutdown](./shutdown.md)
+
+## [6. mkdir](./mkdir.md)
