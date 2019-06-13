@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>snail的技术笔记</title>
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="Shortcut Icon" href="/favicon.ico"  type="image/x-icon" /> 
+    <link rel="Bookmark" href="/favicon.ico" type="image/x-icon" /> 
+
+
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="查看文件内容">查看文件内容</h1>
+<p>命令more和less都可以页页的查看文件内容。</p>
+<h2 id="more">more</h2>
+<h2 id="-功能按键"># 功能按键</h2>
+<p>查看文件过程中，有几个按键是可以按的：</p>
+<ol>
+<li>空格键</li>
+</ol>
+<p>表示向下翻一页</p>
+<ol start="2">
+<li>Enter</li>
+</ol>
+<p>表示向下滚动一行</p>
+<ol start="3">
+<li>/字符串</li>
+</ol>
+<p>在当前显示内容当中，向下查询“字符串”这个关键字。</p>
+<ol start="4">
+<li>:f</li>
+</ol>
+<p>立刻显示出文件名以及目前显示的行数。</p>
+<ol start="5">
+<li>q</li>
+</ol>
+<p>立刻离开more，不再显示该文件内容。</p>
+<ol start="6">
+<li>b或[ctrl] -b</li>
+</ol>
+<p>往回翻页，不过这操作只对文件有用，对管道无用。</p>
+<h2 id="less">less</h2>
+<p>less相比more来说，更加有弹性。在使用more的时候，我们没有办法向前面翻，只能往后面看，但若使用了less时，就可以使用上，下等按键功能来往前往后翻看文件。除此之外，在less里头可以拥有更多的查询功能。不只可以向下查询，也可以向上查询。基本可输入的命令有：</p>
+<h3 id="可输入的命令">可输入的命令</h3>
+<ol>
+<li>空格键 </li>
+</ol>
+<p>向下翻动一页</p>
+<ol start="2">
+<li><code>[PageDown]</code></li>
+</ol>
+<p>向下翻动一页</p>
+<ol start="3">
+<li><code>[PageUp]</code></li>
+</ol>
+<p>向上翻动一页</p>
+<ol start="4">
+<li>/字符串</li>
+</ol>
+<p>向下查询“字符串”的功能</p>
+<ol start="5">
+<li>?字符串</li>
+</ol>
+<p>向上查询“字符串”的功能</p>
+<ol start="6">
+<li>n </li>
+</ol>
+<p>重复前一个查询（与/或？有关）</p>
+<ol start="7">
+<li>N</li>
+</ol>
+<p>反向重复前一个查询（与/或？有关）</p>
+<ol start="8">
+<li>q</li>
+</ol>
+<p>离开less这个程序</p>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>

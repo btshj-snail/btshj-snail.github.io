@@ -30,15 +30,27 @@
         </div>
         <div class="right-area">
             <div class="md-content-null-right" id="mdContent">
-<h1 id="linux-每日一令">linux 每日一令</h1>
-<h2 id="1-netstat"><a href="./netstat.html">1. netstat</a></h2>
-<h2 id="2-rm"><a href="./rm.html">2. rm</a></h2>
-<h2 id="3-cp"><a href="./cp.html">3. cp</a></h2>
-<h2 id="4-pwd"><a href="./pwd.html">4. pwd</a></h2>
-<h2 id="5-shutdown"><a href="./shutdown.html">5. shutdown</a></h2>
-<h2 id="6-mkdir"><a href="./mkdir.html">6. mkdir</a></h2>
-<h2 id="7cat"><a href="./cat.html">7.cat</a></h2>
-<h2 id="8-大文件查看"><a href="./moreAndLess.html">8. 大文件查看</a></h2>
+<h1 id="cat">cat</h1>
+<p>查看一个文件的内容。</p>
+<h2 id="命令">命令</h2>
+<ul>
+<li>-A ：相当于<code>-vET</code>的整合，可列出一些特殊字符，而不是空白而已。</li>
+<li>-b ：列出行号，仅针对非空白行做行号现实，空白行不表行号。</li>
+<li>-E ：将结尾的断行字符$显示出来。</li>
+<li>-n :   打印出行号，连同空白行也会有行号，与-b参数不同。</li>
+<li>-T :   将<code>[Tab]</code>按键以^T显示出来；</li>
+<li>-v :    列出一些看不出来的特殊字符。</li>
+</ul>
+<h2 id="例子">例子</h2>
+<ul>
+<li><ol>
+<li>查看<code>/etc/issue</code> 这个文件的内容,并且加上行号</li>
+</ol>
+</li>
+</ul>
+<pre><code class="language-shell">
+cat  -b /etc/issue
+</code></pre>
 
 </div>
         </div>
