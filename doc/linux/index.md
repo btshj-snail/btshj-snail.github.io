@@ -11,3 +11,7 @@
 ## [5. shutdown](./shutdown.md)
 
 ## [6. mkdir](./mkdir.md)
+
+## [7.cat](./cat.md)
+
+## [8. 大文件查看](./moreAndLess.md)
