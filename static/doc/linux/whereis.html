@@ -30,16 +30,28 @@
         </div>
         <div class="right-area">
             <div class="md-content-null-right" id="mdContent">
-<h1 id="linux-每日一令">linux 每日一令</h1>
-<h2 id="1-netstat"><a href="./netstat.html">1. netstat</a></h2>
-<h2 id="2-rm"><a href="./rm.html">2. rm</a></h2>
-<h2 id="3-cp"><a href="./cp.html">3. cp</a></h2>
-<h2 id="4-pwd"><a href="./pwd.html">4. pwd</a></h2>
-<h2 id="5-shutdown"><a href="./shutdown.html">5. shutdown</a></h2>
-<h2 id="6-mkdir"><a href="./mkdir.html">6. mkdir</a></h2>
-<h2 id="7cat"><a href="./cat.html">7.cat</a></h2>
-<h2 id="8-大文件查看"><a href="./moreAndLess.html">8. 大文件查看</a></h2>
-<h2 id="9whereis"><a href="./whereis.html">9.whereis</a></h2>
+<h1 id="whereis">whereis</h1>
+<p>查找文件。在<code>Liunx</code>下面也有相当优异的查找命令。通常<code>find</code>不很常用的，因为速度比较慢。通常我们都是先使用<code>whereis</code>和<code>locate</code>来检查，如果真的找不到了，才用<code>find</code>来查找。为什么呢？因为<code>whereis</code>与<code>locate</code>是利用数据库来查找的，所以相当快速，而且并没有实际查询硬盘，比较节省时间。</p>
+<h2 id="命令">命令</h2>
+<ul>
+<li>-b ： 只找二进制格式的文件。</li>
+<li>-m ： 只找在说明文件<code>manual</code>路径下的文件</li>
+<li>-s ： 只找<code>source</code>源文件</li>
+<li>-u ： 查找不在上述三个选项当中的其他特殊文件。</li>
+</ul>
+<h2 id="实例">实例</h2>
+<ul>
+<li>找出<code>ifconfi</code>g 这个文件名</li>
+</ul>
+<pre><code class="language-shell">
+whereis ifconfig
+</code></pre>
+<ul>
+<li>只找出跟<code>passwd</code>有关的说明文件</li>
+</ul>
+<pre><code class="language-shell">
+whereis -m passwd
+</code></pre>
 
 </div>
         </div>

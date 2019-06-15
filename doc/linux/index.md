@@ -12,8 +12,10 @@
 
 ## [6. mkdir](./mkdir.md)
 
-## [7.cat](./cat.md)
+## [7. cat](./cat.md)
 
 ## [8. 大文件查看](./moreAndLess.md)
 
-## [9.whereis](./whereis.md)
+## [9. whereis](./whereis.md)
+
+## [10. find](./find.md)
