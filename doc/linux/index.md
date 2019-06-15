@@ -15,3 +15,5 @@
 ## [7.cat](./cat.md)
 
 ## [8. 大文件查看](./moreAndLess.md)
+
+## [9.whereis](./whereis.md)
