@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>snail的技术笔记</title>
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="Shortcut Icon" href="/favicon.ico"  type="image/x-icon" /> 
+    <link rel="Bookmark" href="/favicon.ico" type="image/x-icon" /> 
+
+
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="代码格式规范的自动化（eslint-与-prettier）">代码格式规范的自动化（eslint 与 prettier）</h1>
+<p>其实很早之前就想在工程中使用 <code>eslint</code> 和 <code>prettier</code> 来规范代码。可是 <code>eslint</code> 和 <code>prettier</code> 的相爱相杀，再加上框架（<code>vue</code>,<code>react</code>）的特有写法（<code>jsx</code>，<code>template</code>）等等总是让自己开发过程很痛苦，很懵逼，不知所措。所以每次都启用 <code>esint</code>，然后又禁用，又启用，又禁用，如此反复，周而复始。
+前段时间看前端工程化相关的资料，发现其实工程代码格式规范是其中重要的环节之一。顾而，借着周末好好捋一捋 <code>eslint</code> 和 <code>prettier</code>，来达到开发的高效和规范。</p>
+<p>在代码规范的道路上，我们终极目标是：</p>
+<p><strong>团队中的所有开发人员用一套代码规范规则，并且无需我们花太大的精力去为了格式而格式。希望有一套自动化工具，帮我们检测代码是否规范，如果不规范，则自动能够帮我们按照既定规范格式化。</strong></p>
+<p>通过对 <code>eslint</code> 和 <code>prettier</code> 的大致了解，其实可以发现，<code>prettier</code> 是用于格式化代码的。而代码规范规则的设置和代码上的 <code>warn</code>，<code>error</code> 等提醒，则是 <code>eslint</code> 来实现的。故而，我们的大目标应该是 <code>eslint</code>，然后把 <code>prettier</code> 集成进来。</p>
+<h2 id="eslint"><code>ESLint</code></h2>
+<blockquote>
+<p><code>ESLint</code> 是一个开源的 <code>JavaScript</code> 代码检查工具，由 Nicholas C. Zakas 于 2013 年 6 月创建。代码检查是一种静态的分析，常用于寻找有问题的模式或者代码，并且不依赖于具体的编码风格。对大多数编程语言来说都会有代码检查，一般来说编译程序会内置检查工具。</p>
+</blockquote>
+<p><code>ESLint</code> 的所有规则都被设计成可插入的。<code>ESLint</code> 的默认规则与其他的插件并没有什么区别，规则本身和测试可以依赖于同样的模式。
+因此可配置、插件式是 <code>ESLint</code> 的最大特点，也是我们热衷使用它的原因。</p>
+<h3 id="如何配置">如何配置</h3>
+<p>配置 <code>ESLint</code> 有两种方式：</p>
+<ul>
+<li>使用 <code>JavaScript</code> 注释把配置信息直接嵌入到一个代码源文件中</li>
+<li>配置文件式</li>
+</ul>
+<p>这两种方式中，“配置文件”是最常见的配置方式。使用 <code>JavaScript</code>、<code>JSON</code>或者 <code>YAML</code> 文件为整个目录（处理你的主目录）和它的子目录指定配置信息。<code>ESLint</code> 会查找和自动读取它们，再者，你可以在命令行运行时指定一个任意的配置文件。</p>
+<p><code>ESLint</code> 支持几种格式的配置文件：</p>
+<ul>
+<li><code>JavaScript</code> - 使用 <code>.eslintrc.js</code> 然后输出一个配置对象。</li>
+<li><code>YAML</code> - 使用 <code>.eslintrc.yaml</code> 或 <code>.eslintrc.yml</code>去定义配置的结构。</li>
+<li><code>JSON</code> - 使用 <code>.eslintrc.json</code> 去定义配置的结构，<code>ESLint</code> 的 <code>JSON</code> 文件允许 <code>JavaScript</code> 风格的注释。</li>
+<li>(弃用) - 使用 <code>.eslintrc</code>，可以使 <code>JSON</code> 也可以是 YAML。</li>
+<li><code>package.json</code> - 在 <code>package.json</code> 里创建一个 <code>eslintConfig</code> 属性，在那里定义你的配置。</li>
+</ul>
+<p>如果同一个目录下有多个配置文件，<code>ESLint</code> 只会使用一个。优先级顺序如下：</p>
+<ul>
+<li><code>.eslintrc.js</code></li>
+<li><code>.eslintrc.yaml</code></li>
+<li><code>.eslintrc.yml</code></li>
+<li><code>.eslintrc.json</code></li>
+<li><code>.eslintrc</code></li>
+<li><code>package.json</code></li>
+</ul>
+<p>由于 js 里面可以很方便的书写逻辑，并且它的优先级又比较高，故而建议使用 js 文件来当作配置文件。</p>
+<p><img src="./img/eslintPrettier_1.jpg" alt=""></p>
+<h3 id="这些配置啥意思">这些配置啥意思</h3>
+<p>可配置是 <code>ESLint</code> 的特点之一。也就意味着我们必须了解每个配置项什么意思，才能玩转 <code>ESLint</code>。因此接下来我们来看看常用配置项是什么意思。</p>
+<h4 id="parser">Parser</h4>
+<p><code>ESLint</code> 默认使用 Espree 作为其解析器，你可以在配置文件中指定一个不同的解析器.</p>
+<p>以下解析器与 <code>ESLint</code> 兼容：</p>
+<ul>
+<li>Esprima</li>
+<li>Babel-ESLint - 一个对 Babel 解析器的包装，使其能够与 <code>ESLint</code> 兼容。</li>
+<li>typescript-eslint-parser(实验) - 一个把 TypeScript 转换为 ESTree 兼容格式的解析器，这样它就可以在 <code>ESLint</code> 中使用了。这样做的目的是通过 <code>ESLint</code> 来解析 TypeScript 文件（尽管不一定必须通过所有的 <code>ESLint</code> 规则）。
+注意，在使用自定义解析器时，为了让 <code>ESLint</code> 在处理非 <code>ECMAScript 5</code> 特性时正常工作，配置属性 <code>parserOptions</code> 仍然是必须的。解析器会被传入 <code>parserOptions</code>，但是不一定会使用它们来决定功能特性的开关。</li>
+</ul>
+<h4 id="parseroptions">parserOptions</h4>
+<p>这个属性常用于设置语法解析器的一些配置。可用的选项有：</p>
+<ul>
+<li><ol>
+<li><code>ecmaVersion</code>: 制定 <code>ECMAScript</code> 的版本。</li>
+</ol>
+</li>
+</ul>
+<p>默认设置为 3，5（默认）， 你可以使用 6、7、8 或 9 来指定你想要使用的 <code>ECMAScript</code> 版本。你也可以用使用年份命名的版本号指定为 2015（同 6），2016（同 7），或 2017（同 8）或 2018（同 9）</p>
+<ul>
+<li><ol start="2">
+<li><code>sourceType</code>: 源码类型</li>
+</ol>
+</li>
+</ul>
+<p>设置为 &quot;<code>script</code>&quot; (默认) 或 &quot;<code>module</code>&quot;（如果你的代码是 <code>ECMAScript</code> 模块)。</p>
+<ul>
+<li><ol start="3">
+<li><code>ecmaFeatures</code>： 这是个对象，表示你想使用的额外的语言特性:</li>
+</ol>
+</li>
+<li><p>3.1 <code>globalReturn</code> - 允许在全局作用域下使用 <code>return</code> 语句</p>
+</li>
+<li><p>3.2 <code>impliedStrict</code> - 启用全局 strict mode (如果 <code>ecmaVersion</code> 是 5 或更高)</p>
+</li>
+<li><p>3.3 <code>jsx</code> - 启用 <code>JSX</code></p>
+</li>
+<li><p>3.4 <code>experimentalObjectRestSpread</code> - 启用实验性的 <code>object rest</code>/<code>spread properties</code> 支持。(重要：这是一个实验性的功能,在未来可能会有明显改变。 建议你写的规则 不要 依赖该功能，除非当它发生改变时你愿意承担维护成本。)</p>
+</li>
+</ul>
+<blockquote>
+<p>设置解析器选项能帮助 <code>ESLint</code> 确定什么是解析错误，所有语言选项默认都是 <code>false</code></p>
+</blockquote>
+<h4 id="environments"><code>Environments</code></h4>
+<p>该配置属性定义来一组预定义的全局变量。可用的环境包括：</p>
+<ul>
+<li><code>browser</code> - 浏览器环境中的全局变量。</li>
+<li><code>node</code> - <code>Node.js</code> 全局变量和 <code>Node.js</code> 作用域。</li>
+<li><code>commonjs</code> - <code>CommonJS</code> 全局变量和 <code>CommonJS</code> 作用域 (用于 <code>Browserify/WebPack</code> 打包的只在浏览器中运行的代码)。</li>
+<li><code>shared-node-browser</code> - <code>Node.js</code> 和 <code>Browser</code> 通用全局变量。</li>
+<li><code>es6</code> - 启用除了 <code>modules</code> 以外的所有 <code>ECMAScript 6</code> 特性（该选项会自动设置 <code>ecmaVersion</code> 解析器选项为 6）。</li>
+<li><code>worker</code> - <code>Web Workers</code> 全局变量。</li>
+<li><code>amd</code> - 将 <code>require()</code> 和 <code>define()</code> 定义为像 <code>amd</code> 一样的全局变量。</li>
+<li><code>mocha</code> - 添加所有的 <code>Mocha</code> 测试全局变量。</li>
+<li><code>jasmine</code> - 添加所有的 <code>Jasmine</code> 版本 1.3 和 2.0 的测试全局变量。</li>
+<li><code>jest</code> - <code>Jest</code> 全局变量。</li>
+<li><code>phantomjs</code> - <code>PhantomJS</code> 全局变量。</li>
+<li><code>protractor</code> - <code>Protractor</code> 全局变量。</li>
+<li><code>qunit</code> - <code>QUnit</code> 全局变量。</li>
+<li><code>jquery</code> - <code>jQuery</code> 全局变量。</li>
+<li><code>prototypejs</code> - <code>Prototype.js</code> 全局变量。</li>
+<li><code>shelljs</code> - <code>ShellJS</code> 全局变量。</li>
+<li><code>meteor</code> - <code>Meteor</code> 全局变量。</li>
+<li><code>mongo</code> - <code>MongoDB</code> 全局变量。</li>
+<li><code>applescript</code> - <code>AppleScript</code> 全局变量。</li>
+<li><code>nashorn</code> - <code>Java 8 Nashorn</code> 全局变量。</li>
+<li><code>serviceworker</code> - <code>Service Worker</code> 全局变量。</li>
+<li><code>atomtest</code> - <code>Atom</code> 测试全局变量。</li>
+<li><code>embertest</code> - <code>Ember</code> 测试全局变量。</li>
+<li><code>webextensions</code> - <code>WebExtensions</code> 全局变量。</li>
+<li><code>greasemonkey</code> - <code>GreaseMonkey</code> 全局变量。
+这些环境并不是互斥的，所以你可以同时定义多个。</li>
+</ul>
+<h4 id="globals"><code>Globals</code></h4>
+<p>我们使用第三方提供的全局变量的时候（例如：<code>jQuery</code>,<code>AMap</code> 等对象），<code>ESLint</code> 并不能识别他们，总是会报错。这个时候，该配置的作用就出现了。使用 <code>globals</code> 指出你要使用的全局变量。将变量设置为 <code>true</code> 将允许变量被重写，或 <code>false</code> 将不允许被重写。</p>
+<h4 id="plugins">Plugins</h4>
+<p><code>ESLint</code> 支持使用第三方插件。在使用插件之前，你必须使用包管理工具安装它。
+在配置文件里配置插件时，可以使用 <code>plugins</code> 关键字来存放插件名字的列表。插件名称可以省略 <code>eslint-plugin-</code> 前缀。</p>
+<h4 id="rules">Rules</h4>
+<p><code>ESLint</code> 附带有大量的规则。你可以使用注释或配置文件修改你项目中要使用的规则。要改变一个规则设置，你必须将规则 ID 设置为<code>off</code>、<code>warn</code>、<code>error</code>三者之一。</p>
+<h3 id="继承配置文件">继承配置文件</h3>
+<p>基本要用的配置属性在上面都已经涉及到了。但是我们之前讲过 <code>ESLint</code> 不仅有可配性，还有插件的可插拔性。那么插件又是如何工作的呢？插件无外乎是增强某些功能，并且对外提供接口。在 <code>ESLint</code> 中，插件一般都是通过继承的方式，来实现对外提供特定功能。</p>
+<h4 id="extends"><code>extends</code></h4>
+<p>一个配置文件可以从基础配置中继承已启用的规则。</p>
+<p><code>extends</code> 属性值可以是：</p>
+<p>(1)、在配置中指定的一个字符串</p>
+<p>(2)、字符串数组：每个配置继承它前面的配置</p>
+<p><code>ESLint</code> 递归地进行扩展配置，所以一个基础的配置也可以有一个 <code>extends</code> 属性。</p>
+<p><code>extends</code> 里面可以引入 共享配置包，可以引入 插件</p>
+<ul>
+<li>共享配置包</li>
+</ul>
+<p>可共享的配置 是一个 <code>npm</code> 包，它输出一个配置对象。</p>
+<p><code>extends</code> 属性值可以省略包名的前缀 eslint-config-。</p>
+<p><img src="./img/eslintPrettier_2.png" alt=""></p>
+<ul>
+<li>插件</li>
+</ul>
+<p>插件 是一个 <code>npm</code> 包，通常输出规则。一些插件也可以输出一个或多个命名的 配置。</p>
+<p><code>plugins</code> 属性值 可以省略包名的前缀 <code>eslint-plugin-</code>。</p>
+<p><code>extends</code> 属性值可以由以下组成：</p>
+<p>（1）、<code>plugin</code>:
+（2）、包名 (省略了前缀，比如，<code>react</code>)
+（3）、/
+（4）、配置名称 (比如 <code>recommended</code>)</p>
+<p><img src="./img/eslintPrettier_3.png" alt=""></p>
+<h2 id="prettier"><code>Prettier</code></h2>
+<p><code>Prettier</code> 是一个代码格式化工具。能够按照我们的规则，将我们的代码格式化。</p>
+<p>为什么我们用它，而不用其他的代码格式化工具呢？Prettier 主要有以下优点：</p>
+<ul>
+<li>可配置化</li>
+<li>支持多种语言</li>
+<li>集成多数的编辑器</li>
+<li>简洁的配置项</li>
+</ul>
+<h2 id="eslint--prettier"><code>ESLint</code> + <code>Prettier</code></h2>
+<blockquote>
+<p>团队中的所有开发人员用一套代码规范规则，并且无需我们花太大的精力去为了格式而格式。希望有一套自动化工具，帮我们检测代码是否规范，如果不规范，则自动能够帮我们按照既定规范格式化。------我们的终极目标</p>
+</blockquote>
+<p>通过上面的了解，要想达到我们的终极目标似乎就是将这两个一起使用即可。那么如何整合他们呢？</p>
+<p>以<code>vue</code>工程为例：</p>
+<h3 id="第一步：-下载相关包">第一步： 下载相关包</h3>
+<p>最基本的，我们肯定要下载<code>eslint</code>，<code>prettier</code>这两个包的。</p>
+<p>其次，为了将其整合起来那么我们需要已写好的“共享配置包”和插件。因此我们需要下载<code>eslint-plugin-prettier</code>,<code>eslint-config-prettier</code>。</p>
+<p>再次，我们需要站在巨人的肩膀上看世界。也就是我们需要业界一些比较成熟的规范，来规范我们的代码。因此我们可以使用大团队提供的代码规范插件。比较有名的就是<code>airbnb</code>。这里我们选用的是<code>airbnb-base</code>。故而我们需要下载<code>eslint-config-airbnb-base</code>。</p>
+<p>最后，为了完美使用我们 ES6 的一些新特性。我们需要将“词法解析器”设置为<code>babel-eslint</code>。因此我们还需要下载<code>babel-eslint</code>.</p>
+<p>对了，我们是<code>vue</code>工程，那么肯定要有对 vue 配置的插件，因此我们需要下载<code>eslint-plugin-vue</code></p>
+<p>总结可得，我们需要下载以下包</p>
+<pre><code class="language-shell">
+npm install esint prettier eslint-plugin-prettier eslint-config-prettier eslint-config-airbnb-base babel-eslint eslint-plugin-vue
+</code></pre>
+<h3 id="第二步-建立配置文件">第二步 建立配置文件</h3>
+<p>如果仔细阅读了之前<code>eslint</code>的配置项，那么这一步是比较机械化的。因此我直接将工程中的配置文件拷贝过来，加以注释吧。</p>
+<p>在工程的根目录，创建一个<code>.eslintrc.js</code>文件，文件内容如下：</p>
+<pre><code class="language-javaScript">
+module.exports = {
+  env: {
+    browser: true,
+    jquery: true, //由于项目中使用来jquery。。。其实不用引入jquery的，以后有机会去掉jquery后，请移除该配置。
+  },
+  parserOptions: {
+    parser: &#39;babel-eslint&#39;, //词法解析器使用babel-eslint，以更好的适配es6的新api
+    ecmaVersion: 6, //启用 ES6 语法支持;默认设置为3，5（默认）， 你可以使用 6、7、8 或 9 来指定你想要使用的 ECMAScript 版本。你也可以用使用年份命名的版本号指定为 2015（同 6），2016（同 7），或 2017（同 8）或 2018（同 9）
+    sourceType: &#39;module&#39;, //设置为 &quot;script&quot; (默认) 或 &quot;module&quot;（如果你的代码是 ECMAScript 模块)。
+  },
+  extends: [
+    &#39;airbnb-base&#39;,
+    &#39;eslint:recommended&#39;,
+    &#39;plugin:vue/essential&#39;,
+    &#39;plugin:prettier/recommended&#39;,
+  ],
+  plugins: [&#39;vue&#39;, &#39;prettier&#39;],
+  rules: {
+    &#39;prettier/prettier&#39;: &#39;error&#39;,
+    &#39;generator-star-spacing&#39;: &#39;off&#39;,
+    &#39;import/no-named-as-default&#39;: &#39;off&#39;,
+    &#39;import/no-named-as-default-member&#39;: &#39;off&#39;,
+    &#39;no-unused-vars&#39;: [
+      &#39;error&#39;,
+      { vars: &#39;all&#39;, args: &#39;none&#39;, ignoreRestSiblings: false },
+    ], //没有使用的参数，不会报错。因为个人觉的把可用的参数写上去 有利于以后的维护。
+  },
+};
+
+</code></pre>
+<h3 id="开发工具">开发工具</h3>
+<p>其实到上一步的话，已经将<code>ESlint</code>和<code>Prettier</code>配置完了。但是要能够自动格式化，那么我们还需要做一些集成。</p>
+<p>实现自动格式化这一目标，可以在开发工具上做文章，也可以在<code>webpack</code>上做文章。其实我比较倾向在开发工具上实现自动格式化，因为这样子似乎比较快。</p>
+<p>在开发工具中，我们希望在修改代码保存后，能够自动格式化代码。如何实现这一目标呢？我们以<code>VScode</code>为例</p>
+<ul>
+<li><ol>
+<li>打开<code>VScode</code>的配置文件</li>
+</ol>
+</li>
+</ul>
+<p><img src="./img/eslinPrettier_4.jpg" alt=""></p>
+<ul>
+<li><ol start="2">
+<li>增加以下配置.</li>
+</ol>
+</li>
+</ul>
+<pre><code class="language-javaScript">
+...
+
+&quot;prettier.eslintIntegration&quot;: true,
+  &quot;eslint.autoFixOnSave&quot;: true,
+  &quot;editor.formatOnSave&quot;: true,
+  //配置 ESLint 检查的文件类型
+  &quot;eslint.validate&quot;: [&quot;javascript&quot;, &quot;javascriptreact&quot;, &quot;vue&quot;, &quot;html&quot;],
+  &quot;eslint.options&quot;: {
+    &quot;configFile&quot;: &quot;./`.eslintrc`.js&quot;
+  },
+
+...
+
+</code></pre>
+<h3 id="webpack"><code>webpack</code></h3>
+<p>除了可以在开发工具上做文章，也可以在打包编译工具上做文章，以实现自动格式化的目标。我们以<code>webpack</code>为例：</p>
+<p><img src="./img/eslintPrettier_5.png" alt=""></p>
+<p>因为<code>vue</code>工程通常会用官方提供的脚手架，所以这里我直接上图了，就不<code>BB</code>了。（其实是时间太晚了，明天还要上班，老婆已经再催了）</p>
+<h3 id="后记">后记</h3>
+<p>其实我们在代码规范方面，利用<code>eslint</code>还可以做很多很多事情。</p>
+<p>比如，我们可以增加一个脚本，来检测代码是否规范。</p>
+<p>我们也可以在<code>git</code>提交前，做一次自动检测，避免团队中提交不规范的代码。可以借阅<code>code review</code>的一部分精力，可以把<code>code review</code>的重点放在代码逻辑本身的合理性上。</p>
+<p>好吧，晚安～</p>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>
