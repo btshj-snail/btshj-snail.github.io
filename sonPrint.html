@@ -1,192 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="./favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="./favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
     <link rel="Bookmark" href="/favicon.ico" type="image/x-icon" />
     <title>Title</title>
-    <script src="./static/threeComponent/jquery-3.2.1.min.js"></script>
+    <!-- <script src="./static/threeComponent/jquery-3.2.1.min.js"></script> -->
     <style>
-        body {
-            padding: 0;
-            margin: 0;
-            clear: both;
-            /* font-size:0; */
-        }
+      body {
+        padding: 0;
+        margin: 0;
+        clear: both;
+        /* font-size:0; */
+      }
 
-        .a4-wrapper {
-            width: 1160px;
-            height: 820px;
-            margin: 0 auto;
-            box-sizing:border-box;
-        }
+      .a4-wrapper {
+        width: 1160px;
+        height: 820px;
+        margin: 0 auto;
+        box-sizing: border-box;
+      }
 
-        .a4-wrapper h2 {
-            text-align: center;
-        }
-        
-        .calendar-wrapper{
-            height:100%;
-            width:100%;
-            border-collapse: collapse;
-            border:solid 1px #333;
-        }
-        .calendar-wrapper tr th{
-           height:50px;
-        }
+      .a4-wrapper h2 {
+        text-align: center;
+      }
 
-        .calendar-wrapper tr td,.calendar-wrapper tr th{
-            border-bottom:solid 1px #333;
-            border-right:solid 1px #333;
-        }
+      .calendar-wrapper {
+        height: 100%;
+        width: 100%;
+        border-collapse: collapse;
+        border: solid 1px #333;
+      }
+      .calendar-wrapper tr th {
+        height: 50px;
+      }
 
-        .calendar-wrapper tr td:last-child,.calendar-wrapper tr th:last-child{
-            border-right:none;
-        }
-        .calendar-wrapper tr:last-child td,.calendar-wrapper tr:last-child th{
-            border-bottom:none;
-        }
-        .calendar-wrapper tr td{
-           vertical-align: top;
-           height:100px;
-        }
-        .date-cell{
-            width:100%;
-            font-size:18px;
-            height:20px;
-            line-height:20px;
-            font-weight:bold;
-            border-bottom:dashed 1px #333;
-            text-align: center;
-        }
-        .daily-content{
-            width:50%;
-            display: inline-block;
-            box-sizing:border-box;
-            border-right:dashed 1px #333;
-            height:80px;
-            text-align: center;
-            padding-top:5px;
-        }
-        td .daily-content:last-child{
-            border-right:none;
-        }
+      .calendar-wrapper tr td,
+      .calendar-wrapper tr th {
+        border-bottom: solid 1px #333;
+        border-right: solid 1px #333;
+      }
+
+      .calendar-wrapper tr td:last-child,
+      .calendar-wrapper tr th:last-child {
+        border-right: none;
+      }
+      .calendar-wrapper tr:last-child td,
+      .calendar-wrapper tr:last-child th {
+        border-bottom: none;
+      }
+      .calendar-wrapper tr td {
+        vertical-align: top;
+        height: 100px;
+      }
+      .date-cell {
+        width: 100%;
+        font-size: 18px;
+        height: 20px;
+        line-height: 20px;
+        font-weight: bold;
+        border-bottom: dashed 1px #333;
+        text-align: center;
+      }
+      .daily-content {
+        width: 50%;
+        display: inline-block;
+        box-sizing: border-box;
+        border-right: dashed 1px #333;
+        height: 80px;
+        text-align: center;
+        padding-top: 5px;
+      }
+      td .daily-content:last-child {
+        border-right: none;
+      }
     </style>
+  </head>
 
-</head>
-
-<body>
+  <body>
     <div class="a4-wrapper">
-        <h2><span id="titleYearMonth">2019年3月</span>成长表</h2>
-        <table class="calendar-wrapper">
-            <tr>
-                <th>星期一</th>
-                <th>星期二</th>
-                <th>星期三</th>
-                <th>星期四</th>
-                <th>星期五</th>
-                <th>星期六</th>
-                <th>星期日</th>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </table>
+      <h2><span id="titleYearMonth">2019年3月</span>成长表</h2>
+      <table class="calendar-wrapper">
+        <tr>
+          <th>星期一</th>
+          <th>星期二</th>
+          <th>星期三</th>
+          <th>星期四</th>
+          <th>星期五</th>
+          <th>星期六</th>
+          <th>星期日</th>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
     </div>
     <script>
-        function createCell(posIndex,day){
-            console.log('-------------------',posIndex,day)
-            var td = document.querySelectorAll("td")[posIndex];
-            var dateCell = document.createElement('div');
-            dateCell.className = "date-cell";
-            dateCell.innerText = day;
+      function createCell(posIndex, day) {
+        console.log("-------------------", posIndex, day);
+        var td = document.querySelectorAll("td")[posIndex];
+        var dateCell = document.createElement("div");
+        dateCell.className = "date-cell";
+        dateCell.innerText = day;
 
-            var leftContent = document.createElement('div');
-            leftContent.className = "daily-content";
-            leftContent.innerText = "学习";
+        var leftContent = document.createElement("div");
+        leftContent.className = "daily-content";
+        leftContent.innerText = "学习";
 
-            var rightContent = document.createElement('div');
-            rightContent.className = "daily-content";
-            rightContent.innerText = "锻炼";
+        var rightContent = document.createElement("div");
+        rightContent.className = "daily-content";
+        rightContent.innerText = "锻炼";
 
-            td.appendChild(dateCell)
-            td.appendChild(leftContent)
-            td.appendChild(rightContent)
+        td.appendChild(dateCell);
+        td.appendChild(leftContent);
+        td.appendChild(rightContent);
+      }
+      function generate(year, month) {
+        var titleYm = document.querySelector("#titleYearMonth");
+        titleYm.innerText = year + "年" + month + "月";
+        var row = 0;
+        var totalDays = new Date(year, month, 0).getDate();
+        for (var i = 1, l = totalDays; i <= l; i++) {
+          var ym = new Date();
+          ym.setFullYear(year);
+          ym.setMonth(month - 1);
+          ym.setDate(i);
+
+          var week = ym.getDay();
+          week = week > 0 ? week - 1 : 6;
+          var posIndex = row * 7 + week;
+          if (week == 6) {
+            row++;
+          }
+
+          createCell(posIndex, i < 10 ? "0" + i : i);
         }
-        function generate(year,month){
-            var titleYm = document.querySelector("#titleYearMonth")
-            titleYm.innerText = year+"年"+month+"月"
-            var row = 0;
-            var totalDays = new Date(year, month, 0).getDate();
-            for(var i=1,l=totalDays;i<=l;i++){
-                var ym = new Date();
-                ym.setFullYear(year)
-                ym.setMonth(month-1)
-                ym.setDate(i);
-        
-                var week = ym.getDay();
-                week = week>0 ?week-1:6
-                var posIndex = row*7 + week;
-                if(week==6){row++}
-                
-                createCell(posIndex,i<10?"0"+i:i)
-            }
+      }
+
+      function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg); //匹配目标参数
+        if (r != null) {
+          return decodeURIComponent(r[2]);
         }
-        generate(2019,6)
+        return null;
+      }
+
+      function doGenerate(y, m) {
+        var year = getUrlParam("year");
+        var month = getUrlParam("month");
+        if (year && month) {
+          y = year;
+          m = month;
+        }
+        generate(y, m);
+      }
+
+      doGenerate(2019, 8);
     </script>
-</body>
-
+  </body>
 </html>
