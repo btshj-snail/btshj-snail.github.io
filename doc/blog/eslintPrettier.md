@@ -1,4 +1,8 @@
-# 代码格式规范的自动化（eslint 与 prettier）
+# 代码规范（eslint 与 prettier）
+
+ <p class="article-desc">日期:2019.7.1 00:52</p>
+
+---
 
 其实很早之前就想在工程中使用 `eslint` 和 `prettier` 来规范代码。可是 `eslint` 和 `prettier` 的相爱相杀，再加上框架（`vue`,`react`）的特有写法（`jsx`，`template`）等等总是让自己开发过程很痛苦，很懵逼，不知所措。所以每次都启用 `esint`，然后又禁用，又启用，又禁用，如此反复，周而复始。
 前段时间看前端工程化相关的资料，发现其实工程代码格式规范是其中重要的环节之一。顾而，借着周末好好捋一捋 `eslint` 和 `prettier`，来达到开发的高效和规范。
@@ -256,7 +260,7 @@ module.exports = {
 
 - 1. 打开`VScode`的配置文件
 
-![](./img/eslinPrettier_4.jpg)
+![](./img/eslintPrettier_4.jpg)
 
 - 2. 增加以下配置.
 
