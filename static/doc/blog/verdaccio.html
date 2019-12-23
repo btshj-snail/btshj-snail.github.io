@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>snail的技术笔记</title>
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="Shortcut Icon" href="/favicon.ico"  type="image/x-icon" /> 
+    <link rel="Bookmark" href="/favicon.ico" type="image/x-icon" /> 
+
+
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="npm-私服搭建">NPM 私服搭建</h1>
+<h2 id="背景">背景</h2>
+<p>目前项目组以及公司的前端项目越来越多，业务系统划分越来越精细，那么前端项目之间的公共组件、公共服务应该如何抽取、如何维护、如何管理，这些问题就愈显突出。因此搭建 npm 私服，将公共组件和服务以包的形式进行管理，通过版本号的形式进行发布，可以有效的管理公司、项目组内部的公共组件及服务。同时通过权限设置，也可以有效的保护公司成果不被泄露。除此之外，由于前端每次打包都需要重新拉取第三方包，这个步骤的速度依赖于网络以及第三方镜像。npm 私服可以设置缓存，第一次拉取第三方包后，以后的拉取将直接从 NPM 私服上进行，这样将会极大的提升打包编译速率。</p>
+<h2 id="为什么选择-verdaccio">为什么选择 verdaccio</h2>
+<p>网上主要有几种搭建企业 npm 私服的方式：</p>
+<ol>
+<li>付费选择：</li>
+</ol>
+<ul>
+<li><code>MyGet</code></li>
+<li><code>NPM Org</code></li>
+</ul>
+<ol start="2">
+<li>免费选择：</li>
+</ol>
+<ul>
+<li><code>DIY NPM</code></li>
+<li><code>Git</code>，这也是一种选择，在<code>package.json</code>中指定<code>git</code>仓库的<code>URL</code>即可，但是这种做法有些别扭，第一，使得<code>package.json</code>不够优雅，第二，当<code>git</code>仓库为<code>private</code>时，你需要<code>HTTPS</code>或<code>SSH</code>凭据，而且通常我们并没有每个团队的权限。</li>
+<li><code>Sinopia</code></li>
+<li><code>verdaccio</code></li>
+</ul>
+<p>排除付费，可选择的其实也就<code>DIY NPM</code>、<code>Sinopia</code>、<code>verdaccio</code>。从社区活跃度来说，基本都选择了<code>verdaccio</code>。<code>verdaccio</code>是一个极简单的开源的<code>NPM</code>服务。</p>
+<h2 id="搭建">搭建</h2>
+<ol>
+<li><p>找个合适的地方下载安装<code>nodejs</code>，比如在<code>/usr/local/lib</code>下</p>
+<p>安装<code>wget</code>（已经安装的跳过这步）</p>
+<pre><code class="language-shell">
+yum install -y wget;
+</code></pre>
+<p>下载：</p>
+<pre><code class="language-shell">
+wget https://npm.taobao.org/mirrors/node/v12.14.0/node-v12.14.0-linux-x64.tar.xz
+</code></pre>
+<p>解压：</p>
+<pre><code class="language-shell">
+tar -xvf node-v10.6.0-linux-x64.tar.xz;
+</code></pre>
+<p>重命名安装目录：</p>
+<pre><code class="language-shell">
+mv node-v10.6.0-linux-x64 nodejs;
+</code></pre>
+<p>建立软连接：</p>
+<pre><code class="language-shell">
+ln -s /usr/local/lib/nodejs/bin/npm /usr/local/bin/
+ln -s /usr/local/lib/nodejs/bin/node /usr/local/bin/
+</code></pre>
+</li>
+</ol>
+<p>执行<code>node -v</code>和 <code>npm -v</code>命令检查是否安装成功</p>
+<p>全局安装<code>verdaccio</code>：</p>
+<pre><code class="language-shell">npm i verdaccio -g;</code></pre>
+<p>全局安装<code>pm2</code>，用来守护<code>node</code>进程：</p>
+<pre><code class="language-shell">npm i pm2 -g;</code></pre>
+<p><code>pm2</code>启动服务，执行</p>
+<pre><code class="language-shell">pm2 start verdaccio;</code></pre>
+<p>然后浏览器访问<code>http://</code>服务器<code>IP</code>，出现以下页面则代表安装成功。</p>
+<blockquote>
+<p>pm2 start *<strong>* // 启动;<br>pm2 reload **</strong> //重启 ; <br> pm2 logs *** // 日志</p>
+</blockquote>
+<h2 id="verdaccio-使用">verdaccio 使用</h2>
+<p><code>verdaccio</code>允许任何人创建账号，若没有配置<code>verdaccio</code>的配置文件<code>config.yaml</code>，则默认任何注册了<code>verdaccio</code>的开发都有<code>publish</code>权限。看个实例：</p>
+<blockquote>
+<p>以下都以<code>http://1.1.1.1:4873</code>服务为例。注意要其他机器能访问，必须要修改配置文件。可参考进阶的配置</p>
+</blockquote>
+<ol>
+<li>添加一个用户：<code>npm adduser --registry http://1.1.1.1:4873</code></li>
+<li>给要添加到服务的工程添加源信息，在工程根目录下新建<code>.npmrc</code>文件，添加以下内容</li>
+</ol>
+<pre><code>registry=http://1.1.1.1:4873</code></pre><ol start="3">
+<li><p><code>package.json</code>中设置好版本，执行<code>npm publish</code></p>
+</li>
+<li><p>查看<code>http://1.1.1.1:4873</code>。可返现网站上已有列表</p>
+</li>
+</ol>
+<h2 id="进阶">进阶</h2>
+<p>向上面这样，肯定是不能满足我们的需求的。我们需要权限可控（添加用户，请求、发布、撤销包），UI 可配置。先看看<code>verdaccio</code>提供的配置</p>
+<h3 id="verdaccio-默认配置"><code>verdaccio</code> 默认配置</h3>
+<pre><code class="language-yarml">#包缓存路径
+storage: ./storage
+
+# 网站配置
+web:
+#网站标题
+  title: verddico
+#网站logo
+  logo: /root/.config/verdaccio/logo.png
+#网站导航栏背景色
+  primary_color: &quot;#3894ff&quot;
+#权限配置
+auth:
+# 内置的htpasswd权限插件
+  htpasswd:
+# 用户列表文件
+    file: ./htpasswd
+# 用户最大数目。-1表示不能在随意注册。
+    max_users: -1
+# 外部包管理仓库地址
+uplinks:
+  npmjs:
+    url: https://registry.npmjs.org/
+packages:
+  &#39;@*/*&#39;:
+    access: $all
+    publish: $authenticated
+    proxy: npmjs
+  &#39;**&#39;:
+    proxy: npmjs
+logs:
+  - {type: stdout, format: pretty, level: http}
+</code></pre>
+<h3 id="外网访问配置">外网访问配置</h3>
+<p>如果外网需要访问，那么必须在<code>config.yaml</code>增加以下配置</p>
+<pre><code class="language-yaml">listen: 0.0.0.0:4873</code></pre>
+<h3 id="用户管理">用户管理</h3>
+<p>按照默认配置，我们可以通过</p>
+<pre><code class="language-shell">npm adduser --registry=http://1.1.1.1:4873
+</code></pre>
+<p>这样可以随意的注册用户。但是对于公司私服来说，通常不希望这样。因此我们可以通过以下配置来禁止随意注册用户。</p>
+<pre><code class="language-yaml">auth:
+  htpasswd:
+    file: ./htpasswd
+    max_users: -1</code></pre>
+<p>问题来了，这样以后，我们如何增加用户呢？可以有以下两种方式：</p>
+<ol>
+<li>手动编辑<code>./htpasswd</code>文件。</li>
+<li>使用第三方插件，以命令的形式增加用户。</li>
+</ol>
+<pre><code class="language-shell">
+npm install sinopia-adduser -g
+</code></pre>
+<p>安装好该插件，在<code>./htpasswd</code>目录下，运行以下命令</p>
+<pre><code class="language-shell">
+sinopia-adduser
+</code></pre>
+<h3 id="权限设置">权限设置</h3>
+<p><code>verdaccio</code> 默认引入了<code>htpasswd</code>插件。但是这个插件只能以<code>user</code>的角度去设置权限。而实际中，我们通常想通过分组来设置权限。</p>
+<blockquote>
+<p>由于第三方权限组件都有权限服务器，而我们仅仅只想有个按分组来设置权限的功能即可.因此自己写了一个简单的分组权限插件<code>verdaccio-simplegroup</code>。<code>github</code>地址:<code>https://github.com/btshj-snail/snail-verdaccio-group</code>。</p>
+</blockquote>
+<pre><code class="language-shell">
+npm install verdaccio-simplegroup -g
+</code></pre>
+<p>在<code>config.yaml</code>配置文件中，增加相应的配置</p>
+<pre><code class="language-yaml">auth:
+  htpasswd:
+    file: ./htpasswd
+    max_users: -1
+  simplegroup:
+    admin_group: Jack Lucy
+    base_group: Jack
+
+packages:
+  &#39;@company/*&#39;:
+    access: $authenticated
+    publish: admin_group
+    unpublish: admin_group
+    proxy: npmjs
+
+  &#39;@base/*&#39;:
+    access: $authenticated
+    publish: base_group
+    unpublish: base_group
+    proxy: npmjs
+  &#39;**&#39;:
+    access: $all
+    publish:
+    unpublish:
+    proxy: npmjs</code></pre>
+<p><code>ok</code>，增加了以上配置，基本可以达到可使用的程度了。吐槽一下，<code>verdaccio</code>提供的默认网站 UI 真的有点<code>low</code>，提供的可配置地方又比较少。本来还想写一个网站的插件，但想想最近的时间，来还是以后再弄吧。</p>
+<h2 id="参考">参考</h2>
+<ol>
+<li><a href="https://www.jianshu.com/p/d32ce7e9d4d8">npm 私服搭建—verdaccio 方案及其最佳实践</a></li>
+<li><a href="https://www.jianshu.com/p/97222440cd08">YAML 快速入门</a></li>
+<li><a href="https://juejin.im/post/5cc81991f265da036d79c8ca">Verdaccio 搭建私有 NPM</a></li>
+<li><a href="https://verdaccio.org">verdaccio</a></li>
+</ol>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>
