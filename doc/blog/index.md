@@ -11,3 +11,5 @@
 ## [5. npm 私服搭建-verdaccio](./verdaccio.md)
 
 ## [6. npm 私服搭建-权限插件](./verdaccioPlugin.md)
+
+## [7. vscode 调试工具 与 jest 结合](./vscodeDebugger.md)
