@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>snail的技术笔记</title>
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="Shortcut Icon" href="/favicon.ico"  type="image/x-icon" /> 
+    <link rel="Bookmark" href="/favicon.ico" type="image/x-icon" /> 
+
+
+    <link rel="stylesheet" href="/static/threeComponent/highlight/styles/atom-one-light.css">
+
+    <link rel="stylesheet" href="/static/threeComponent/md/han.css">
+    <!-- <link rel="stylesheet" href="/static/threeComponent/md/common.css"> -->
+
+    <script src="/static/threeComponent/highlight/highlight.pack.js"></script>
+    <script src="/static/threeComponent/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="left-area">
+            <div class="vertical-menu" id="verticalMenu">
+
+            </div>
+        </div>
+        <div class="right-area">
+            <div class="md-content-null-right" id="mdContent">
+<h1 id="vscode-调试工具-与-jest-结合">vscode 调试工具 与 jest 结合</h1>
+<h2 id="背景">背景</h2>
+<p>原来只是知晓 <code>vscode</code> 有调试工具，但是总觉的有浏览器的开发者工具已经完全够用了。但是最近在写 <code>sdk</code> 和其他公共工具类，使用 <code>jest</code> 的时候才发现， <code>vscode</code> 调试工具大有用处。可以方便断点、步进跟踪调试代码。</p>
+<h2 id="开启调试之旅">开启调试之旅</h2>
+<h3 id="创建工程">创建工程</h3>
+<p>我们新创建一个名字叫 <code>debugger-try</code> 的工程，用以实践 <code>vscode</code> 的 <code>debugger</code> 功能。同时创建 <code>index.js</code> 文件，书写一个简单的 <code>add</code> 方法，用以测试。</p>
+<pre><code class="language-javaScript">function add (a,b){
+  if(typeof a !== &#39;number&#39; || typeof b !== &#39;number&#39;) return 0;
+  return a + b;
+}
+
+export {add};</code></pre>
+<p>同时为了顺便将 <code>jest</code> 与 <code>vscode</code> 的 <code>debugger</code> 功能结合起来，我们在这个工程中引入 <code>jest</code> 。</p>
+<pre><code class="language-shell">
+npm install jest babel-jest @babel/core @babel/preset-env --saev-dev
+</code></pre>
+<p>在工程的 <code>__test__</code>文件夹中建立一个测试文件，<code>index.spec.js</code>.</p>
+<pre><code class="language-javaScript">// index.spec.js
+
+import {add} from &#39;../index&#39;
+
+
+import {add} from &#39;../index&#39;
+
+test(&#39;add function success&#39;, () =&gt; {
+  const val = add(1,2)
+  expect(val).toBe(3);
+});
+
+test(&#39;params error&#39;, () =&gt; {
+  const val = add(&quot;1&quot;,&quot;2&quot;)
+  expect(val).toBe(0);
+});
+</code></pre>
+<p>更改 <code>package.json</code> 文件，在 <code>scripts</code> 中加入执行测试命令动作</p>
+<pre><code class="language-javaScript">......
+  &quot;scripts&quot;: {
+    &quot;test&quot;: &quot;jest&quot;
+  },
+</code></pre>
+<p>运行以下命令</p>
+<pre><code class="language-shell">
+npm run test
+</code></pre>
+<p><img src="./img/vscode-debugger-2.png" alt=""></p>
+<h3 id="创建-vscode-调试配置文件">创建 <code>vscode</code> 调试配置文件</h3>
+<p><img src="./img/vscode-debugger-3.png" alt=""></p>
+<p>按照上图，依次点击 1 ，2 ，3 步骤。</p>
+<p>此时会在工程根目录创建 <code>.vscode</code> 文件夹，在该文件夹下生成一个 <code>launch.json</code> 文件。</p>
+<p>该文件则是 <code>debugger</code> 的核心文件，它将会指导 <code>vscode</code> 的 <code>debugger</code> 模块如何运行。</p>
+<pre><code class="language-json">
+{
+  // 使用 IntelliSense 了解相关属性。 
+  // 悬停以查看现有属性的描述。
+  // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+  &quot;version&quot;: &quot;0.2.0&quot;,
+  &quot;configurations&quot;: [
+    {
+      &quot;type&quot;: &quot;node&quot;,
+      &quot;request&quot;: &quot;launch&quot;,
+      &quot;name&quot;: &quot;Debug Jest Tests&quot;,
+      &quot;url&quot;: &quot;http://localhost:8080&quot;,
+      &quot;webRoot&quot;: &quot;${workspaceFolder}&quot;
+    }
+  ]
+}
+</code></pre>
+<h3 id="launchjson-文件">launch.json 文件</h3>
+<p>在 <code>vscode</code> 中，有两种模式调试模式， <code>Launch</code> 和 <code>Attach</code> 。对于这两种模式的区别，可以按以下的描述进行理解。</p>
+<ul>
+<li><code>launch</code> : 启动。在 <code>vscode</code> 启动应用程序</li>
+<li><code>attach</code> : 附加。 在启动应用程序时，附加启动的应用。</li>
+</ul>
+<pre><code class="language-json">
+    {
+        &quot;version&quot;: &quot;0.2.0&quot;,
+        &quot;configurations&quot;: [
+            {
+                &quot;version&quot;: &quot;0.2.0&quot;,
+                &quot;configurations&quot;: [],
+                &quot;compounds&quot;: []
+            },
+            {
+                // 配置名称，将会在启动配置的下拉菜单中显示
+                &quot;name&quot;: &quot;Launch Chrome against localhost&quot;,
+                // 配置类型.chrome/node 等
+                &quot;type&quot;: &quot;chrome&quot;, 
+                // 请求配置类型，可以为launch（启动）或attach（附加）                          
+                &quot;request&quot;: &quot;launch&quot;,
+                 // 将要进行调试的程序的路径               
+                &quot;program&quot;: &quot;${workspaceRoot}&quot;, 
+                // 传递给运行时可执行文件的可选参数。
+                &quot;runtimeArgs&quot;:[],
+                // 程序调试时传递给程序的命令行参数。
+                &quot;args&quot;: [], 
+                // 环境变量
+                &quot;env&quot;:&quot;&quot;,
+                // 调试程序时的工作目录，一般为${workspaceRoot}即代码所在目录                       
+                &quot;cwd&quot;: &quot;${workspaceRoot}&quot;,  
+                // 端口号
+                &quot;port&quot;:9527,
+                // 使用哪种打印日志 internalConsole  integratedTerminal  externalTerminal
+                &quot;console&quot;:&quot;internalConsole&quot;,
+                // 调试时是否显示控制台窗口，一般设置为true显示控制台                
+                &quot;externalConsole&quot;: true, 
+                // 在执行一个任务前开启一个debug session，该值是.vscode文件夹下tasks.json文件中task的name。或者设置${defaultBuildTask}，以使用默认的任务                
+                &quot;preLaunchTask&quot;: &quot;&quot;,
+                // 在debug session结束后，执行的任务。该值是.vscode文件夹下tasks.json文件中task的name。
+                &quot;postDebugTask&quot;:&quot;&quot;,
+                //控制何时打开内部调试控制台。neverOpen 从不打开 ；openOnFirstSessionStart 在第一次时打开 ； openOnSessionStart 在打开时
+                &quot;internalConsoleOptions&quot;:&quot;neverOpen&quot;,
+                // 仅用于debug插件开发者
+                &quot;debugServer&quot;:&quot;&quot;
+
+            }
+        ]
+    }
+</code></pre>
+<h3 id="结合jest">结合<code>jest</code></h3>
+<pre><code class="language-json">
+{
+  &quot;version&quot;: &quot;0.2.0&quot;,
+  &quot;configurations&quot;: [
+    {
+      &quot;name&quot;: &quot;Debug Jest Tests&quot;,
+      &quot;timeout&quot;: 600000,
+      &quot;type&quot;: &quot;node&quot;,
+      &quot;request&quot;: &quot;launch&quot;,
+      &quot;runtimeArgs&quot;: [&quot;--inspect-brk&quot;, &quot;${workspaceRoot}/node_modules/.bin/jest&quot;],
+      &quot;cwd&quot;: &quot;${workspaceFolder}&quot;,
+      &quot;args&quot;: [&quot;--runInBand&quot;, &quot;--no-watch&quot;],
+      &quot;console&quot;: &quot;integratedTerminal&quot;,
+      &quot;internalConsoleOptions&quot;: &quot;openOnFirstSessionStart&quot;,
+      &quot;port&quot;: 9229
+    }
+  ]
+}
+</code></pre>
+<h3 id="debug"><code>debug</code></h3>
+<p>随后和其他<code>IDE</code>工具一样，在想要断点的代码处打上断点。</p>
+<p><img src="./img/vscode-debugger-4.png" alt=""></p>
+<blockquote>
+<p>注意，一定要先打断点，再启动调试。否则打的断点不生效</p>
+</blockquote>
+<p>进入断点后的效果</p>
+<p><img src="./img/vscode-debugger-5.png" alt=""></p>
+
+</div>
+        </div>
+    </div>
+</body>
+<script>hljs.initHighlightingOnLoad();</script>
+ <script src="/static/threeComponent/md/common.js"></script>
+
+</html>
