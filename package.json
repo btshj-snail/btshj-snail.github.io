@@ -50,7 +50,7 @@
     "html-loader": "^0.5.0",
     "html-webpack-plugin": "^2.29.0",
     "html-withimg-loader": "^0.1.16",
-    "jquery": "^1.11.3",
+    "jquery": "^3.5.0",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
     "postcss-loader": "^2.0.6",
