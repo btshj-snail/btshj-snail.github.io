@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      body {
+        padding: 0;
+        margin: 0;
+        clear: both;
+        /* font-size:0; */
+      }
+
+      .a4-wrapper {
+        width: 1160px;
+        /* height: 820px; */
+        margin: 0 auto;
+        box-sizing: border-box;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: stretch;
+      }
+      .item {
+        font-size: 24px;
+        padding: 20px 30px 20px 10px;
+        letter-spacing: 10px;
+        border-right: solid 1px #ccc;
+        border-bottom: solid 1px #ccc;
+        height: 60px;
+        line-height: 60px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="a4-wrapper" id="container"></div>
+  </body>
+  <script>
+    function getRandomNum(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function generateAdditionItem(max) {
+      const a = getRandomNum(1, max);
+      const b = getRandomNum(1, max - a);
+      return { a, b };
+    }
+
+    function additionExpression(max) {
+      const res = generateAdditionItem(max);
+      return res.a + "+" + res.b + "=";
+    }
+
+    function getExpression(type) {
+      let fun = additionExpression;
+      switch (type) {
+        case "addition":
+          fun = additionExpression;
+          break;
+        default:
+      }
+
+      return fun;
+    }
+
+    function deal(count, type, maxResult) {
+      const containerDom = document.querySelector("#container");
+      let maxWidth = 0;
+      for (let i = 0, l = count; i < l; i++) {
+        const res = getExpression(type)(maxResult);
+        let dom = document.createElement("div");
+        dom.setAttribute("class", "item");
+        dom.innerText = res;
+        containerDom.appendChild(dom);
+        const size = dom.getBoundingClientRect();
+        if (size.width > maxWidth) {
+          maxWidth = size.width;
+        }
+        dom = null;
+      }
+
+      document.querySelectorAll(".item").forEach(function (dom) {
+        dom.style.width = maxWidth + "px";
+      });
+    }
+
+    console.log("*******************************");
+    console.log("**********欢迎使用生成器**********");
+    console.log("请在地址中加入以下参数，以控制输出计算表达式");
+    console.log("> 参数 count : 表示 生成多少个表达式.");
+    console.log("> 参数 type : 表示 生成什么类型的表达式。目前仅支持 addition 即加法表达式.");
+    console.log("> 参数 max : 表示 生成出来的计算表达式最终结果不能超过的值.");
+    console.log("比如在地址栏中输入以下链接：");
+    console.log("https://vsnail.cn/expression.html?count=70&type=addition&max=30");
+    console.log("则系统会生成70个加法表达式，并且这些表达式的计算结果不会超过30");
+    console.log("*******************************");
+
+    function getUrlParam(name) {
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+      var r = window.location.search.substr(1).match(reg); //匹配目标参数
+      if (r != null) {
+        return decodeURIComponent(r[2]);
+      }
+      return null;
+    }
+
+    function doGenerate() {
+      const count = getUrlParam("count");
+      const type = getUrlParam("type");
+      const max = getUrlParam("max");
+      if (!count || !type || !max) {
+        let dom = document.createElement("h1");
+        dom.innerText = "请打开控制台，阅读相关说明，输入正确的链接";
+        document.body.appendChild(dom);
+        dom = null;
+      } else {
+        deal(count, type, max);
+      }
+    }
+
+    doGenerate();
+  </script>
+</html>
